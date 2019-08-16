@@ -3,7 +3,7 @@
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo" href="index.html"><img src="{{ asset('assetsAdminTemplate/images/logo.svg')}}" alt="logo"/></a>
+        <a class="navbar-brand brand-logo" href="index.html"><img src="{{ asset('assetsAdminTemplate/images/logo.svgs')}}" alt="logo"/></a>
         <!-- <a class="navbar-brand brand-logo-mini" href="index.html"><img src="{{ asset('assetsAdminTemplate/images/logo-mini.svg')}}" alt="logo"/></a> -->
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-stretch">
@@ -34,15 +34,23 @@
               </div>
             </a>
             <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
-              <a class="dropdown-item" href="#">
+              <!-- <a class="dropdown-item" href="#">
                 <i class="mdi mdi-cached mr-2 text-success"></i>
                 Activity Log
-              </a>
+              </a> -->
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">
-                <i class="mdi mdi-logout mr-2 text-primary"></i>
-                Signout
+              <a class="dropdown-item" href="{{ route('logout') }}"
+                  onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();">
+                  {{ __('Logout') }}
               </a>
+              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                  @csrf
+              </form>
+              <!-- <a class="dropdown-item" href="#">
+                <i class="mdi mdi-logout mr-2 text-primary"></i>
+                Cerrar sesión
+              </a> -->
             </div>
           </li>
           

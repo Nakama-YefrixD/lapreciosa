@@ -5,7 +5,7 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>@yield('title') | {{ config('app.name', 'Laravel') }}</title>
+  <title>@yield('title') | La preciosa</title>
   <!-- plugins:css -->
   <link rel="stylesheet" href="{{ asset('assetsAdminTemplate/vendors/iconfonts/mdi/css/materialdesignicons.min.css')}}">
   <link rel="stylesheet" href="{{ asset('assetsAdminTemplate/vendors/css/vendor.bundle.base.css')}}">

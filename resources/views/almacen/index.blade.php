@@ -9,8 +9,8 @@
             <h4 class="card-title">Modulos de agregar</h4>
             <button type="button" data-toggle="modal" data-target="#entradaModal" class="btn btn-gradient-primary btn-rounded btn-fw">Agregar Entrada</button>
             <button type="button" data-toggle="modal" data-target="#productoModal" class="btn btn-gradient-success btn-rounded btn-fw">Agregar Producto</button>
-            <button type="button" class="btn btn-gradient-info btn-rounded btn-fw">Agregar Marca</button>
-            <button type="button" class="btn btn-gradient-warning btn-rounded btn-fw">Agregar Proveedor</button>
+            <button type="button" data-toggle="modal" data-target="#marcaModal" class="btn btn-gradient-info btn-rounded btn-fw">Agregar Marca</button>
+            <button type="button" data-toggle="modal" data-target="#proveedorModal" class="btn btn-gradient-warning btn-rounded btn-fw">Agregar Proveedor</button>
         </div>
     </div> 
 </div>
@@ -213,6 +213,121 @@
 </div>
 
 
+<div id="marcaModal" class="modal fade bd-marcaModal" role="dialog">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="card card-default">
+                <div class="card-header cabezera">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4> Agregar Marca </h4>
+                    <div class="form-group row">
+                          <div class="col-sm-6">
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="productoEstado" id="cerrarProducto" value="1" checked="">
+                                Cerrar automaticamente
+                              <i class="input-helper"></i></label>
+                            </div>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="productoEstado" id="abrirProducto" value="0">
+                                Mantenerla abierta
+                              <i class="input-helper"></i></label>
+                            </div>
+                          </div>
+                        </div>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+                        <form method="post" role="form" data-toggle="validator" id="frm_producto">
+                        <!-- <form role="form" method="post" accept-charset="utf-8" id="frm_producto" 
+                                enctype="multipart/form-data"> -->
+                            @csrf
+                            
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label>Nombre de la marca</label>
+                                        <input type="text" class="form-control" name="marca" id="marca" >
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+                            <div class="form-group boton">
+                                <button type="button" class="addexis form-control btn btn-block btn-success btn-lg" id="crearProducto">
+                                    Agregar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="proveedorModal" class="modal fade bd-proveedorModal" role="dialog">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="card card-default">
+                <div class="card-header cabezera">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4> Agregar proveedor </h4>
+                    <div class="form-group row">
+                          <div class="col-sm-6">
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="proveedorEstado" id="cerrarProveedor" value="1" checked="">
+                                Cerrar automaticamente
+                              <i class="input-helper"></i></label>
+                            </div>
+                          </div>
+                          <div class="col-sm-6">
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="proveedorEstado" id="abrirProveedor" value="0">
+                                Mantenerla abierta
+                              <i class="input-helper"></i></label>
+                            </div>
+                          </div>
+                        </div>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+                        <form method="post" role="form" data-toggle="validator" id="frm_producto">
+                        <!-- <form role="form" method="post" accept-charset="utf-8" id="frm_producto" 
+                                enctype="multipart/form-data"> -->
+                            @csrf
+                            
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label>Nombre del proveedor</label>
+                                        <input type="text" class="form-control" name="marca" id="marca" >
+                                    </div>
+                                    <div class="col-6">
+                                        <label>RUC del proveedor</label>
+                                        <input type="text" class="form-control" name="marca" id="marca" >
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+                            <div class="form-group boton">
+                                <button type="button" class="addexis form-control btn btn-block btn-success btn-lg" id="crearProducto">
+                                    Agregar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
