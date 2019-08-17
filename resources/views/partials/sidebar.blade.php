@@ -5,7 +5,7 @@
           <li class="nav-item nav-profile">
             <a href="#" class="nav-link">
               <div class="nav-profile-image">
-                <img src="{{ asset('assetsAdminTemplate/images/faces/face1.jpg')}}" alt="profile">
+                <img src="{{ asset('img/usuarios/'.Auth::user()->imagen)}}" alt="profile">
                 <span class="login-status online"></span> <!--change to offline or busy as needed-->              
               </div>
               <div class="nav-profile-text d-flex flex-column">
@@ -36,7 +36,31 @@
           </li> -->
           <li class="nav-item">
             <a class="nav-link" href="{{route ('almacen.index')}}">
-              <span class="menu-title">Almacen</span>
+              <span class="menu-title">Almacén</span>
+              <i class="mdi mdi-shopping menu-icon"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{route ('almacen.index')}}">
+              <span class="menu-title">Ventas</span>
+              <i class="mdi mdi-shopping menu-icon"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{route ('almacen.index')}}">
+              <span class="menu-title">Configuración</span>
+              <i class="mdi mdi-shopping menu-icon"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{route ('almacen.index')}}">
+              <span class="menu-title">Estadisticas</span>
+              <i class="mdi mdi-shopping menu-icon"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{route ('almacen.index')}}">
+              <span class="menu-title">Perfil</span>
               <i class="mdi mdi-shopping menu-icon"></i>
             </a>
           </li>

@@ -16,7 +16,7 @@ $(document).ready(function() {
                         { "data": "idProducto" },
                         { "data": "nombreMarca" },
                         { "data": "nombreProducto" },
-                        { "data": "precioProducto" },
+                        { "data": "precioVistaProducto" },
                         { "data": "cantidadProducto" },
                     ],
 

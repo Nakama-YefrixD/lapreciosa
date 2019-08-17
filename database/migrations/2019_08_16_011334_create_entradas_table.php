@@ -16,8 +16,8 @@ class CreateEntradasTable extends Migration
         Schema::create('entradas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('proveedor_id');
-            $table->string('factura', 60)->nullable();
-            $table->date('fecha')->nullable();
+            $table->string('factura', 60);
+            $table->date('fecha');
             $table->timestamps();
 
             $table->foreign('proveedor_id')->references('id')->on('proveedores');

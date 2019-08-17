@@ -19,6 +19,7 @@
 <div class="col-lg-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
+            <h4 class="card-title">Almacen de productos</h4>
             <table id="tb_almacen" class="table table-striped" style="width:100%">
                 <thead>
                     <tr>
@@ -69,10 +70,13 @@
                                 enctype="multipart/form-data"> -->
                             @csrf
                             <input type='hidden' value='1' name= "cantidadProductos" id="cantidadProductos">
+                            <input type='hidden' value='0' name= "agregandoProveedor" id="agregandoProveedor">
+                            <input type='hidden' value='0' name= "agregandoProducto" id="agregandoProducto">
+
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-6">
-                                        <label>Proveedor</label>
+                                        <label>Selecciona al proveedor</label>
                                         <div class="input-group">
                                             <select class="form-control" name="proveedor" id="proveedores" style="width: 90%;">
                                                 @foreach($proveedores as $proveedor)
@@ -80,7 +84,7 @@
                                                 @endforeach
                                             </select>
                                             <div class="input-group-append">
-                                                <button class="btn btn-sm btn-gradient-primary" type="button"><i class="mdi mdi-plus"></i></button>
+                                                <button class="btn btn-sm btn-gradient-primary" id="agregarNuevoProveedor" type="button"><i class="mdi mdi-plus"></i></button>
                                             </div>
                                         </div>
                                     </div>
@@ -97,21 +101,32 @@
                             </div>
                             <div class="form-group" id="listProductos">
                                 <div class="row">
-                                    <div class="col-5">
-                                        <label>Producto</label><br>
-                                        <select class="form-control" id="productos" name="producto[]" style="width: 100%; height: 550px;" >
+                                    <div class="col-4">
+                                        <label>Producto de entrada</label><br>
+                                        <select class="form-control listProductos" id="productos" name="producto[]" style="width: 100%;" >
                                             @foreach($productos as $producto)
                                                 <option value="{{ $producto->id }}" >{{ $producto->nombre }}</option>
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-3">
-                                        <label>Precio</label>
-                                        <input type="text" class="form-control" name="precio[]" id="precio">
+                                    <div class="col-2 precioCompraContainer">
+                                        <label>Precio de compra</label>
+                                        <input type="text" name="precio[]" id="precio" class="form-control precioCompra"
+                                            pattern="^\S/\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="S/1,000,000.00">
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-2 cantidadCompraContainer">
                                         <label>Cantidad</label>
-                                        <input type="text" class="form-control" name="cantidad[]" id="cantidad" >
+                                        <input type="number" class="form-control cantidadProductoEntrada" name="cantidad[]" id="cantidad" >
+                                    </div>
+                                    <div class="col-2 importeCompraContainer">
+                                        <label>Importe</label>
+                                        <input type="text" name="importe[]" id="importe" class="form-control " pattern="^\S/\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="S/1,000,000.00">
+                                    </div>
+                                    <div class="col-1">
+                                        <br>
+                                        <button type="button" class="btn btn-gradient-primary btn-rounded btn-icon " id="agregarNuevoProducto">
+                                            <i class="mdi mdi-plus"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -165,13 +180,36 @@
                         <!-- <form role="form" method="post" accept-charset="utf-8" id="frm_producto" 
                                 enctype="multipart/form-data"> -->
                             @csrf
-                            
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label>Tipos</label>
+                                        <div class="input-group">
+                                            <select class="form-control" name="tipoProducto" id="tipoProducto" style="width: 100%;">
+                                                @foreach($tipos as $tipo)
+                                                    <option value="{{ $tipo->id }}" > {{ $tipo->nombre }} </option>
+                                                @endforeach
+                                            </select>
+                                            <!-- <div class="input-group-append">
+                                                <button class="btn btn-sm btn-gradient-primary" type="button"><i class="mdi mdi-plus"></i></button>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label>Nuevo tipo de producto</label>
+                                        <input type="text" class="form-control" name="nuevoTipoProducto" id="nuevoTipoProducto" >
+                                        <div class="input-group-append">
+                                            <button  id="crearTipoProducto" class="btn form-control btn-sm btn-gradient-primary" type="button"><i class="mdi mdi-plus"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-6">
                                         <label>Marcas</label>
                                         <div class="input-group">
-                                            <select class="form-control" name="marca" id="marca" style="width: 100%;">
+                                            <select class="form-control" name="marcaProducto" id="marcaProducto" style="width: 100%;">
                                                 @foreach($marcas as $marca)
                                                     <option value="{{ $marca->id }}" > {{ $marca->nombre }} </option>
                                                 @endforeach
@@ -182,20 +220,22 @@
                                         </div>
                                     </div>
                                     <div class="col-6">
-                                        <label>Nombre del producto</label>
-                                        <input type="text" class="form-control" name="producto" id="producto" >
+                                        <label>Precio de venta</label>
+                                        <input type="text" name="precioVentaProducto" id="precioVentaProducto" class="form-control"
+                                            pattern="^\S/\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="S/1,000,000.00">
+                                        <!-- <input type="text" class="form-control" name="producto" id="producto" > -->
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group" id="listProductos">
+                            <div class="form-group" >
                                 <div class="row">
-                                    <div class="col-6">
-                                        <label>Precio</label>
-                                        <input type="text" class="form-control" name="precio" id="precio">
+                                    <div class="col-3">
+                                        <label>Codigo</label>
+                                        <input type="text" class="form-control" name="codigoProductoNuevo" id="codigoProductoNuevo">
                                     </div>
-                                    <div class="col-6">
-                                        <label>Cantidad</label>
-                                        <input type="text" class="form-control" name="cantidad" id="cantidad" >
+                                    <div class="col-9">
+                                        <label>Nombre del producto</label>
+                                        <input type="text" class="form-control" name="nombreProductoNuevo" id="nombreProductoNuevo">
                                     </div>
                                 </div>
                             </div>
@@ -224,7 +264,7 @@
                           <div class="col-sm-6">
                             <div class="form-check">
                               <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="productoEstado" id="cerrarProducto" value="1" checked="">
+                                <input type="radio" class="form-check-input" name="marcaEstado" id="cerrarMarca" value="1" checked="">
                                 Cerrar automaticamente
                               <i class="input-helper"></i></label>
                             </div>
@@ -232,7 +272,7 @@
                           <div class="col-sm-6">
                             <div class="form-check">
                               <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="productoEstado" id="abrirProducto" value="0">
+                                <input type="radio" class="form-check-input" name="marcaEstado" id="abrirMarca" value="0">
                                 Mantenerla abierta
                               <i class="input-helper"></i></label>
                             </div>
@@ -241,8 +281,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="card-body">
-                        <form method="post" role="form" data-toggle="validator" id="frm_producto">
-                        <!-- <form role="form" method="post" accept-charset="utf-8" id="frm_producto" 
+                        <form method="post" role="form" data-toggle="validator" id="frm_marca">
+                        <!-- <form role="form" method="post" accept-charset="utf-8" id="frm_marca" 
                                 enctype="multipart/form-data"> -->
                             @csrf
                             
@@ -250,14 +290,14 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <label>Nombre de la marca</label>
-                                        <input type="text" class="form-control" name="marca" id="marca" >
+                                        <input type="text" class="form-control" name="nombreMarca" id="nombreMarca" >
                                     </div>
                                 </div>
                             </div>
 
                             
                             <div class="form-group boton">
-                                <button type="button" class="addexis form-control btn btn-block btn-success btn-lg" id="crearProducto">
+                                <button type="button" class="addexis form-control btn btn-block btn-success btn-lg" id="crearMarca">
                                     Agregar</button>
                             </div>
                         </form>
@@ -278,47 +318,65 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4> Agregar proveedor </h4>
                     <div class="form-group row">
-                          <div class="col-sm-6">
-                            <div class="form-check">
-                              <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="proveedorEstado" id="cerrarProveedor" value="1" checked="">
-                                Cerrar automaticamente
-                              <i class="input-helper"></i></label>
-                            </div>
-                          </div>
-                          <div class="col-sm-6">
-                            <div class="form-check">
-                              <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="proveedorEstado" id="abrirProveedor" value="0">
-                                Mantenerla abierta
-                              <i class="input-helper"></i></label>
-                            </div>
-                          </div>
+                        <div class="col-sm-6">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                            <input type="radio" class="form-check-input" name="proveedorEstado" id="cerrarProveedor" value="1" checked="">
+                            Cerrar automaticamente
+                            <i class="input-helper"></i></label>
                         </div>
+                        </div>
+                        <div class="col-sm-6">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                            <input type="radio" class="form-check-input" name="proveedorEstado" id="abrirProveedor" value="0">
+                            Mantenerla abierta
+                            <i class="input-helper"></i></label>
+                        </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-body">
                     <div class="card-body">
-                        <form method="post" role="form" data-toggle="validator" id="frm_producto">
-                        <!-- <form role="form" method="post" accept-charset="utf-8" id="frm_producto" 
+                        <form method="post" role="form" data-toggle="validator" id="frm_proveedor">
+                        <!-- <form role="form" method="post" accept-charset="utf-8" id="frm_proveedor" 
                                 enctype="multipart/form-data"> -->
                             @csrf
                             
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-6">
-                                        <label>Nombre del proveedor</label>
-                                        <input type="text" class="form-control" name="marca" id="marca" >
+                                        <label>RUC del proveedor</label>
+                                        <input type="number" class="form-control" name="rucProveedor" id="rucProveedor" >
                                     </div>
                                     <div class="col-6">
-                                        <label>RUC del proveedor</label>
-                                        <input type="text" class="form-control" name="marca" id="marca" >
+                                        <label>Telefono</label>
+                                        <input type="number" class="form-control" name="telefonoProveedor" id="telefonoProveedor" >
+                                    </div>
+                                    
+                                </div><br>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label>Nombre del proveedor</label>
+                                        <input type="text" class="form-control" name="nombreProveedor" id="nombreProveedor" >
+                                    </div>
+                                    
+                                </div><br>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label>Dirección</label>
+                                        <input type="text" class="form-control" name="direccionProveedor" id="direccionProveedor" >
+                                    </div>
+                                </div><br>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label>Tipo</label>
+                                        <input type="text" class="form-control" name="tipoProveedor" id="tipoProveedor" >
                                     </div>
                                 </div>
                             </div>
-
-                            
                             <div class="form-group boton">
-                                <button type="button" class="addexis form-control btn btn-block btn-success btn-lg" id="crearProducto">
+                                <button type="button" class="addexis form-control btn btn-block btn-success btn-lg" id="crearProveedor">
                                     Agregar</button>
                             </div>
                         </form>
@@ -335,18 +393,43 @@
 
 @section('script')
 <script type="text/javascript" src="{{ asset('js/almacen/select2.js') }}"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('body').on('click', '#cerrar', function() {
-            $('#cerrar').val('1');
-            $('#abrir').val('0');
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#rucProveedor').on('keyup', function() {
+            let url = '';
+
+            if($(this).val().length == 11) {
+                url = '/consult/ruc/' + $(this).val();
+                obtenerDatosProveedor(url, $('#typedocument').val());
+            }
+            
         });
 
-        $('body').on('click', '#abrir', function() {
-            $('#cerrar').val('0');
-            $('#abrir').val('1');
-        });
+        function obtenerDatosProveedor(url, typedocument)
+        {
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: {
+                    '_token': "{{ csrf_token() }}"
+                },
+                dataType: 'json',
+                success: function(response) {
+                        $('#telefonoProveedor').val(response['telefonos']);
+                        $('#nombreProveedor').val(response['razonSocial']);
+                        $('#direccionProveedor').val(response['direccion']);
+                        $('#tipoProveedor').val(response['tipo']);
+                },
+                error: function(response) {
+                    toastr.info('El ruc no existe.');
+                }
+            });
+        }
 
+        let productos = '';
+        @foreach($productos as $producto)
+            productos += '<option value="{{ $producto->id }}" >{{ $producto->nombre }}</option>';
+        @endforeach
         $('#agregarProducto').on('click', function() {
                 var cantidadProductos = $('#cantidadProductos').val();
                 var nuevaCantidadProductos = $('#cantidadProductos').val(parseInt(cantidadProductos)+1);
@@ -355,21 +438,21 @@
                 let data = '<div class="productosAgregados">';
                 data += '<br>';
                 data += '<div class="row">';
-                data += '<div class="col-5">';
-                data += '<select class="form-control productos" name="producto[]" style="width: 100%;" >';
-                    @foreach($productos as $producto)
-                        data += '<option value="{{ $producto->id }}" >{{ $producto->nombre }}</option>';
-                    @endforeach
+                data += '<div class="col-4">';
+                data += '<select class="form-control productos listProductos" name="producto[]" style="width: 100%;" > id="otroAc"';
+                data += productos;   
                 data += '</select>';
                 data += '</div>';
-                data += '<div class="col-3">';
-                data += '<input type="text" class="form-control" name="precio[]" >';
+                data += '<div class="col-2 precioCompraContainer">';
+                data += '<input type="text" name="precio[]" id="precio" class="form-control precioCompra" pattern="^\S/\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="S/1,000,000.00">';
                 data += '</div>';
-                data += '<div class="col-3">';
-                data += '<input type="number" class="form-control" name="cantidad[]" >';
+                data += '<div class="col-2 cantidadCompraContainer">';
+                data += '<input type="number" class="form-control cantidadProductoEntrada" name="cantidad[]" >';
+                data += '</div>';
+                data += '<div class="col-2 importeCompraContainer">';
+                data += '<input type="text" name="importe[]" id="importe" class="form-control " pattern="^\S/\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="S/1,000,000.00">';
                 data += '</div>';
                 data += '<div class="col-1">';
-                
                 data += '<button type="button" class="btn btn-gradient-danger btn-rounded btn-icon remove">';
                 data += '<i class="mdi mdi-close"></i>';
                 data += '</button>';
@@ -377,14 +460,220 @@
                 data += '</div>';
                 $('#listProductos').append(data);
                 $('.productos').select2();
+                declararFormatMoney();
+                // $('.listProductos ').load('/almacen/load/productos');
                 
             });
+
             $('body').on('click', '.remove', function() {
                 $(this).parent().parent().parent().remove();
                 var cantidadProductos = $('#cantidadProductos').val();
                 var nuevaCantidadProductos = $('#cantidadProductos').val(parseInt(cantidadProductos)-1);
             });
 
+            $('#crearProveedor').on('click', function(e) {
+                    let data = $('#frm_proveedor').serialize();
+                    console.log(data);
+                    $.confirm({
+                        icon: 'fa fa-question',
+                        theme: 'modern',
+                        animation: 'scale',
+                        type: 'blue',
+                        title: '¿Está seguro de crear este proveedor?',
+                        content: false,
+                        buttons: {
+                            Confirmar: function () {
+                                $.ajax({
+                                    url: '/almacen/proveedor/crear',
+                                    type: 'post',
+                                    data: data ,
+                                    dataType: 'json',
+                                    success: function(response) {
+                                        if(response['response'] == true) {
+                                            toastr.success('Se grabó satisfactoriamente el proveedor');
+                                            $("#tb_almacen").DataTable().ajax.reload();
+                                            $('#rucProveedor').val('');
+                                            $('#nombreProveedor').val('');
+                                            $('#telefonoProveedor').val('');
+                                            $('#direccionProveedor').val('');
+                                            $('#tipoProveedor').val('');
+                                            if($('#cerrarProveedor').val() == 1){
+                                                $('#proveedorModal').modal('hide');
+                                                if($('#agregandoProveedor').val() == 1){
+                                                    $('#agregandoProveedor').val(0);
+                                                    $('#entradaModal').modal('show');
+                                                }
+                                            }
+                                            data = '<option value="'+response['idProveedor']+'" >'+response['nombreProveedor']+'</option>';
+                                            $('#proveedores').append(data);
+
+                                            
+                                        } else {
+                                            // toastr.error(response.responseText);
+                                            toastr.error('Ocurrio un error al momento de crear este proveedor porfavor fijate si todos los campos estan correctos');
+                                        }
+                                    },
+                                    error: function(response) {
+                                        // toastr.error(response.responseText);
+                                        toastr.error('sOcurrio un error al momento de crear este proveedor porfavor fijate si todos los campos estan correctos');
+                                        
+                                    }
+                                });
+                            },
+                            Cancelar: function () {
+                                
+                            }
+                        }
+                    });
+            });
+
+
+            $('#crearProducto').on('click', function(e) {
+                    let data = $('#frm_producto').serialize();
+                    console.log(data);
+                    $.confirm({
+                        icon: 'fa fa-question',
+                        theme: 'modern',
+                        animation: 'scale',
+                        type: 'blue',
+                        title: '¿Está seguro de crear este producto?',
+                        content: false,
+                        buttons: {
+                            Confirmar: function () {
+                                $.ajax({
+                                    url: '/almacen/producto/crear',
+                                    type: 'post',
+                                    data: data ,
+                                    dataType: 'json',
+                                    success: function(response) {
+                                        if(response['response'] == true) {
+                                            toastr.success('Se grabó satisfactoriamente el producto');
+                                            $("#tb_almacen").DataTable().ajax.reload();
+                                            $('#precioVentaProducto').val(' ');
+                                            $('#codigoProductoNuevo').val(' ');
+                                            $('#nombreProductoNuevo').val(' ');
+                                            
+                                            if($('#cerrarProducto').val() == 1){
+                                                $('#productoModal').modal('hide');
+                                                if($('#agregandoProducto').val() == 1){
+                                                    $('#agregandoProducto').val(0);
+                                                    $('#entradaModal').modal('show');
+                                                }
+                                            }
+
+                                            data = '<option value="'+response['idProducto']+'" >'+response['nombreProducto']+'</option>';
+                                            $('.listProductos').append(data);
+                                            productos += '<option value="'+response['idProducto']+'" >'+response['nombreProducto']+'</option>';
+                                            // $('.listProductos').load('/almacen/load/productos');
+                                        } else {
+                                            // toastr.error(response.responseText);
+                                            toastr.error('Ocurrio un error al momento de crear este producto porfavor verifique si todos los campos estan correctos');
+                                        }
+                                    },
+                                    error: function(response) {
+                                        // toastr.error(response.responseText);
+                                        toastr.error('Ocurrio un error al momento de crear este producto porfavor verifique si todos los campos estan correctos');
+                                        
+                                    }
+                                });
+                            },
+                            Cancelar: function () {
+                                
+                            }
+                        }
+                    });
+            });
+
+            $('#crearMarca').on('click', function(e) {
+                    let data = $('#frm_marca').serialize();
+                    console.log(data);
+                    $.confirm({
+                        icon: 'fa fa-question',
+                        theme: 'modern',
+                        animation: 'scale',
+                        type: 'blue',
+                        title: '¿Está seguro de crear esta marca?',
+                        content: false,
+                        buttons: {
+                            Confirmar: function () {
+                                $.ajax({
+                                    url: '/almacen/marca/crear',
+                                    type: 'post',
+                                    data: data ,
+                                    dataType: 'json',
+                                    success: function(response) {
+                                        if(response['response'] == true) {
+                                            toastr.success('Se grabó satisfactoriamente la marca');
+                                            $("#tb_almacen").DataTable().ajax.reload();
+                                            $('#nombreMarca').val(' ');
+                                            if($('#cerrarMarca').val() == 1){
+                                                $('#marcaModal').modal('hide');
+                                            }
+                                            $('#marcaProducto').load('/almacen/load/marcas');
+
+                                            
+                                        } else {
+                                            // toastr.error(response.responseText);
+                                            toastr.error('Ocurrio un error al momento de crear esta marca porfavor verifique si todos los campos estan correctos');
+                                        }
+                                    },
+                                    error: function(response) {
+                                        // toastr.error(response.responseText);
+                                        toastr.error('Ocurrio un error al momento de crear esta marca porfavor verifique si todos los campos estan correctos');
+                                        
+                                    }
+                                });
+                            },
+                            Cancelar: function () {
+                                
+                            }
+                        }
+                    });
+            });
+
+            $('#crearTipoProducto').on('click', function(e) {
+                    let data = $('#frm_producto').serialize();
+                    console.log(data);
+                    $.confirm({
+                        icon: 'fa fa-question',
+                        theme: 'modern',
+                        animation: 'scale',
+                        type: 'blue',
+                        title: '¿Está seguro de crear este tipo de producto?',
+                        content: false,
+                        buttons: {
+                            Confirmar: function () {
+                                $.ajax({
+                                    url: '/almacen/tipo/crear',
+                                    type: 'post',
+                                    data: data,
+                                    dataType: 'json',
+                                    success: function(response) {
+                                        if(response['response'] == true) {
+                                            toastr.success('Se grabó satisfactoriamente el tipo');
+                                            $("#tb_almacen").DataTable().ajax.reload();
+                                            $('#nuevoTipoProducto').val(' ');
+                                            $('#tipoProducto').load('/almacen/load/tiposProductos');
+
+                                            
+                                        } else {
+                                            // toastr.error(response.responseText);
+                                            toastr.error('Ocurrio un error al momento de crear este tipo de producto porfavor verifique si todos los campos estan correctos');
+                                        }
+                                    },
+                                    error: function(response) {
+                                        // toastr.error(response.responseText);
+                                        toastr.error('Ocurrio un error al momento de crear esta tipo de producto porfavor verifique si todos los campos estan correctos');
+                                        
+                                    }
+                                });
+                            },
+                            Cancelar: function () {
+                                
+                            }
+                        }
+                    });
+            });
 
             $('#crearEntrada').on('click', function(e) {
                     let data = $('#frm_entrada').serialize();
@@ -440,5 +729,9 @@
 </script>
     <script type="text/javascript" src="{{ asset('js/almacen/datatables.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/almacen/date.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/almacen/inputFormatMoney.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/almacen/cerrarAutomaticamente.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/almacen/calcularImporte.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/almacen/agregandoDatosModal.js') }}"></script>
     
 @endsection

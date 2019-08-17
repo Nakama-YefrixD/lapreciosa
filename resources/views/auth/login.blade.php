@@ -1,3 +1,6 @@
+@section('title')
+    Login
+@endsection
 @include('partials.head')
     <div class="header bg-gradient-primary pb-8 pt-5 pt-md-4">
         <nav class="navbar navbar-top navbar-horizontal navbar-expand-md navbar-dark">

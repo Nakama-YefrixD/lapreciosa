@@ -12,9 +12,10 @@ class MarcasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public static function index()
     {
-        //
+        $marcas = marcas::all();
+        return $marcas;      
     }
 
     /**
