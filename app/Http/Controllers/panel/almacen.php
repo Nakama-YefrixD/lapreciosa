@@ -97,9 +97,6 @@ class almacen extends Controller
                             $control->descripcion = "Actualizar la cantidad de productos";
                             $control->save();    
                         }
-
-                        
-
                     }
                 }
             }
