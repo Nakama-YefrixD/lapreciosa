@@ -41,7 +41,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{route ('almacen.index')}}">
+            <a class="nav-link" href="{{route ('ventas.index')}}">
               <span class="menu-title">Ventas</span>
               <i class="mdi mdi-shopping menu-icon"></i>
             </a>

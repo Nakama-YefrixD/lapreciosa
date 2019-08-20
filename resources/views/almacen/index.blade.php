@@ -28,6 +28,7 @@
                         <th>Nombre</th>
                         <th>Precio</th>
                         <th>Cantidad</th>
+                        <th>Opciones</th>
                     </tr>
                 </thead>
             </table>  
@@ -182,6 +183,20 @@
                             @csrf
                             <div class="form-group">
                                 <div class="row">
+                                    <div class="col-12">
+                                        <label>Nuevo tipo de producto</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="nuevoTipoProducto" id="nuevoTipoProducto" >
+                                            <div class="input-group-append">
+                                                <button  id="crearTipoProducto" class="btn form-control btn-sm btn-gradient-primary" type="button"><i class="mdi mdi-plus"></i></button>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
                                     <div class="col-6">
                                         <label>Tipos</label>
                                         <div class="input-group">
@@ -196,17 +211,6 @@
                                         </div>
                                     </div>
                                     <div class="col-6">
-                                        <label>Nuevo tipo de producto</label>
-                                        <input type="text" class="form-control" name="nuevoTipoProducto" id="nuevoTipoProducto" >
-                                        <div class="input-group-append">
-                                            <button  id="crearTipoProducto" class="btn form-control btn-sm btn-gradient-primary" type="button"><i class="mdi mdi-plus"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-6">
                                         <label>Marcas</label>
                                         <div class="input-group">
                                             <select class="form-control" name="marcaProducto" id="marcaProducto" style="width: 100%;">
@@ -219,10 +223,23 @@
                                             </div> -->
                                         </div>
                                     </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    
                                     <div class="col-6">
                                         <label>Precio de venta</label>
-                                        <input type="text" name="precioVentaProducto" id="precioVentaProducto" class="form-control"
+                                        <input type="text" name="precioVentaProductoSinIGV" id="precioVentaProductoSinIGV" class="form-control"
                                             pattern="^\S/\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="S/1,000,000.00">
+                                        <!-- <input type="text" class="form-control" name="producto" id="producto" > -->
+                                    </div>
+
+                                    <div class="col-6">
+                                        <label>Precio con IGV(18%)</label>
+                                        <input type="text" name="precioVentaProducto" id="precioVentaProducto" class="form-control"
+                                            pattern="^\S/\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="S/1,000,000.00" >
                                         <!-- <input type="text" class="form-control" name="producto" id="producto" > -->
                                     </div>
                                 </div>
@@ -236,6 +253,9 @@
                                     <div class="col-9">
                                         <label>Nombre del producto</label>
                                         <input type="text" class="form-control" name="nombreProductoNuevo" id="nombreProductoNuevo">
+                                    </div>
+                                    <div class="col-12" id="alertaCodigo"><br>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -388,6 +408,88 @@
 </div>
 
 
+<div id="productoEditarModal" class="modal fade bd-productoEditarModal" role="dialog">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="card card-default">
+                <div class="card-header cabezera">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4> Editar Producto </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+                        <form method="post" role="form" data-toggle="validator" id="frm_editar_producto">
+                            @csrf
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label>Tipos</label>
+                                        <div class="input-group">
+                                            <select class="form-control" name="tipoProducto" id="tipoProducto" style="width: 100%;">
+                                                @foreach($tipos as $tipo)
+                                                    <option value="{{ $tipo->id }}" > {{ $tipo->nombre }} </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label>Nuevo tipo de producto</label>
+                                        <input type="text" class="form-control" name="nuevoTipoProducto" id="nuevoTipoProducto" >
+                                        <div class="input-group-append">
+                                            <button  id="crearTipoProducto" class="btn form-control btn-sm btn-gradient-primary" type="button"><i class="mdi mdi-plus"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label>Marcas</label>
+                                        <div class="input-group">
+                                            <select class="form-control" name="marcaProducto" id="marcaProducto" style="width: 100%;">
+                                                @foreach($marcas as $marca)
+                                                    <option value="{{ $marca->id }}" > {{ $marca->nombre }} </option>
+                                                @endforeach
+                                            </select>
+                                            <!-- <div class="input-group-append">
+                                                <button class="btn btn-sm btn-gradient-primary" type="button"><i class="mdi mdi-plus"></i></button>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label>Precio de venta</label>
+                                        <input type="text" name="precioVentaProducto" id="precioVentaProducto" class="form-control"
+                                            pattern="^\S/\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="S/1,000,000.00">
+                                        <!-- <input type="text" class="form-control" name="producto" id="producto" > -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" >
+                                <div class="row">
+                                    <div class="col-3">
+                                        <label>Codigo</label>
+                                        <input type="text" class="form-control" name="codigoProductoNuevo" id="codigoProductoNuevo">
+                                    </div>
+                                    <div class="col-9">
+                                        <label>Nombre del producto</label>
+                                        <input type="text" class="form-control" name="nombreProductoNuevo" id="nombreProductoNuevo">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group boton">
+                                <button type="button" class="addexis form-control btn btn-block btn-success btn-lg" id="crearProducto">
+                                    Agregar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 @endsection
 
@@ -396,15 +498,15 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('#rucProveedor').on('keyup', function() {
-            let url = '';
+                let url = '';
 
-            if($(this).val().length == 11) {
-                url = '/consult/ruc/' + $(this).val();
-                obtenerDatosProveedor(url, $('#typedocument').val());
-            }
+                if($(this).val().length == 11) {
+                    url = '/consult/ruc/' + $(this).val();
+                    obtenerDatosProveedor(url, $('#typedocument').val());
+                }
+                
+            });
             
-        });
-
         function obtenerDatosProveedor(url, typedocument)
         {
             $.ajax({
@@ -427,8 +529,12 @@
         }
 
         let productos = '';
+        var productoIndividual = [];
+        let contadorProductoIndividual = 0;
         @foreach($productos as $producto)
+            productoIndividual[contadorProductoIndividual]= '{{ $producto->id }}'+'-'+'{{ $producto->nombre }}';
             productos += '<option value="{{ $producto->id }}" >{{ $producto->nombre }}</option>';
+            contadorProductoIndividual = contadorProductoIndividual+1;
         @endforeach
         $('#agregarProducto').on('click', function() {
                 var cantidadProductos = $('#cantidadProductos').val();
@@ -528,6 +634,40 @@
             });
 
 
+            $('#precioVentaProductoSinIGV').on('keyup', function() {
+                let valor = $(this).val().split('S/');
+                console.log(valor[1]);
+                let igv = (valor[1] *18)/100;
+                console.log(igv)
+                let total = parseFloat(valor[1])+parseFloat(igv);
+                $('#precioVentaProducto').val(total.toFixed(2));
+                
+            });
+            50*100/18
+            $('#precioVentaProducto').on('keyup', function() {
+                let valor = $(this).val().split('S/');
+                console.log(valor[1]);
+                let igv = (valor[1] *18)/100;
+                console.log(igv)
+                let total = parseFloat(valor[1])-parseFloat(igv);
+                $('#precioVentaProductoSinIGV').val(total.toFixed(2));
+                
+            });
+            //miomio
+            $('#codigoProductoNuevo').on('keyup', function() {
+                for(let x = 0; x < productoIndividual.length; x++){
+                    var valorProductoIndividual = productoIndividual[x].split('-');
+                    if($(this).val() == valorProductoIndividual[0]){
+                        $('#alertaCodigo').html('<label style="color:red;">EL CODIGO '+valorProductoIndividual[0]+' YA EXISTE Y LE PERTENECE A '+valorProductoIndividual[1]+'</label>')
+                        
+                        break;
+                    }else{
+                        $('#alertaCodigo').html('')
+                    }
+                }
+                
+            });
+
             $('#crearProducto').on('click', function(e) {
                     let data = $('#frm_producto').serialize();
                     console.log(data);
@@ -564,6 +704,9 @@
                                             data = '<option value="'+response['idProducto']+'" >'+response['nombreProducto']+'</option>';
                                             $('.listProductos').append(data);
                                             productos += '<option value="'+response['idProducto']+'" >'+response['nombreProducto']+'</option>';
+                                            
+                                            productoIndividual[contadorProductoIndividual] = response['idProducto']+'-'+response['nombreProducto'];
+                                            contadorProductoIndividual = contadorProductoIndividual+1;
                                             // $('.listProductos').load('/almacen/load/productos');
                                         } else {
                                             // toastr.error(response.responseText);
@@ -640,7 +783,7 @@
                         animation: 'scale',
                         type: 'blue',
                         title: '¿Está seguro de crear este tipo de producto?',
-                        content: false,
+                        content: 'Recuerda que con esto solo estamos creando un tipo de producto',
                         buttons: {
                             Confirmar: function () {
                                 $.ajax({

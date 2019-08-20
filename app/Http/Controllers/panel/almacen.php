@@ -221,13 +221,27 @@ class almacen extends Controller
         DB::beginTransaction();
         try {
             $precioVenta = explode("S/", $request['precioVentaProducto']);
+
+            if(sizeof($precioVenta) > 1){
+                $prePrecioVenta = $precioVenta[1];
+            }else{
+                $prePrecioVenta = $precioVenta[0];
+            }
+            
+            $precioVentaEntero = explode(",", $prePrecioVenta);
+            if(sizeof($precioVentaEntero) > 1){
+                $precioVentaFinal = $precioVentaEntero[0].$precioVentaEntero[1];
+            }else{
+                $precioVentaFinal = $precioVentaEntero[0];
+            }
+
             $productos = new Productos;
             $productos->id = $request['codigoProductoNuevo'];
             $productos->marca_id = $request['marcaProducto'];
             $productos->tipo_id = $request['tipoProducto'];
             $productos->nombre = $request['nombreProductoNuevo'];
             $productos->cantidad = 0;
-            $productos->precio = $precioVenta[1];
+            $productos->precio = $precioVentaFinal;
             $productos->precioVista = $request['precioVentaProducto'];
             
             if($productos->save()) {
