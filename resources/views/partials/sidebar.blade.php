@@ -1,4 +1,4 @@
-<div class="container-fluid page-body-wrapper">
+﻿<div class="container-fluid page-body-wrapper">
       <!-- partial:partials/_sidebar.html -->
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
@@ -47,19 +47,19 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{route ('almacen.index')}}">
+            <a class="nav-link" href="#">
               <span class="menu-title">Configuración</span>
               <i class="mdi mdi-shopping menu-icon"></i>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{route ('almacen.index')}}">
+            <a class="nav-link" href="#">
               <span class="menu-title">Estadisticas</span>
               <i class="mdi mdi-shopping menu-icon"></i>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{route ('almacen.index')}}">
+            <a class="nav-link" href="#">
               <span class="menu-title">Perfil</span>
               <i class="mdi mdi-shopping menu-icon"></i>
             </a>

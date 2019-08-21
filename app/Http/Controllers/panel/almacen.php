@@ -61,6 +61,7 @@ class almacen extends Controller
             $entrada->proveedor_id = $request['proveedor'];
             $entrada->factura = $request['factura'];
             $entrada->fecha = $request['fecha'];
+	    $entrada->ruc = "454545454";
             
             if($entrada->save()) {
                 $control = new control;
