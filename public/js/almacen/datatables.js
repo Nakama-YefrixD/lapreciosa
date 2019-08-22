@@ -13,19 +13,23 @@ $(document).ready(function() {
                     "ajax": URLactual+"/tb_almacen", 
                     "columns":[
                         
-                        { "data": "idProducto" },
+                        { "data": "codigoProducto" },
                         { "data": "nombreMarca" },
+                        { "data": "nombreTipo" },
                         { "data": "nombreProducto" },
-                        { "data": "precioVistaProducto" },
+                        { "data": "precioProducto" },
                         { "data": "cantidadProducto" },
                         { "data": "idProducto" },
                     ],
 
 
                     "fnRowCallback": function(nRow, aData, iDisplayIndex) {
-                        var btnEdit = '<button class="btn btn-sm btn-gradient-secondary" data-toggle="modal" data-target="#productoEditarModal" type="button"><i class="mdi mdi-lead-pencil"></i></button>';
+                        var btnEdit = '<button class="btn btn-sm btn-gradient-secondary editar" type="button"><i class="mdi mdi-lead-pencil"></i></button>';
                         var btnDelete = '<button class="btn btn-sm btn-gradient-danger eliminar" type="button"><i class="mdi mdi-delete"></i></button>';
-                        $(nRow).find("td:eq(5)").html(btnEdit+" "+btnDelete);
+                        $(nRow).find("td:eq(6)").html(btnEdit+" "+btnDelete);
+
+                        
+                        $(nRow).find("td:eq(4)").html('S/'+aData['precioProducto']);
                         
                     }
                 });
@@ -72,8 +76,68 @@ $(document).ready(function() {
                 
             }
         });
-
-        
-        
     }); 
+
+
+    $("#tb_almacen").on('click', '.editar', function(){
+        var data = dt.row($(this).parents('tr')).data();
+        let id = data['idProducto'];
+        let codigo = data['codigoProducto'];
+        let nombre = data['nombreProducto'];
+        let precio = data['precioProducto'];
+        let marca = data['idMarca'];
+        let tipo = data['idTipo'];
+        $("#editarIdProducto").val(id);
+        $("#editarCodigoProductoNuevo").val(codigo);
+        $("#editarMarcaProducto").val(marca);
+        $("#editarTipoProducto").val(tipo);
+        $("#editarNombreProductoNuevo").val(nombre);
+        $("#editarPrecioVentaProducto").val(precio);
+        $('#editarMarcaProducto').select2();
+        $('#editarTipoProducto').select2();
+        $('#editarAlertaCodigo').html('')
+        $("#productoEditarModal" ).modal('show');
+    }); 
+
+    $('#editarProducto').on('click', function(e) {
+        let data = $('#frm_editarProducto').serialize();
+        console.log(data);
+        $.confirm({
+            icon: 'fa fa-question',
+            theme: 'modern',
+            animation: 'scale',
+            type: 'blue',
+            title: '¿Está seguro de editar este producto?',
+            content: false,
+            buttons: {
+                Confirmar: function () {
+                    $.ajax({
+                        url: '/almacen/producto/editar',
+                        type: 'post',
+                        data: data ,
+                        dataType: 'json',
+                        success: function(response) {
+                            if(response['response'] == true) {
+                                toastr.success('Se edito el producto satisfactoriamente');
+                                $("#tb_almacen").DataTable().ajax.reload();
+                                
+                            } else {
+                                toastr.error('Ocurrio un error al momento de editar este producto porfavor verifique si todos los campos estan correctos');
+                            }
+                        },
+                        error: function(response) {
+                            toastr.error('Ocurrio un error al momento de editar este producto porfavor verifique si todos los campos estan correctos');
+                            
+                        }
+                    });
+                },
+                Cancelar: function () {
+                    
+                }
+            }
+        });
+    });
+
+
+
 })

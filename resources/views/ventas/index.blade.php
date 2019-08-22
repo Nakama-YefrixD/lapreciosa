@@ -18,7 +18,7 @@
 <div id="formularioElectronico">
 
 </div>
-
+<!-- 
 <div class="col-lg-12 grid-margin stretch-card">
     <div class="card">
         <div class="card-body">
@@ -44,11 +44,39 @@
             </table>  
         </div>
     </div>
+</div> -->
+
+
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h6 class="card-title">Comprobantes</h6>
+            <table id="tb_ventas" class="table table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Fecha Emisión</th>
+                        <th>Cliente</th>
+                        <th>Tipo Comprobante</th>
+                        <th>Número</th>
+                        <th>Estado</th>
+                        <th>SubTotal</th>
+                        <th>Total</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+            </table>  
+        </div>
+    </div>
 </div>
+
 
 @endsection
 
 @section('script')
+
+<script type="text/javascript" src="{{ asset('js/ventas/comprobantes/tabla.js') }}"></script>
+
 <script type="text/javascript">
     $(document).ready(function() {
         $('#btn_factura').on('click', function() {

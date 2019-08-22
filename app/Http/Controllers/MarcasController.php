@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\marcas;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
+use App\control;
+use DB;
 
 class MarcasController extends Controller
 {
@@ -17,6 +20,81 @@ class MarcasController extends Controller
         $marcas = marcas::all();
         return $marcas;      
     }
+
+    public function show()
+    {
+        $marcas = marcas::all();
+        
+        return view('almacen.marcas');
+    }
+
+    public function tb_marcas()
+    {
+        $marcas = marcas::all();
+        return Datatables::of($marcas)->make(true);
+    }
+
+    public function marcasEditar(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            
+            $marcas = marcas::find($request['editarIdMarca']);
+            $marcas->nombre = $request['editarNombreMarca'];
+            
+            if($marcas->update()) {
+                $control = new control;
+                $control->user_id = auth()->id();
+                $control->metodo = "Editar";
+                $control->tabla = "Marcas";
+                $control->campos = "all";
+                $control->datos = $request['editarIdMarca'].', '. $request['editarNombreMarca'];
+                $control->descripcion = "Editar una marca";
+                $control->save();
+            }
+
+            DB::commit();
+
+            $rpta = array(
+                'response'          =>  true,
+            );
+            echo json_encode($rpta);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            echo json_encode($e->getMessage());
+        }
+    }
+
+    public function marcasEliminar(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            
+            $marcas = marcas::find($request['id']);
+            if($marcas->delete()){
+                $control = new control;
+                $control->user_id = auth()->id();
+                $control->metodo = "Eliminar";
+                $control->tabla = "Marcas";
+                $control->campos = "all";
+                $control->datos = $request['id'];
+                $control->descripcion = "Eliminar una marca especifica";
+                $control->save();
+            }
+
+            DB::commit();
+
+            $rpta = array(
+                'response'          =>  true,
+            );
+            echo json_encode($rpta);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            echo json_encode($e->getMessage());
+        }     
+    }
+
+    
 
     /**
      * Show the form for creating a new resource.
@@ -39,16 +117,6 @@ class MarcasController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\marcas  $marcas
-     * @return \Illuminate\Http\Response
-     */
-    public function show(marcas $marcas)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.

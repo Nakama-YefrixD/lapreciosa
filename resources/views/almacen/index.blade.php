@@ -25,6 +25,7 @@
                     <tr>
                         <th>Codigo</th>
                         <th>Marca</th>
+                        <th>Tipo</th>
                         <th>Nombre</th>
                         <th>Precio</th>
                         <th>Cantidad</th>
@@ -186,7 +187,7 @@
                                     <div class="col-12">
                                         <label>Nuevo tipo de producto</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" name="nuevoTipoProducto" id="nuevoTipoProducto" >
+                                            <input type="text"  placeholder="Si no existe el tipo de producto agregalo" class="form-control" name="nuevoTipoProducto" id="nuevoTipoProducto" >
                                             <div class="input-group-append">
                                                 <button  id="crearTipoProducto" class="btn form-control btn-sm btn-gradient-primary" type="button"><i class="mdi mdi-plus"></i></button>
                                             </div>
@@ -195,21 +196,18 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group" >
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label>Codigo</label>
+                                        <input type="text" class="form-control" name="codigoProductoNuevo" id="codigoProductoNuevo">
+                                    </div>
+                                    <div class="col-12" id="alertaCodigo">
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <div class="row">
-                                    <div class="col-6">
-                                        <label>Tipos</label>
-                                        <div class="input-group">
-                                            <select class="form-control" name="tipoProducto" id="tipoProducto" style="width: 100%;">
-                                                @foreach($tipos as $tipo)
-                                                    <option value="{{ $tipo->id }}" > {{ $tipo->nombre }} </option>
-                                                @endforeach
-                                            </select>
-                                            <!-- <div class="input-group-append">
-                                                <button class="btn btn-sm btn-gradient-primary" type="button"><i class="mdi mdi-plus"></i></button>
-                                            </div> -->
-                                        </div>
-                                    </div>
                                     <div class="col-6">
                                         <label>Marcas</label>
                                         <div class="input-group">
@@ -223,7 +221,27 @@
                                             </div> -->
                                         </div>
                                     </div>
-                                    
+                                    <div class="col-6">
+                                        <label>Tipos de prodcuto</label>
+                                        <div class="input-group">
+                                            <select class="form-control" name="tipoProducto" id="tipoProducto" style="width: 100%;">
+                                                @foreach($tipos as $tipo)
+                                                    <option value="{{ $tipo->id }}" > {{ $tipo->nombre }} </option>
+                                                @endforeach
+                                            </select>
+                                            <!-- <div class="input-group-append">
+                                                <button class="btn btn-sm btn-gradient-primary" type="button"><i class="mdi mdi-plus"></i></button>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label>Nombre del producto</label>
+                                        <input type="text" class="form-control" name="nombreProductoNuevo" id="nombreProductoNuevo">
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -244,21 +262,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group" >
-                                <div class="row">
-                                    <div class="col-3">
-                                        <label>Codigo</label>
-                                        <input type="text" class="form-control" name="codigoProductoNuevo" id="codigoProductoNuevo">
-                                    </div>
-                                    <div class="col-9">
-                                        <label>Nombre del producto</label>
-                                        <input type="text" class="form-control" name="nombreProductoNuevo" id="nombreProductoNuevo">
-                                    </div>
-                                    <div class="col-12" id="alertaCodigo"><br>
-                                        
-                                    </div>
-                                </div>
-                            </div>
+                            
                             
                             <div class="form-group boton">
                                 <button type="button" class="addexis form-control btn btn-block btn-success btn-lg" id="crearProducto">
@@ -418,26 +422,16 @@
                 </div>
                 <div class="modal-body">
                     <div class="card-body">
-                        <form method="post" role="form" data-toggle="validator" id="frm_editar_producto">
+                        <form method="post" role="form" data-toggle="validator" id="frm_editarProducto">
                             @csrf
-                            <div class="form-group">
+                            <div class="form-group" >
                                 <div class="row">
-                                    <div class="col-6">
-                                        <label>Tipos</label>
-                                        <div class="input-group">
-                                            <select class="form-control" name="tipoProducto" id="tipoProducto" style="width: 100%;">
-                                                @foreach($tipos as $tipo)
-                                                    <option value="{{ $tipo->id }}" > {{ $tipo->nombre }} </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                    <div class="col-12">
+                                        <label>Codigo</label>
+                                        <input type="hidden" name="editarIdProducto" id="editarIdProducto">
+                                        <input type="text" class="form-control" name="editarCodigoProductoNuevo" id="editarCodigoProductoNuevo">
                                     </div>
-                                    <div class="col-6">
-                                        <label>Nuevo tipo de producto</label>
-                                        <input type="text" class="form-control" name="nuevoTipoProducto" id="nuevoTipoProducto" >
-                                        <div class="input-group-append">
-                                            <button  id="crearTipoProducto" class="btn form-control btn-sm btn-gradient-primary" type="button"><i class="mdi mdi-plus"></i></button>
-                                        </div>
+                                    <div class="col-12" id="editarAlertaCodigo">
                                     </div>
                                 </div>
                             </div>
@@ -446,40 +440,46 @@
                                     <div class="col-6">
                                         <label>Marcas</label>
                                         <div class="input-group">
-                                            <select class="form-control" name="marcaProducto" id="marcaProducto" style="width: 100%;">
+                                            <select class="form-control" name="editarMarcaProducto" id="editarMarcaProducto" style="width: 100%;">
                                                 @foreach($marcas as $marca)
                                                     <option value="{{ $marca->id }}" > {{ $marca->nombre }} </option>
                                                 @endforeach
                                             </select>
-                                            <!-- <div class="input-group-append">
-                                                <button class="btn btn-sm btn-gradient-primary" type="button"><i class="mdi mdi-plus"></i></button>
-                                            </div> -->
                                         </div>
                                     </div>
                                     <div class="col-6">
-                                        <label>Precio de venta</label>
-                                        <input type="text" name="precioVentaProducto" id="precioVentaProducto" class="form-control"
-                                            pattern="^\S/\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="S/1,000,000.00">
+                                        <label>Tipos de prodcuto</label>
+                                        <div class="input-group">
+                                            <select class="form-control" name="editarTipoProducto" id="editarTipoProducto" style="width: 100%;">
+                                                @foreach($tipos as $tipo)
+                                                    <option value="{{ $tipo->id }}" > {{ $tipo->nombre }} </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label>Nombre del producto</label>
+                                        <input type="text" class="form-control" name="editarNombreProductoNuevo" id="editarNombreProductoNuevo">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label>Precio con IGV(18%)</label>
+                                        <input type="text" name="editarPrecioVentaProducto" id="editarPrecioVentaProducto" class="form-control"
+                                            pattern="^\S/\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="S/1,000,000.00" >
                                         <!-- <input type="text" class="form-control" name="producto" id="producto" > -->
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group" >
-                                <div class="row">
-                                    <div class="col-3">
-                                        <label>Codigo</label>
-                                        <input type="text" class="form-control" name="codigoProductoNuevo" id="codigoProductoNuevo">
-                                    </div>
-                                    <div class="col-9">
-                                        <label>Nombre del producto</label>
-                                        <input type="text" class="form-control" name="nombreProductoNuevo" id="nombreProductoNuevo">
-                                    </div>
-                                </div>
-                            </div>
-                            
                             <div class="form-group boton">
-                                <button type="button" class="addexis form-control btn btn-block btn-success btn-lg" id="crearProducto">
-                                    Agregar</button>
+                                <button type="button" class="addexis form-control btn btn-block btn-success btn-lg" id="editarProducto">
+                                    Editar</button>
                             </div>
                         </form>
                     </div>
@@ -532,7 +532,7 @@
         var productoIndividual = [];
         let contadorProductoIndividual = 0;
         @foreach($productos as $producto)
-            productoIndividual[contadorProductoIndividual]= '{{ $producto->id }}'+'-'+'{{ $producto->nombre }}';
+            productoIndividual[contadorProductoIndividual]= '{{ $producto->codigo }}'+'-'+'{{ $producto->nombre }}';
             productos += '<option value="{{ $producto->id }}" >{{ $producto->nombre }}</option>';
             contadorProductoIndividual = contadorProductoIndividual+1;
         @endforeach
@@ -643,7 +643,7 @@
                 $('#precioVentaProducto').val(total.toFixed(2));
                 
             });
-            50*100/18
+            
             $('#precioVentaProducto').on('keyup', function() {
                 let valor = $(this).val().split('S/');
                 console.log(valor[1]);
@@ -663,6 +663,20 @@
                         break;
                     }else{
                         $('#alertaCodigo').html('')
+                    }
+                }
+                
+            });
+
+            $('#editarCodigoProductoNuevo').on('keyup', function() {
+                for(let x = 0; x < productoIndividual.length; x++){
+                    var valorProductoIndividual = productoIndividual[x].split('-');
+                    if($(this).val() == valorProductoIndividual[0]){
+                        $('#editarAlertaCodigo').html('<label style="color:red;">EL CODIGO '+valorProductoIndividual[0]+' YA EXISTE Y LE PERTENECE A '+valorProductoIndividual[1]+'</label>')
+                        
+                        break;
+                    }else{
+                        $('#editarAlertaCodigo').html('')
                     }
                 }
                 
@@ -705,7 +719,7 @@
                                             $('.listProductos').append(data);
                                             productos += '<option value="'+response['idProducto']+'" >'+response['nombreProducto']+'</option>';
                                             
-                                            productoIndividual[contadorProductoIndividual] = response['idProducto']+'-'+response['nombreProducto'];
+                                            productoIndividual[contadorProductoIndividual] = response['codigoProducto']+'-'+response['nombreProducto'];
                                             contadorProductoIndividual = contadorProductoIndividual+1;
                                             // $('.listProductos').load('/almacen/load/productos');
                                         } else {
@@ -819,55 +833,58 @@
             });
 
             $('#crearEntrada').on('click', function(e) {
-                    let data = $('#frm_entrada').serialize();
-                    console.log(data);
-                    $.confirm({
-                        icon: 'fa fa-question',
-                        theme: 'modern',
-                        animation: 'scale',
-                        type: 'blue',
-                        title: '¿Está seguro de crear esta entrada?',
-                        content: false,
-                        buttons: {
-                            Confirmar: function () {
-                                $.ajax({
-                                    url: '/almacen/entrada/crear',
-                                    type: 'post',
-                                    data: data ,
-                                    dataType: 'json',
-                                    success: function(response) {
-                                        if(response['response'] == true) {
-                                            toastr.success('Se grabó satisfactoriamente la entrada');
-                                            $("#tb_almacen").DataTable().ajax.reload();
-                                            $('.productosAgregados').remove();
-                                            $('#cantidadProductos').val('1');
-                                            $('#factura').val(' ');
-                                            $('#date').val(' ');
-                                            $('#precio').val(' ');
-                                            $('#cantidad').val(' ');
-                                            if($('#cerrar').val() == 1){
-                                                $('#entradaModal').modal('hide');
-                                            }
-
-                                            
-                                        } else {
-                                            // toastr.error(response.responseText);
-                                            toastr.error('Ocurrio un error al momento de crear esta entrada porfavor fijate si todos los campos estan correctos');
+                let data = $('#frm_entrada').serialize();
+                console.log(data);
+                $.confirm({
+                    icon: 'fa fa-question',
+                    theme: 'modern',
+                    animation: 'scale',
+                    type: 'blue',
+                    title: '¿Está seguro de crear esta entrada?',
+                    content: false,
+                    buttons: {
+                        Confirmar: function () {
+                            $.ajax({
+                                url: '/almacen/entrada/crear',
+                                type: 'post',
+                                data: data ,
+                                dataType: 'json',
+                                success: function(response) {
+                                    if(response['response'] == true) {
+                                        toastr.success('Se grabó satisfactoriamente la entrada');
+                                        $("#tb_almacen").DataTable().ajax.reload();
+                                        $('.productosAgregados').remove();
+                                        $('#cantidadProductos').val('1');
+                                        $('#factura').val(' ');
+                                        $('#date').val(' ');
+                                        $('#precio').val(' ');
+                                        $('#cantidad').val(' ');
+                                        if($('#cerrar').val() == 1){
+                                            $('#entradaModal').modal('hide');
                                         }
-                                    },
-                                    error: function(response) {
-                                        // toastr.error(response.responseText);
-                                        toastr.error('sOcurrio un error al momento de crear esta entrada porfavor fijate si todos los campos estan correctos');
+
                                         
+                                    } else {
+                                        // toastr.error(response.responseText);
+                                        toastr.error('Ocurrio un error al momento de crear esta entrada porfavor fijate si todos los campos estan correctos');
                                     }
-                                });
-                            },
-                            Cancelar: function () {
-                                
-                            }
+                                },
+                                error: function(response) {
+                                    // toastr.error(response.responseText);
+                                    toastr.error('sOcurrio un error al momento de crear esta entrada porfavor fijate si todos los campos estan correctos');
+                                    
+                                }
+                            });
+                        },
+                        Cancelar: function () {
+                            
                         }
-                    });
+                    }
+                });
             });
+
+            
+
     })
 </script>
     <script type="text/javascript" src="{{ asset('js/almacen/datatables.js') }}"></script>

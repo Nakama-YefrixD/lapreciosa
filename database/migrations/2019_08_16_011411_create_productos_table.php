@@ -17,6 +17,7 @@ class CreateProductosTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('marca_id');
             $table->unsignedBigInteger('tipo_id');
+            $table->string('codigo');
             $table->string('nombre');
             $table->integer('cantidad');
             $table->string('precio');

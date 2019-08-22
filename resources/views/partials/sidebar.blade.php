@@ -21,25 +21,28 @@
               <i class="mdi mdi-home menu-icon"></i>
             </a>
           </li> -->
-          <!-- <li class="nav-item">
+          <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-              <span class="menu-title">UI Elements</span>
+              <span class="menu-title">Almacén</span>
               <i class="menu-arrow"></i>
               <i class="mdi mdi-crosshairs-gps menu-icon"></i>
             </a>
             <div class="collapse" id="ui-basic">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{route ('almacen.index')}}">Almacén</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{route ('almacen.entrada.index')}}">Entradas</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{route ('almacen.proveedor.index')}}">Proveedores</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{route ('almacen.tiposproductos.index')}}">Tipos Producto</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{route ('almacen.marcas.index')}}">Marcas</a></li>  
               </ul>
             </div>
-          </li> -->
-          <li class="nav-item">
+          </li>
+          <!-- <li class="nav-item">
             <a class="nav-link" href="{{route ('almacen.index')}}">
               <span class="menu-title">Almacén</span>
               <i class="mdi mdi-shopping menu-icon"></i>
             </a>
-          </li>
+          </li> -->
           <li class="nav-item">
             <a class="nav-link" href="{{route ('ventas.index')}}">
               <span class="menu-title">Ventas</span>

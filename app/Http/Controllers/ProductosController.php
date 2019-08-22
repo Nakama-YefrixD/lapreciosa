@@ -21,6 +21,18 @@ class ProductosController extends Controller
         return $productos;        
     }
 
+    public function codigo()
+    {
+        $productos = productos::all();
+        foreach($productos as $producto){
+
+            $producto = Productos::find($producto->id);
+            $producto->codigo = $producto->id;
+            $producto->update();
+
+        }
+    }
+
     public function eliminarProducto(Request $request)
     {
         DB::beginTransaction();

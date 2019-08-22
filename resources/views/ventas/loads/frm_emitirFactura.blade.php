@@ -137,7 +137,7 @@
                     <div class="col-12">
                         <br>
                         
-                        <button type="button" class="btn btn-primary" id="btnAddProduct">
+                        <button type="button" class="btn btn-warning" id="btnAddProduct">
                             <i class="mdi mdi-plus-circle"></i>   AGREGAR PRODUCTO AL DETALLE
                         </button>
                         <br>
@@ -196,12 +196,12 @@
                 <div class="form-group boton">
                     <div class="row">
                         <div class="col-6">
-                            <button type="button" class=" addexis form-control btn btn-block btn-success btn-lg" id="emitirFactura">
-                                EMITIR DOCUMENTO ELECTRÓNICO</button>
+                            <button type="button" class=" addexis form-control btn btn-block btn-primary btn-lg" id="emitirFactura">
+                                EMITIR FACTURA ELECTRÓNICA</button>
                         </div>
                         <div class="col-6">
                             <button type="button" class=" addexis form-control btn btn-block btn-success btn-lg" id="guardarFactura">
-                                GUARDAR DOCUMENTO ELECTRÓNICO</button>
+                                GUARDAR FACTURA ELECTRÓNICA</button>
                         </div>
                     </div>
                     

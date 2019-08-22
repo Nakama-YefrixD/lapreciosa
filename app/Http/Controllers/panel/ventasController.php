@@ -11,7 +11,7 @@ use App\tiposcomprobante;
 use App\tiposdocumento;
 use App\tiposmoneda;
 use App\productos;
-
+use Yajra\DataTables\DataTables;
 
 use Greenter\Ws\Services\SunatEndpoints;
 use Greenter\See;
@@ -41,6 +41,29 @@ class ventasController extends Controller
     {
         return view('ventas.index');
     }
+
+    public function tb_ventas()
+    {
+        $ventas = ventas::join('tiposcomprobante', 'ventas.tipoComprobante_id', '=', 'tiposcomprobante.id')
+                        ->join('clientes', 'ventas.cliente_id', '=', 'clientes.id')
+                        ->get([
+                            'ventas.id                  as idVentas',
+                            'tiposcomprobante.id        as idTiposcomprobante',
+                            'tiposcomprobante.nombre    as nombreTiposcomprobante',
+                            'ventas.fecha               as fechaVentas',
+                            'clientes.nombre            as nombreClientes',
+                            'ventas.numero              as numeroVentas',
+                            'ventas.estadoSunat         as estadoSunatVentas',
+                            'ventas.subtotal            as subTotalVentas',
+                            'ventas.total               as totalVentas',
+                        ]);
+        
+        return Datatables::of($ventas)->make(true);
+    }
+
+
+
+
 
     public function emitirFactura(Request $request)
     {

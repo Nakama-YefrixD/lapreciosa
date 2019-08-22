@@ -40,10 +40,14 @@ class almacen extends Controller
     public function tb_almacen()
     {
         $productos = Productos::join('marcas', 'productos.marca_id', '=', 'marcas.id')
+                                ->join('tipos', 'tipos.id', '=', 'productos.tipo_id')
                                 ->get([
                                     'productos.id as idProducto',
+                                    'productos.codigo as codigoProducto',
                                     'marcas.id as idMarca',
                                     'marcas.nombre as nombreMarca',
+                                    'tipos.id as idTipo',
+                                    'tipos.nombre as nombreTipo',
                                     'productos.nombre as nombreProducto',
                                     'productos.cantidad as cantidadProducto',
                                     'productos.precio as precioProducto',
@@ -61,7 +65,7 @@ class almacen extends Controller
             $entrada->proveedor_id = $request['proveedor'];
             $entrada->factura = $request['factura'];
             $entrada->fecha = $request['fecha'];
-	    $entrada->ruc = "454545454";
+	        $entrada->ruc = "454545454";
             
             if($entrada->save()) {
                 $control = new control;
@@ -237,7 +241,7 @@ class almacen extends Controller
             }
 
             $productos = new Productos;
-            $productos->id = $request['codigoProductoNuevo'];
+            $productos->codigo = $request['codigoProductoNuevo'];
             $productos->marca_id = $request['marcaProducto'];
             $productos->tipo_id = $request['tipoProducto'];
             $productos->nombre = $request['nombreProductoNuevo'];
@@ -262,6 +266,7 @@ class almacen extends Controller
                 'response'          =>  true,
                 'idProducto'        =>  $productos->id,
                 'nombreProducto'    =>  $productos->nombre,
+                'codigoProducto'    =>  $productos->codigo,
             );
             echo json_encode($rpta);
         } catch (\Exception $e) {
@@ -269,4 +274,56 @@ class almacen extends Controller
             echo json_encode($e->getMessage());
         }
     } 
+
+    public function productoEditar(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $precioVenta = explode("S/", $request['editarPrecioVentaProducto']);
+
+            if(sizeof($precioVenta) > 1){
+                $prePrecioVenta = $precioVenta[1];
+            }else{
+                $prePrecioVenta = $precioVenta[0];
+            }
+            
+            $precioVentaEntero = explode(",", $prePrecioVenta);
+            if(sizeof($precioVentaEntero) > 1){
+                $precioVentaFinal = $precioVentaEntero[0].$precioVentaEntero[1];
+            }else{
+                $precioVentaFinal = $precioVentaEntero[0];
+            }
+
+            //miomio
+            $productos = Productos::find($request['editarIdProducto']);
+            $productos->codigo = $request['editarCodigoProductoNuevo'];
+            $productos->marca_id = $request['editarMarcaProducto'];
+            $productos->tipo_id = $request['editarTipoProducto'];
+            $productos->nombre = $request['editarNombreProductoNuevo'] ;
+            $productos->precio = $precioVentaFinal;
+            $productos->precioVista = $request['editarPrecioVentaProducto'];
+            
+            if($productos->update()) {
+                $control = new control;
+                $control->user_id = auth()->id();
+                $control->metodo = "Editar";
+                $control->tabla = "productos";
+                $control->campos = "codigo, marca_id, tipo_id, nombre, precio, precioVista";
+                $control->datos = $request['editarIdProducto'].', '. $request['editarCodigoProductoNuevo'].', '. $request['editarMarcaProducto'].', '. $request['editarTipoProducto'].', '. $request['editarNombreProductoNuevo'].', '. $request['editarPrecioVentaProducto'];
+                $control->descripcion = "Editar un producto";
+                $control->save();
+            }
+
+            DB::commit();
+
+            $rpta = array(
+                'response'          =>  true,
+            );
+            echo json_encode($rpta);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            echo json_encode($e->getMessage());
+        }
+    } 
+
 }
