@@ -16,12 +16,14 @@ class tiposComprobanteSeeder extends Seeder
             'codigo' => '01',
             'serie' => 'F001',
             'nombre' => 'FACTURA',
+	    'correlativo' => 1
         ]);
 
         tiposComprobante::create([
             'codigo' => '03',
             'serie' => 'B001',
             'nombre' => 'BOLETA DE VENTA',
+	    'correlativo' => 1,
         ]);
     }
 }
