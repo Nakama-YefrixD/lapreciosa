@@ -7,10 +7,21 @@ $(document).ready(function() {
     }
     
     var dt = $('#tb_almacen').DataTable({
-                    "processing": false,
-                    "serverSide": true,
+                    'searching': false,
+                    'processing': true,
+                    'serverSide': true,
                     "language": { 'url': "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json" },
-                    "ajax": URLactual+"/tb_almacen", 
+                    "ajax": {
+                        'url'   : URLactual+"/tb_almacen", 
+                        'type'  : 'get',
+                        'data'  : function(d) {
+                            d.bcodigo = $('#buscar_tb_codigo').val();
+                            d.bmarca = $('#buscar_tb_marca').val();
+                            d.btipo = $('#buscar_tb_tipo').val();
+                            d.bnombre = $('#buscar_tb_nombre').val();
+                        },
+                    },
+                    
                     "columns":[
                         
                         { "data": "codigoProducto" },
@@ -33,6 +44,24 @@ $(document).ready(function() {
                         
                     }
                 });
+    
+
+
+    $('#buscar_tb_codigo').on('keyup', function() {
+        $("#tb_almacen").DataTable().ajax.reload();
+    });
+
+    $('#buscar_tb_marca').on('keyup', function() {
+        $("#tb_almacen").DataTable().ajax.reload();
+    });
+
+    $('#buscar_tb_tipo').on('keyup', function() {
+        $("#tb_almacen").DataTable().ajax.reload();
+    });
+
+    $('#buscar_tb_nombre').on('keyup', function() {
+        $("#tb_almacen").DataTable().ajax.reload();
+    });
 
     $("#tb_almacen").on('click', '.eliminar', function(){
         var data = dt.row($(this).parents('tr')).data();

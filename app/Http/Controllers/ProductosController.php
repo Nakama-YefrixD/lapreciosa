@@ -21,6 +21,11 @@ class ProductosController extends Controller
         return $productos;        
     }
 
+    public static function buscadorProductos()
+    {
+        $productos = productos::select('id', 'marca_id', 'tipo_id', 'cantidad','precio','precioVista',DB::raw("CONCAT(codigo,'-',nombre) AS nombre"))->get();
+        return $productos;
+    }
     public function codigo()
     {
         $productos = productos::all();

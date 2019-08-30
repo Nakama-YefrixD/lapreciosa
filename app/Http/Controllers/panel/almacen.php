@@ -37,10 +37,27 @@ class almacen extends Controller
         return view('almacen.index')->with($data);
     }
 
-    public function tb_almacen()
+    public function tb_almacen(Request $request)
     {
         $productos = Productos::join('marcas', 'productos.marca_id', '=', 'marcas.id')
                                 ->join('tipos', 'tipos.id', '=', 'productos.tipo_id')
+                                ->where(function ($query) use($request) {
+                                    if($request->get('bcodigo') != ''){
+                                        $query->where('productos.codigo', 'like', '%' . $request->get('bcodigo') . '%');
+                                    }
+                    
+                                    if($request->get('bmarca') != ''){
+                                        $query->where('marcas.nombre', 'like', '%' . $request->get('bmarca') . '%');
+                                    }
+                    
+                                    if($request->get('btipo') != ''){
+                                        $query->where('tipos.nombre', 'like', '%' . $request->get('btipo') . '%');
+                                    }
+
+                                    if($request->get('bnombre') != ''){
+                                        $query->where('productos.nombre', 'like', '%' . $request->get('bnombre') . '%');
+                                    }
+                                })
                                 ->get([
                                     'productos.id as idProducto',
                                     'productos.codigo as codigoProducto',
