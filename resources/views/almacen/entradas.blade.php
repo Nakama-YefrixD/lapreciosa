@@ -1,4 +1,4 @@
-@extends('layouts.blank')
+﻿@extends('layouts.blank')
 @section('title')
     Entradas
 @endsection
@@ -145,8 +145,8 @@
 
 
 
-<div id="entradaDetalladaModal" class="modal fade bd-entradaDetalladaModal" role="dialog">
-    <div class="modal-dialog ">
+<div id="entradaDetalladaModal" class="modal fade bd-entradaDetalladaModal-lg" role="dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="card card-default">
                 <div class="card-header cabezera">
