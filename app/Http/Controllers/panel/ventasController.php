@@ -217,24 +217,27 @@ class ventasController extends Controller
 
                 $producto = productos::where('id', $request['nombreProducto'][$x])
                                         ->first();
-                $productoImpuesto = $request['total'][$x] - $request['subtotal'][$x];
+                // $productoImpuesto = $request['total'][$x] - $request['subtotal'][$x];
                 $productoPrecioSinIgv = $producto->precio * 18;
                 $productoPrecioSinIgv = $productoPrecioSinIgv/100;
                 $productoPrecioSinIgv = $producto->precio - $productoPrecioSinIgv;
-                $productoPrecioCantidadSinIgv = $productoPrecioSinIgv * $request['cantidad'][$x];
+                // $productoPrecioCantidadSinIgv = $productoPrecioSinIgv * $request['cantidad'][$x];
+                $productoPrecioCantidadSinIgv = $producto->precio * $request['cantidad'][$x];
+                $productoImpuesto = $request['total'][$x] - $request['subtotal'][$x];
+
                 $items[$x] = (new SaleDetail())
                     ->setCodProducto($producto->codigo)
                     ->setUnidad('NIU')
-                    ->setCantidad($request['cantidad'][$x])
+                    ->setCantidad($request['cantidad'][$x])//2
                     ->setDescripcion($producto->nombre)
-                    ->setMtoBaseIgv($productoPrecioCantidadSinIgv)
+                    ->setMtoBaseIgv($productoPrecioCantidadSinIgv)  //100
                     ->setPorcentajeIgv(18.00) // 18%
-                    ->setIgv($productoImpuesto)
+                    ->setIgv(sprintf("%.2f", $productoImpuesto))    //18
                     ->setTipAfeIgv('10')
-                    ->setTotalImpuestos($productoImpuesto)
-                    ->setMtoValorVenta($productoPrecioCantidadSinIgv)
-                    ->setMtoValorUnitario($productoPrecioSinIgv)
-                    ->setMtoPrecioUnitario($producto->precio);
+                    ->setTotalImpuestos(sprintf("%.2f", $productoImpuesto))//18
+                    ->setMtoValorVenta($productoPrecioCantidadSinIgv)//100
+                    ->setMtoValorUnitario($productoPrecioSinIgv)//50
+                    ->setMtoPrecioUnitario($producto->precio);//59
             }
 
             $legend = (new Legend())
@@ -262,62 +265,62 @@ class ventasController extends Controller
 
 
             // IMPRIMIR TICKET
-            // $nombre_impresora = "POS"; 
+            $nombre_impresora = "POS"; 
 
-            // $connector = new WindowsPrintConnector($nombre_impresora);
-            // $printer = new Printer($connector);
+            $connector = new WindowsPrintConnector($nombre_impresora);
+            $printer = new Printer($connector);
 
-            // $printer->setJustification(Printer::JUSTIFY_CENTER);
+            $printer->setJustification(Printer::JUSTIFY_CENTER);
 
             
+            try{
+                $logo = EscposImage::load(public_path('img/logo.png'), false);
+                $printer->bitImage($logo);
+            }catch(Exception $e){/*No hacemos nada si hay error*/}
+
+
+            $printer->text("\n"."LA PRECIOSA " . "\n");
+            $printer->text("Direccion: Orquídeas #151" . "\n");
+            $printer->text("Tel: 454664544" . "\n");
+            #La fecha también
+            date_default_timezone_set("America/Mexico_City");
+            $printer->text(date("Y-m-d H:i:s") . "\n");
+            $printer->text("-----------------------------" . "\n");
+            $printer->setJustification(Printer::JUSTIFY_LEFT);
+            $printer->text("CANT  DESCRIPCION    P.U   IMP.\n");
+            $printer->text("-----------------------------"."\n");
+
+                $printer->setJustification(Printer::JUSTIFY_LEFT);
+                for ($x = 0; $x < count($request['cantidad']); $x++) {
+                    
+                    $producto = productos::where('id', $request['nombreProducto'][$x])
+                                        ->first();
+
+                    $printer->text($producto['nombre'].": \n");
+                    $printer->text( $request['cantidad'][$x]."  unidad    ".$producto['precio']." ".$request['total'][$x]."   \n");
+                    
+                    
+                }
+                
+
+            $printer->text("-----------------------------"."\n");
+            $printer->setJustification(Printer::JUSTIFY_RIGHT);
+            $printer->text("SUBTOTAL: ".$request['subTotalVenta']."\n");
+            $printer->text("IVA: ".$request['igvVenta']."\n");
+            $printer->text("TOTAL: ".$request['totalVenta']."\n");
+
+            $printer->setJustification(Printer::JUSTIFY_CENTER);
+            $printer->text("Muchas gracias por su compra\n");
+
             // try{
             //     $logo = EscposImage::load(public_path('img/logo.png'), false);
             //     $printer->bitImage($logo);
             // }catch(Exception $e){/*No hacemos nada si hay error*/}
 
-
-            // $printer->text("\n"."LA PRECIOSA " . "\n");
-            // $printer->text("Direccion: Orquídeas #151" . "\n");
-            // $printer->text("Tel: 454664544" . "\n");
-            // #La fecha también
-            // date_default_timezone_set("America/Mexico_City");
-            // $printer->text(date("Y-m-d H:i:s") . "\n");
-            // $printer->text("-----------------------------" . "\n");
-            // $printer->setJustification(Printer::JUSTIFY_LEFT);
-            // $printer->text("CANT  DESCRIPCION    P.U   IMP.\n");
-            // $printer->text("-----------------------------"."\n");
-
-            //     $printer->setJustification(Printer::JUSTIFY_LEFT);
-            //     for ($x = 0; $x < count($request['cantidad']); $x++) {
-                    
-            //         $producto = productos::where('id', $request['nombreProducto'][$x])
-            //                             ->first();
-
-            //         $printer->text($producto['nombre'].": \n");
-            //         $printer->text( $request['cantidad'][$x]."  unidad    ".$producto['precio']." ".$request['total'][$x]."   \n");
-                    
-                    
-            //     }
-                
-
-            // $printer->text("-----------------------------"."\n");
-            // $printer->setJustification(Printer::JUSTIFY_RIGHT);
-            // $printer->text("SUBTOTAL: ".$request['subTotalVenta']."\n");
-            // $printer->text("IVA: ".$request['igvVenta']."\n");
-            // $printer->text("TOTAL: ".$request['totalVenta']."\n");
-
-            // $printer->setJustification(Printer::JUSTIFY_CENTER);
-            // $printer->text("Muchas gracias por su compra\n");
-
-            // // try{
-            // //     $logo = EscposImage::load(public_path('img/logo.png'), false);
-            // //     $printer->bitImage($logo);
-            // // }catch(Exception $e){/*No hacemos nada si hay error*/}
-
-            // $printer->feed(3);
-            // $printer->cut();
-            // $printer->pulse();
-            // $printer->close();
+            $printer->feed(3);
+            $printer->cut();
+            $printer->pulse();
+            $printer->close();
 
 
 
@@ -635,7 +638,8 @@ class ventasController extends Controller
                 $productoPrecioSinIgv = $producto->precio * 18;
                 $productoPrecioSinIgv = $productoPrecioSinIgv/100;
                 $productoPrecioSinIgv = $producto->precio - $productoPrecioSinIgv;
-                $productoPrecioCantidadSinIgv = $productoPrecioSinIgv * $request['cantidad'][$x];
+                $productoPrecioCantidadSinIgv = $producto->precio * $request['cantidad'][$x];
+                // $productoPrecioCantidadSinIgv = $productoPrecioSinIgv * $request['cantidad'][$x];
                 $items[$x] = (new SaleDetail())
                     ->setCodProducto($producto->codigo)
                     ->setUnidad('NIU')
@@ -676,62 +680,62 @@ class ventasController extends Controller
 
 
             // IMPRIMIR TICKET
-            // $nombre_impresora = "POS"; 
+            $nombre_impresora = "POS"; 
 
-            // $connector = new WindowsPrintConnector($nombre_impresora);
-            // $printer = new Printer($connector);
+            $connector = new WindowsPrintConnector($nombre_impresora);
+            $printer = new Printer($connector);
 
-            // $printer->setJustification(Printer::JUSTIFY_CENTER);
+            $printer->setJustification(Printer::JUSTIFY_CENTER);
 
             
+            try{
+                $logo = EscposImage::load(public_path('img/logo.png'), false);
+                $printer->bitImage($logo);
+            }catch(Exception $e){/*No hacemos nada si hay error*/}
+
+
+            $printer->text("\n"."LA PRECIOSA " . "\n");
+            $printer->text("Direccion: Orquídeas #151" . "\n");
+            $printer->text("Tel: 454664544" . "\n");
+            #La fecha también
+            date_default_timezone_set("America/Mexico_City");
+            $printer->text(date("Y-m-d H:i:s") . "\n");
+            $printer->text("-----------------------------" . "\n");
+            $printer->setJustification(Printer::JUSTIFY_LEFT);
+            $printer->text("CANT  DESCRIPCION    P.U   IMP.\n");
+            $printer->text("-----------------------------"."\n");
+
+                $printer->setJustification(Printer::JUSTIFY_LEFT);
+                for ($x = 0; $x < count($request['cantidad']); $x++) {
+                    
+                    $producto = productos::where('id', $request['nombreProducto'][$x])
+                                        ->first();
+
+                    $printer->text($producto['nombre'].": \n");
+                    $printer->text( $request['cantidad'][$x]."  unidad    ".$producto['precio']." ".$request['total'][$x]."   \n");
+                    
+                    
+                }
+                
+
+            $printer->text("-----------------------------"."\n");
+            $printer->setJustification(Printer::JUSTIFY_RIGHT);
+            $printer->text("SUBTOTAL: ".$request['subTotalVenta']."\n");
+            $printer->text("IVA: ".$request['igvVenta']."\n");
+            $printer->text("TOTAL: ".$request['totalVenta']."\n");
+
+            $printer->setJustification(Printer::JUSTIFY_CENTER);
+            $printer->text("Muchas gracias por su compra\n");
+
             // try{
             //     $logo = EscposImage::load(public_path('img/logo.png'), false);
             //     $printer->bitImage($logo);
             // }catch(Exception $e){/*No hacemos nada si hay error*/}
 
-
-            // $printer->text("\n"."LA PRECIOSA " . "\n");
-            // $printer->text("Direccion: Orquídeas #151" . "\n");
-            // $printer->text("Tel: 454664544" . "\n");
-            // #La fecha también
-            // date_default_timezone_set("America/Mexico_City");
-            // $printer->text(date("Y-m-d H:i:s") . "\n");
-            // $printer->text("-----------------------------" . "\n");
-            // $printer->setJustification(Printer::JUSTIFY_LEFT);
-            // $printer->text("CANT  DESCRIPCION    P.U   IMP.\n");
-            // $printer->text("-----------------------------"."\n");
-
-            //     $printer->setJustification(Printer::JUSTIFY_LEFT);
-            //     for ($x = 0; $x < count($request['cantidad']); $x++) {
-                    
-            //         $producto = productos::where('id', $request['nombreProducto'][$x])
-            //                             ->first();
-
-            //         $printer->text($producto['nombre'].": \n");
-            //         $printer->text( $request['cantidad'][$x]."  unidad    ".$producto['precio']." ".$request['total'][$x]."   \n");
-                    
-                    
-            //     }
-                
-
-            // $printer->text("-----------------------------"."\n");
-            // $printer->setJustification(Printer::JUSTIFY_RIGHT);
-            // $printer->text("SUBTOTAL: ".$request['subTotalVenta']."\n");
-            // $printer->text("IVA: ".$request['igvVenta']."\n");
-            // $printer->text("TOTAL: ".$request['totalVenta']."\n");
-
-            // $printer->setJustification(Printer::JUSTIFY_CENTER);
-            // $printer->text("Muchas gracias por su compra\n");
-
-            // // try{
-            // //     $logo = EscposImage::load(public_path('img/logo.png'), false);
-            // //     $printer->bitImage($logo);
-            // // }catch(Exception $e){/*No hacemos nada si hay error*/}
-
-            // $printer->feed(3);
-            // $printer->cut();
-            // $printer->pulse();
-            // $printer->close();
+            $printer->feed(3);
+            $printer->cut();
+            $printer->pulse();
+            $printer->close();
 
 
 
