@@ -15,6 +15,32 @@
     </div> 
 </div>
 
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Buscar</h4>
+            <div class="row">
+                <div class="col-3">
+                    <label>Buscar Codigo</label>
+                    <input type="text" class="form-control form-control-lg" name="buscar_tb_codigo" id="buscar_tb_codigo">
+                </div>
+                <div class="col-3">
+                    <label>Buscar Marca</label>
+                    <input type="text" class="form-control form-control-lg" name="buscar_tb_marca" id="buscar_tb_marca">
+                </div>
+                <div class="col-3">
+                    <label>Buscar Tipo</label>
+                    <input type="text" class="form-control form-control-lg" name="buscar_tb_tipo" id="buscar_tb_tipo">
+                </div>
+                <div class="col-3">
+                    <label>Buscar Nombre</label>
+                    <input type="text" class="form-control form-control-lg" name="buscar_tb_nombre" id="buscar_tb_nombre">
+                </div>
+                    
+            </div>
+        </div>
+    </div> 
+</div>
 
 <div class="col-lg-12 grid-margin stretch-card">
     <div class="card">

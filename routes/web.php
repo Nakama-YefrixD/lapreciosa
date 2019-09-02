@@ -19,7 +19,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/perfil', 'perfilUsuario@index')->name('perfil');
-Route::post('/consult/ruc/{ruc}', 'consultaIdentidad@rucConsult')->name('consult');
+Route::post('/consult/ruc/{ruc}', 'consultaIdentidad@rucConsult')->name('consult.ruc');
+Route::post('/consult/dni/{dni}', 'consultaIdentidad@dniConsult')->name('consult.dni');
 
 
 // ALMACEN 
@@ -85,22 +86,39 @@ Route::post('/consult/ruc/{ruc}', 'consultaIdentidad@rucConsult')->name('consult
         });
 
     // VENTAS ENVIOS
-        // EMITIR DOCUMENTO ELECTRONICO
+        // EMITIR FACTURA ELECTRONICA
         Route::post('/venta/emitirfactura', 'panel\ventasController@emitirFactura')->name('venta.emitir');
+        Route::post('/venta/guardarEmitirfactura', 'panel\ventasController@guardarEmitirFactura')->name('venta.guardarEmitir');
+
+        // EMITIR BOLETA ELECTRONICA
+        Route::post('/venta/emitirBoleta', 'panel\ventasController@emitirBoleta')->name('venta.boleta.emitir');
+        Route::post('/venta/guardaremitirBoleta', 'panel\ventasController@guardarEmitirBoleta')->name('venta.boleta.guardarEmitir');
+        
+        // ENVIAR COMPROBANTE A LA SUNAT
+        Route::post('/ventas/comprobante/emitir', 'panel\ventasController@comprobanteEmitir')->name('venta.comprobante.emitir');
+        
+
+// CONFIGURACION
+// DESCUENTOS
+    Route::get('/configuracion/descuentos', 'panel\Configuraciones\descuentosController@index')
+            ->name('configuraciones.descuentos.index');
+    Route::get('/configuracion/descuentos/tb_descuentos', 'panel\Configuraciones\descuentosController@tb_descuentos')
+            ->name('configuraciones.descuentos.tabla');
     
-
-
-
-
-
-
-
+    Route::post('/configuraciones/descuentos/crear', 'panel\Configuraciones\descuentosController@descuentoCrear')
+            ->name('configuraciones.descuentos.crear');
+    
+    Route::post('/configuraciones/descuentos/editar', 'panel\Configuraciones\descuentosController@descuentoEditar')
+            ->name('configuraciones.descuentos.editar');
+// USUARIOS
+    Route::get('/configuracion/usuarios', 'panel\Configuraciones\usuariosController@index')->name('configuraciones.usuarios.index');
+    Route::get('/configuracion/usuarios/tb_usuarios', 'panel\Configuraciones\usuariosController@tb_usuarios')->name('configuraciones.usuarios.tabla');
+    
+    Route::post('/configuraciones/usuarios/editar', 'panel\Configuraciones\usuariosController@usuarioEditar')->name('configuraciones.usuarios.editar');
+    Route::post('/configuraciones/usuarios/crear', 'panel\Configuraciones\usuariosController@usuarioCrear')->name('configuraciones.usuarios.crear');
 
 
 Route::post('/producto/eliminar', 'ProductosController@eliminarProducto')->name('producto.eliminar');
 Route::get('/sunats', 'sunat@sunat')->name('sunat');
 Route::get('/villca', 'sunat@villca');
-Route::get('/codigo', 'ProductosController@codigo');
-
-
-
+// Route::get('/codigo', 'ProductosController@codigo');

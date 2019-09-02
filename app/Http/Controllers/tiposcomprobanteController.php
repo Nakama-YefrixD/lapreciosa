@@ -23,4 +23,10 @@ class tiposcomprobanteController extends Controller
         $tiposcomprobante = tiposcomprobante::where('codigo', '01')->first();
         return $tiposcomprobante;        
     }
+
+    public static function boleta()
+    {
+        $tiposcomprobante = tiposcomprobante::where('codigo', '03')->first();
+        return $tiposcomprobante;        
+    }
 }

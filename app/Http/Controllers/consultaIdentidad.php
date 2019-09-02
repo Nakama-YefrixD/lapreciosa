@@ -14,17 +14,17 @@ class consultaIdentidad extends Controller
         $this->middleware('auth');
     }
 
-    public function dniConsult()
+    public function dniConsult($dni)
     {
         $cs = new Dni();
         $cs->setClient(new ContextClient());
 
-        $person = $cs->get('73819654');
+        $person = $cs->get($dni);
         if ($person === false) {
             echo $cs->getError();
             exit();
         }
-        dd($person);
+        return $person;
     }
 
     public function rucConsult($ruc)
@@ -40,4 +40,6 @@ class consultaIdentidad extends Controller
         
         return $company;
     }
+
+    
 }

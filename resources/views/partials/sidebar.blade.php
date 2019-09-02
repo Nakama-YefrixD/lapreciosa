@@ -50,11 +50,24 @@
             </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-configuracion" aria-expanded="false" aria-controls="ui-basic">
+              <span class="menu-title">Configuración</span>
+              <i class="menu-arrow"></i>
+              <i class="mdi mdi-crosshairs-gps menu-icon"></i>
+            </a>
+            <div class="collapse" id="ui-configuracion">
+              <ul class="nav flex-column sub-menu"> 
+                <li class="nav-item"> <a class="nav-link" href="{{route ('configuraciones.descuentos.index')}}">Descuentos</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{route ('configuraciones.usuarios.index')}}">Usuarios</a></li>
+              </ul>
+            </div>
+          </li>
+          <!-- <li class="nav-item">
             <a class="nav-link" href="#">
               <span class="menu-title">Configuración</span>
               <i class="mdi mdi-shopping menu-icon"></i>
             </a>
-          </li>
+          </li> -->
           <li class="nav-item">
             <a class="nav-link" href="#">
               <span class="menu-title">Estadisticas</span>

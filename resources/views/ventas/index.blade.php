@@ -15,8 +15,50 @@
     </div> 
 </div>
 
-<div id="formularioElectronico">
 
+
+
+<div class="col-lg-12 grid-margin stretch-card" id="contenedorEmitir" style="display: none">
+    <div class="card">
+        <div class="card-body">
+            <div id="formularioElectronico">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Buscar</h4>
+            @csrf
+            <div class="row">
+                <div class="col-3">
+                    <label>Cliente</label>
+                    <input type="text" class="form-control form-control-lg" name="buscar_tb_cliente" id="buscar_tb_cliente">
+                </div>
+                <div class="col-3">
+                    <label>Tipo de comprobante</label>
+                    <select class="form-control" name ="buscar_tb_comprobante" id="buscar_tb_comprobante">
+                        <option value="">SELECCIONA UN COMPROBANTE</option>
+                        <option value="BOLETA">BOLETA</option>
+                        <option value="FACTURA">FACTURA</option>
+                    </select>
+                    <!-- <input type="text" class="form-control form-control-lg" name="buscar_tb_comprobante" id="buscar_tb_comprobante"> -->
+                </div>
+                <div class="col-3">
+                    <label>Numero de comprobante</label>
+                    <input type="text" class="form-control form-control-lg" name="buscar_tb_numeroComprobante" id="buscar_tb_numeroComprobante">
+                </div>
+                <div class="col-3">
+                    <label>Filtro por Fechas</label>
+                    <input type="text" class="form-control form-control-lg" name="buscar_tb_fecnumeroComprobante" id="buscar_tb_fecnumeroComprobante" value=''>
+                </div>
+                    
+            </div>
+        </div>
+    </div> 
 </div>
 <!-- 
 <div class="col-lg-12 grid-margin stretch-card">
@@ -78,7 +120,50 @@
 <script type="text/javascript" src="{{ asset('js/ventas/comprobantes/tabla.js') }}"></script>
 
 <script type="text/javascript">
+    
     $(document).ready(function() {
+        $('input[name="buscar_tb_fecnumeroComprobante"]').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                cancelLabel: 'Clear',
+                format: 'YYYY/MM/DD',
+                "daysOfWeek": [
+                    "Do",
+                    "Lu",
+                    "Ma",
+                    "Mi",
+                    "Ju",
+                    "Vi",
+                    "Sa"
+                ],
+                "monthNames": [
+                    "Enero",
+                    "Febrero",
+                    "Marzo",
+                    "Abril",
+                    "Mayo",
+                    "Junio",
+                    "Julio",
+                    "Agosto",
+                    "Septiembre",
+                    "Octubre",
+                    "Noviembre",
+                    "Diciembre"
+                ],
+            }
+        });
+        $('input[name="buscar_tb_fecnumeroComprobante"]').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('YYYY/MM/DD') + ' - ' + picker.endDate.format('YYYY/MM/DD'));
+            $("#tb_ventas").DataTable().ajax.reload();
+        });
+
+        $('input[name="buscar_tb_fecnumeroComprobante"]').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+            $("#tb_ventas").DataTable().ajax.reload();
+        });
+
+
+
         $('#btn_factura').on('click', function() {
             if ($('#btn_boleta').hasClass('activado')){
                 $("#btn_boleta").removeClass(" btn-gradient-danger");
@@ -107,7 +192,7 @@
                             $("#btn_factura").addClass("btn-gradient-danger");
                             $("#btn_factura").addClass("activado");
                             $('#textFactura').html('CANCELAR FACTURA ELECTRÓNICA');
-                            
+                            $('#contenedorEmitir').show();
                             $('#formularioElectronico').html(response);
                         }).fail(function(){
                             // self.setContentAppend('<div>Fail!</div>');
@@ -134,6 +219,7 @@
                 $("#btn_factura").addClass("btn-gradient-primary");
                 $("#btn_factura").addClass("desactivado");
                 $('#textFactura').html('FACTURA ELECTRÓNICA');
+                $('#contenedorEmitir').hide();
                 $('#formularioElectronico').html('');
             }
         });
@@ -166,7 +252,7 @@
                             $("#btn_boleta").addClass("btn-gradient-danger");
                             $("#btn_boleta").addClass("activado");
                             $('#textBoleta').html('CANCELAR BOLETA DE VENTA ELECTRÓNICA');
-                            
+                            $('#contenedorEmitir').show();
                             $('#formularioElectronico').html(response);
                         }).fail(function(){
                             // self.setContentAppend('<div>Fail!</div>');
@@ -193,14 +279,11 @@
                 $("#btn_boleta").addClass("btn-gradient-primary");
                 $("#btn_boleta").addClass("desactivado");
                 $('#textBoleta').html('BOLETA DE VENTA ELECTRÓNICA');
+                $('#contenedorEmitir').hide();
                 $('#formularioElectronico').html('');
             }
-            
-            
         });
-        
     })
-
 </script>
 
 

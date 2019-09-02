@@ -21,6 +21,23 @@ class ProductosController extends Controller
         return $productos;        
     }
 
+    public static function buscadorProductos()
+    {
+        $productos = productos::select( 'productos.id           as id', 
+                                        'productos.marca_id     as marca_id', 
+                                        'productos.tipo_id      as tipo_id', 
+                                        'productos.cantidad     as cantidad',
+                                        'productos.precio       as precio',
+                                        'productos.precioVista  as precioVista',
+                                        DB::raw("CONCAT(productos.codigo,'-',productos.nombre) AS nombre"),
+                                        'dp.producto_id         as idProductoDescuento',
+                                        'dp.porcentaje          as porcentajeProductoDescuento',
+                                        'dp.cantidad            as cantidadProductoDescuento'
+                                        )
+                                ->leftjoin('descuentosproducto as dp', 'dp.producto_id', '=','productos.id')
+                                ->get();
+        return $productos;
+    }
     public function codigo()
     {
         $productos = productos::all();
