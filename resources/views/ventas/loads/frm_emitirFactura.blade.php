@@ -1,4 +1,4 @@
-<?php 
+﻿<?php 
   use\App\Http\Controllers\ProductosController; 
   use\App\Http\Controllers\TiposMonedaController;
   use\App\Http\Controllers\tiposcomprobanteController;
@@ -217,7 +217,6 @@
                 </div>
             </form>
         
-
 
 <script type="text/javascript">
     // $('.productos').select2();
