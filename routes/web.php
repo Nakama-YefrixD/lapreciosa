@@ -11,6 +11,11 @@
 |
 */
 
+Route::get('/inicio', function () {
+    return view('web.home.index');
+});
+
+
 Route::get('/', function () {
     return view('auth.login');
 });
