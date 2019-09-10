@@ -7,27 +7,27 @@
 
 	<header class="header">
 		<div class="header_inner d-flex flex-row align-items-center justify-content-start">
-			<div class="logo"><a href="#">Wish</a></div>
+			<div class="logo"><a href="#">PRECIOSA</a></div>
 			<nav class="main_nav">
 				<ul>
-					<li><a href="#">home</a></li>
-					<li><a href="#">clothes</a></li>
+					<li><a href="/">home</a></li>
+					<!-- <li><a href="#">clothes</a></li>
 					<li><a href="#">accessories</a></li>
-					<li><a href="#">lingerie</a></li>
-					<li><a href="#">contact</a></li>
+					<li><a href="#">lingerie</a></li> -->
+					<li><a href="/contactanos">contactanos</a></li>
 				</ul>
 			</nav>
 			<div class="header_content ml-auto">
-				<div class="search header_search">
+				<!-- <div class="search header_search">
 					<form action="#">
 						<input type="search" class="search_input" required="required">
 						<button type="submit" id="search_button" class="search_button">
 							<img src="{{ asset('assetsWeb/images/magnifying-glass.svg')}}" alt=""></button>
 					</form>
-				</div>
+				</div> -->
 				<div class="shopping">
 					<!-- Cart -->
-					<a href="#">
+					<!-- <a href="#">
 						<div class="cart">
 							<img src="{{ asset('assetsWeb/images/shopping-bag.svg')}}" alt="">
 							<div class="cart_num_container">
@@ -36,9 +36,9 @@
 								</div>
 							</div>
 						</div>
-					</a>
+					</a> -->
 					<!-- Star -->
-					<a href="#">
+					<!-- <a href="#">
 						<div class="star">
 							<img src="{{ asset('assetsWeb/images/star.svg')}}" alt="">
 							<div class="star_num_container">
@@ -47,9 +47,9 @@
 								</div>
 							</div>
 						</div>
-					</a>
+					</a> -->
 					<!-- Avatar -->
-					<a href="#">
+					<a href="/login">
 						<div class="avatar">
 							<img src="{{ asset('assetsWeb/images/avatar.svg')}}" alt="">
 						</div>

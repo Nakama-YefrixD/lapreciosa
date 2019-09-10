@@ -15,9 +15,14 @@ Route::get('/inicio', function () {
     return view('web.home.index');
 });
 
+Route::get('/contactanos', function () {
+    return view('web.contactanos.index');
+});
+
 
 Route::get('/', function () {
-    return view('auth.login');
+    return view('web.home.index');
+    // return view('auth.login');
 });
 
 Auth::routes();
