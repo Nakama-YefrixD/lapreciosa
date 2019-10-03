@@ -60,33 +60,7 @@
         </div>
     </div> 
 </div>
-<!-- 
-<div class="col-lg-12 grid-margin stretch-card">
-    <div class="card">
-        <div class="card-body">
-            <h6 class="card-title">Comprobantes</h6>
-            <table id="tb_almacen" class="table table-striped" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Fecha Emisión</th>
-                        <th>Cliente</th>
-                        <th>Número</th>
-                        <th>Estado</th>
-                        <th>T.Gratuito</th>
-                        <th>T.Exonerado</th>
-                        <th>T.Gravado</th>
-                        <th>T.Igv</th>
-                        <th>total</th>
-                        <th>Descargas</th>
-                        <th>Anulación</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-            </table>  
-        </div>
-    </div>
-</div> -->
+
 
 
 <div class="col-lg-12 grid-margin stretch-card">
@@ -214,6 +188,7 @@
                     }
                 });
             }else{
+                location.reload();
                 $("#btn_factura").removeClass(" btn-gradient-danger");
                 $("#btn_factura").removeClass("activado");
                 $("#btn_factura").addClass("btn-gradient-primary");

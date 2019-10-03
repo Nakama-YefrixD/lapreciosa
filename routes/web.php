@@ -84,6 +84,8 @@ Route::post('/consult/dni/{dni}', 'consultaIdentidad@dniConsult')->name('consult
 // VENTAS
     Route::get('/ventas', 'panel\ventasController@index')->name('ventas.index');
     Route::get('/ventas/tb_ventas', 'panel\ventasController@tb_ventas')->name('ventas.tb_ventas');
+
+    Route::get('/ventas/tb_buscarProducto', 'panel\ventasController@tb_buscarProducto')->name('ventas.tb_buscarProducto');
     
 
 
