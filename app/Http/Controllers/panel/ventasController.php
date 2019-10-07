@@ -12,6 +12,7 @@ use App\tiposdocumento;
 use App\tiposmoneda;
 use App\productos;
 use App\control;
+use App\User;
 use Yajra\DataTables\DataTables;
 
 use Greenter\Ws\Services\SunatEndpoints;
@@ -29,7 +30,7 @@ use Mike42\Escpos\EscposImage;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 
 use DB;
-
+use PDF;
 
 class ventasController extends Controller
 {
@@ -1064,5 +1065,37 @@ class ventasController extends Controller
             DB::rollBack();
             echo json_encode($e->getMessage());
         }
+    }
+
+    public function verDetalleVenta($idVenta)
+    {
+
+        $venta   = ventas::find($idVenta);
+        $usuario = User::find($venta->user_id);
+        $cliente = clientes::find($venta->cliente_id);
+
+        $detallesVenta = detallesventa::join('productos as p', 'p.id', '=', 'detalles_venta.producto_id')
+                                    ->where('venta_id', $idVenta)
+                                    ->get([
+                                        'p.nombre                   as nombreProducto',
+                                        'p.precioVista              as precioProducto',
+                                        'detalles_venta.cantidad    as cantidadProducto',
+                                        'detalles_venta.igv         as igvProducto',
+                                        'detalles_venta.descuento   as descuentoProducto',
+                                        'detalles_venta.subtotal    as subtotalProducto',
+                                        'detalles_venta.total       as totalProducto'
+                                    ]);
+        
+        $data = array(
+            'item'  =>  1,
+            "cliente" => $cliente,
+            "usuario" => $usuario,
+            'venta'         => $venta,
+            'detallesVenta' => $detallesVenta,
+        );
+
+        $pdf = PDF::loadView('ventas.pdf.detalleVentaPdf', $data)->setPaper('a4');
+        return $pdf->stream();
+
     }
 }

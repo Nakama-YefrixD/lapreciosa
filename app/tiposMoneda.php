@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class tiposMoneda extends Model
 {
-    protected $table = 'tiposMoneda';
+    protected $table = 'tiposmoneda';
 }

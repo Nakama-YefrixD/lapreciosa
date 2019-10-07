@@ -97,6 +97,9 @@ Route::post('/consult/dni/{dni}', 'consultaIdentidad@dniConsult')->name('consult
             return view('ventas.loads.frm_emitirBoleta');
         });
 
+        Route::get('/ventas/pdf/{idVenta}', 'panel\ventasController@verDetalleVenta')
+                ->name('ventas.pdf');
+
     // VENTAS ENVIOS
         // EMITIR FACTURA ELECTRONICA
         Route::post('/venta/emitirfactura', 'panel\ventasController@emitirFactura')->name('venta.emitir');

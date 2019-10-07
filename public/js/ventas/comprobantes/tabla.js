@@ -39,7 +39,7 @@ $(document).ready(function() {
 
                 ],
                 "fnRowCallback": function(nRow, aData, iDisplayIndex) {
-                    var btnPdf = '<button class="btn btn-sm btn-gradient-primary" type="button"><i class="mdi mdi-file-pdf"></i></button>';
+                    var btnPdf = '<button class="btn btn-sm btn-gradient-primary" type="button"><i class="mdi mdi-file-pdf pdfVer"></i></button>';
                     $(nRow).find("td:eq(8)").html(btnPdf);
 
 
@@ -58,7 +58,14 @@ $(document).ready(function() {
                     
                 }
             });
+    // VER VENTA
+    $("#tb_ventas").on('click', '.pdfVer', function(){
+        var data = dt.row($(this).parents('tr')).data();
+        let idVenta = data['idVentas'];
+
+        window.open("/ventas/pdf/"+idVenta, '_blank');
         
+    });
     dt.on( 'order.dt search.dt', function () {
             dt.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
             cell.innerHTML = i+1;
@@ -127,6 +134,5 @@ $(document).ready(function() {
             }
         });
     }); 
-
-   
 })
+

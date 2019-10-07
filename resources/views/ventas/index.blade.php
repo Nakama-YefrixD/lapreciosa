@@ -92,6 +92,7 @@
 @section('script')
 
 <script type="text/javascript" src="{{ asset('js/ventas/comprobantes/tabla.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/ventas/mostrarPdf.js') }}"></script>
 
 <script type="text/javascript">
     
