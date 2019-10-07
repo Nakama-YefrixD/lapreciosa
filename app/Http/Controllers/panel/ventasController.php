@@ -1033,7 +1033,7 @@ class ventasController extends Controller
             $productos = new Productos;
             $productos->codigo = $request['codigoProductoNuevo'];
             $productos->marca_id = 100;
-            $productos->tipo_id = 100;
+            $productos->tipo_id = 1000;
             $productos->nombre = $request['nombreProductoNuevo'];
             $productos->cantidad = 0;
             $productos->precio = $request['precioVentaProducto'];
