@@ -306,8 +306,8 @@ class ventasController extends Controller
 
 
             $printer->text("\n"."LA PRECIOSA " . "\n");
-            $printer->text("Direccion: Orquídeas #151" . "\n");
-            $printer->text("Tel: 454664544" . "\n");
+            $printer->text("Direccion: Dean Valdivia 412 A" . "\n");
+            $printer->text("Tel: 054 77 34 22" . "\n");
             #La fecha también
             
             $printer->text(date("Y-m-d H:i:s") . "\n");
@@ -460,8 +460,8 @@ class ventasController extends Controller
 
 
             $printer->text("\n"."LA PRECIOSA " . "\n");
-            $printer->text("Direccion: Orquídeas #151" . "\n");
-            $printer->text("Tel: 454664544" . "\n");
+            $printer->text("Direccion: Dean Valdivia 412 A" . "\n");
+            $printer->text("Tel: 054 77 34 22" . "\n");
             #La fecha también
             date_default_timezone_set("America/Mexico_City");
             $printer->text(date("Y-m-d H:i:s") . "\n");
@@ -693,8 +693,8 @@ class ventasController extends Controller
 
 
             $printer->text("\n"."LA PRECIOSA " . "\n");
-            $printer->text("Direccion: Orquídeas #151" . "\n");
-            $printer->text("Tel: 454664544" . "\n");
+            $printer->text("Direccion: Dean Valdivia 412 A" . "\n");
+            $printer->text("Tel: 054 77 34 22" . "\n");
             #La fecha también
             
             $printer->text(date("Y-m-d H:i:s") . "\n");
@@ -841,8 +841,8 @@ class ventasController extends Controller
             }catch(Exception $e){/*No hacemos nada si hay error*/}
 
             $printer->text("\n"."LA PRECIOSA " . "\n");
-            $printer->text("Direccion: Orquídeas #151" . "\n");
-            $printer->text("Tel: 454664544" . "\n");
+            $printer->text("Direccion: Dean Valdivia 412 A" . "\n");
+            $printer->text("Tel: 054 77 34 22" . "\n");
             #La fecha también
             date_default_timezone_set("America/Mexico_City");
             $printer->text(date("Y-m-d H:i:s") . "\n");
