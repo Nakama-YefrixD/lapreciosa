@@ -29,7 +29,7 @@ $('#crearProducto').on('click', function(e) {
                             nombreProducto = codigoProducto+" - "+nombreProducto;
                             let option =    '<option precio     =   "'+precioProducto+'"';
                                 option +=   'disponible         =   "0"';
-                                option +=   'porcentajedp       =   "0';
+                                option +=   'porcentajedp       =   "0"';
                                 option +=   'cantidaddp         =   "0"';
                                 option +=   'value              =   "'+idProducto+'">'+nombreProducto+'</option>';
 

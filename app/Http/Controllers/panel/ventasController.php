@@ -1030,9 +1030,15 @@ class ventasController extends Controller
     {
         DB::beginTransaction();
         try {
-            
+            if($request['codigoProductoNuevo'] == null){
+                $codigo = "TEMPORAL";
+            }else{
+                $codigo = $request['codigoProductoNuevo'];
+            }
+
+
             $productos = new Productos;
-            $productos->codigo = $request['codigoProductoNuevo'];
+            $productos->codigo = $codigo;
             $productos->marca_id = 100;
             $productos->tipo_id = 1000;
             $productos->nombre = $request['nombreProductoNuevo'];
