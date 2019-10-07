@@ -108,7 +108,9 @@ Route::post('/consult/dni/{dni}', 'consultaIdentidad@dniConsult')->name('consult
         
         // ENVIAR COMPROBANTE A LA SUNAT
         Route::post('/ventas/comprobante/emitir', 'panel\ventasController@comprobanteEmitir')->name('venta.comprobante.emitir');
-        
+
+        // CREAR PRODUCTO TEMPORAL
+        Route::post('/ventas/crear/productoTemporal', 'panel\ventasController@productoTemporalCrear')->name('venta.crear.productoTemporal');
 
 // CONFIGURACION
 // DESCUENTOS

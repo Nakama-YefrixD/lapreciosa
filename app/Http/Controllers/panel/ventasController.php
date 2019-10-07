@@ -1024,4 +1024,45 @@ class ventasController extends Controller
             echo json_encode($e->getMessage());
         }
     }
+
+    public function productoTemporalCrear(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            
+            $productos = new Productos;
+            $productos->codigo = $request['codigoProductoNuevo'];
+            $productos->marca_id = 100;
+            $productos->tipo_id = 100;
+            $productos->nombre = $request['nombreProductoNuevo'];
+            $productos->cantidad = 0;
+            $productos->precio = $request['precioVentaProducto'];
+            $productos->precioVista = $request['precioVentaProducto'];
+            
+            if($productos->save()) {
+                $control = new control;
+                $control->user_id = auth()->id();
+                $control->metodo = "crear";
+                $control->tabla = "productos";
+                $control->campos = "all";
+                $control->datos = $request['codigoProductoNuevo'].', '. $request['nombreProductoNuevo'].', '. $request['precioVentaProducto'];
+                $control->descripcion = "Crear un nuevo producto con cantidad 0";
+                $control->save();
+            }
+
+            DB::commit();
+
+            $rpta = array(
+                'response'          =>  true,
+                'idProducto'        =>  $productos->id,
+                'nombreProducto'    =>  $productos->nombre,
+                'codigoProducto'    =>  $productos->codigo,
+                'precioProducto'    =>  $productos->precio,
+            );
+            echo json_encode($rpta);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            echo json_encode($e->getMessage());
+        }
+    }
 }

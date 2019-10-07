@@ -242,7 +242,9 @@
                                 </div>
                             </div>
                         </div> 
-
+                        <button type="button" class="btn btn-warning" id="btnAddProductoTemporal">
+                            <i class="mdi mdi-plus-circle"></i>   AGREGAR PRODUCTO TEMPORAL
+                        </button>
 
                     <div class="card-body" id="agregarProductoDetalleModalBody">
                         <table class="table table-bordered dataTables_length" id="tb_buscarProducto" style="width:100%">
@@ -264,6 +266,63 @@
         </div>
     </div>
 </div>
+
+
+
+<div id="productoTemporalModal" class="modal fade bd-productoTemporalModal" role="dialog">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="card card-default">
+                <div class="card-header cabezera">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4> Agregar Producto </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body">
+                        <form method="post" role="form" data-toggle="validator" id="frm_producto">
+                            @csrf
+                            <div class="form-group" >
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label>Codigo (OPCIONAL)</label>
+                                        <input type="text" class="form-control" name="codigoProductoNuevo" id="codigoProductoNuevo">
+                                    </div>
+                                    <div class="col-12" id="alertaCodigo">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label>Nombre del producto</label>
+                                        <input type="text" class="form-control" name="nombreProductoNuevo" id="nombreProductoNuevo">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label>Precio con IGV(18%)</label>
+                                        <input type="text" name="precioVentaProducto" id="precioVentaProducto" class="form-control"
+                                            pattern="^\S/\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="S/1,000,000.00" >
+                                        <!-- <input type="text" class="form-control" name="producto" id="producto" > -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group boton">
+                                <button type="button" class="addexis form-control btn btn-block btn-success btn-lg" id="crearProducto">
+                                    Agregar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
         
 <script type="text/javascript" src="{{ asset('js/ventas/comprobantes/emitirFactura/buscarProductoAgregarDetalle.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/ventas/comprobantes/emitirFactura/seleccionarProductoDetalle.js') }}"></script>
@@ -272,6 +331,8 @@
 <script type="text/javascript" src="{{ asset('js/ventas/comprobantes/emitirBoleta/emitirBoleta.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/ventas/comprobantes/emitirBoleta/guardarBoleta.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/ventas/comprobantes/emitirFactura/calcularDescuentoProducto.js') }}"></script>
+
+<script type="text/javascript" src="{{ asset('js/ventas/comprobantes/emitirBoleta/agregarProductoTemporal.js') }}"></script>
 
 <script type="text/javascript">
     $('#btnAddProduct').on('click', function() {

@@ -130,6 +130,7 @@ $(document).ready(function() {
 
     $('#editarProducto').on('click', function(e) {
         let data = $('#frm_editarProducto').serialize();
+        console.log("DATA ENVIADA ");
         console.log(data);
         $.confirm({
             icon: 'fa fa-question',
