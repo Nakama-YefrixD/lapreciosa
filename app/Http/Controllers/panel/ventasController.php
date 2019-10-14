@@ -516,6 +516,9 @@ class ventasController extends Controller
     {
         date_default_timezone_set("America/Mexico_City");
         // ENVIAR A LA SUNAT 
+        $rucEmpresa     = "20000000001";
+        $usuarioEmpresa = "MODDATOS";
+        $passEmpresa    = "moddatos";
 
         $see = new See();
         $see->setService(SunatEndpoints::FE_BETA);
@@ -598,8 +601,8 @@ class ventasController extends Controller
                 ->setMtoOperGravadas($venta->subtotal) //100
                 ->setMtoIGV($venta->impuestos) //18
                 ->setTotalImpuestos($venta->impuestos) //18
-                ->setValorVenta( $venta->subtotal) //100
-                ->setMtoImpVenta($venta->total) //118
+                ->setValorVenta( $venta->subtotal ) //100
+                ->setMtoImpVenta( $venta->total ) //118
                 ->setCompany($company);
                 $items = [];
 
@@ -677,6 +680,7 @@ class ventasController extends Controller
             // Guardar CDR
             file_put_contents(public_path('\sunat\zip\venta-'.$venta->id.'-R-'.$invoice->getName().'.zip'), $result->getCdrZip());
 
+            $codigoQr = QrCode::size(500)->generate($rucEmpresa."|".$tiposcomprobante->codigo."|".$request['serieVenta']."|".$request['facturaVenta']."|".$venta->impuestos."|".$venta->total."|".$request['dateFactura']."|".$tipoDocumento->codigo."|".$request['numeroDocumento']."|");
             // IMPRIMIR TICKET
             $nombre_impresora = "POS"; 
 
@@ -723,6 +727,7 @@ class ventasController extends Controller
             $printer->text("TOTAL: ".$request['totalVenta']."\n");
 
             $printer->setJustification(Printer::JUSTIFY_CENTER);
+            $printer->text($codigoQr);
             $printer->text("Muchas gracias por su compra\n");
 
             $printer->feed(3);

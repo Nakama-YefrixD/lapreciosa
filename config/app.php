@@ -179,6 +179,8 @@ return [
         Yajra\DataTables\DataTablesServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
 
+        // GENERAR QR
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class
     ],
 
     /*
@@ -233,6 +235,7 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
         
     ],
 
