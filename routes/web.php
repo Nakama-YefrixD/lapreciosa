@@ -139,3 +139,15 @@ Route::post('/producto/eliminar', 'ProductosController@eliminarProducto')->name(
 Route::get('/sunats', 'sunat@sunat')->name('sunat');
 Route::get('/villca', 'sunat@villca');
 // Route::get('/codigo', 'ProductosController@codigo');
+
+
+Route::get('/prueba', 'prueba\pruebaController@index');
+
+Route::get('qr', function () {
+    \QrCode::size(500)
+              ->format('png')
+              ->generate('ItSolutionStuff.com', public_path('qrcode.png'));
+      
+    return view('qrCode');
+      
+  });
