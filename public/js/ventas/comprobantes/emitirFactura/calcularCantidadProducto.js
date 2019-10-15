@@ -11,8 +11,10 @@ $('body').on('keyup', '.c_quantity', function() {
 
     precio = precio - descuento;
     total       = precio * cantidad;
-    igvProducto = (total * 18)/100;
-    subTotal    = total - igvProducto;
+    subTotal    = (total / 1.18);
+    igvProducto = total - subTotal;
+
+    
     // $(this).parent().siblings('.descuento').find('.descuento').val(0);
     // $(this).parent().siblings('.descuento').find('span').html(0);
 

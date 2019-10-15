@@ -31,6 +31,7 @@ use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 
 use DB;
 use PDF;
+use QrCode;
 
 class ventasController extends Controller
 {
@@ -132,7 +133,7 @@ class ventasController extends Controller
         $see = new See();
         $see->setService(SunatEndpoints::FE_BETA);
         $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
-        $see->setCredentials('20000000001MODDATOS'/*ruc+usuario*/, 'moddatos');
+        $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
         // ---------- FACTURACION -------------
         $tipoDocumento    = tiposdocumento::find($request['tipoDocumento']);
         $tiposcomprobante = tiposcomprobante::find($request['tipoComprobante']);
@@ -146,17 +147,17 @@ class ventasController extends Controller
 
         // Emisor
         $address = new Address();
-        $address->setUbigueo('150101')
+        $address->setUbigueo('040101')
             ->setDepartamento('AREQUIPA')
             ->setProvincia('AREQUIPA')
             ->setDistrito('AREQUIPA')
             ->setUrbanizacion('NONE')
-            ->setDireccion('AV LS');
+            ->setDireccion('CAL. DEAN VALDIVIA 410, 412, 4 NRO. --');
 
         $company = new Company();
-        $company->setRuc('20000000001')
-                ->setRazonSocial('EMPRESA SAC')
-                ->setNombreComercial('EMPRESA')
+        $company->setRuc('20605007211')
+                ->setRazonSocial('LA PRECIOSA DISTRIBUCIONES IMPORTACIONES E.I.R.L')
+                ->setNombreComercial('PRECIOSA')
                 ->setAddress($address);
         
 
@@ -237,10 +238,8 @@ class ventasController extends Controller
                         $producto = productos::find($request['nombreProducto'][$x]);
                         
                         $precioFinalProducto  = $producto->precio - $request['descuento'][$x];
-                        $productoPrecioSinIgv = $precioFinalProducto * 18;
-                        $productoPrecioSinIgv = $productoPrecioSinIgv/100;
-                        $productoPrecioSinIgv = $precioFinalProducto - $productoPrecioSinIgv;
-                        $productoPrecioCantidadSinIgv = $precioFinalProducto * $request['cantidad'][$x];
+                        $productoPrecioSinIgv = $precioFinalProducto/1.18;
+                        $productoPrecioCantidadSinIgv = $productoPrecioSinIgv * $request['cantidad'][$x];
                         $productoImpuesto             = $request['total'][$x] - $request['subtotal'][$x];
 
                         $items[$x] = (new SaleDetail())
@@ -290,6 +289,12 @@ class ventasController extends Controller
             // Guardar CDR
             file_put_contents(public_path('\sunat\zip\venta-'.$venta->id.'-R-'.$invoice->getName().'.zip'), $result->getCdrZip());
 
+            $codigoQr = QrCode::format('png')
+                                ->size(500)
+                                ->generate(
+                                    "20605007211|".$tiposcomprobante->codigo."|".$request['serieVenta']."|".$request['facturaVenta']."|".$venta->impuestos."|".$venta->total."|".$request['dateFactura']."|".$tipoDocumento->codigo."|".$request['numeroDocumento']."|", public_path('img/qr.png')
+                                );
+
             // IMPRIMIR TICKET
             $nombre_impresora = "POS"; 
 
@@ -336,6 +341,8 @@ class ventasController extends Controller
             $printer->text("TOTAL: ".$request['totalVenta']."\n");
 
             $printer->setJustification(Printer::JUSTIFY_CENTER);
+            $imgQr = EscposImage::load(public_path('img/qr.png'), false);
+            $printer->bitImage($imgQr);
             $printer->text("Muchas gracias por su compra\n");
 
             $printer->feed(3);
@@ -393,7 +400,7 @@ class ventasController extends Controller
 
                 $idCliente = $cliente->id;
             }
-
+            $tipoDocumento    = tiposdocumento::find($request['tipoDocumento']);
             $venta = new ventas;
             $venta->tipoComprobante_id  = $request['tipoComprobante'];  
             $venta->cliente_id          = $idCliente;
@@ -444,6 +451,12 @@ class ventasController extends Controller
                 }
             }
 
+            $codigoQr = QrCode::format('png')
+                                ->size(500)
+                                ->generate(
+                                    "20605007211|".$tiposcomprobante->codigo."|".$request['serieVenta']."|".$request['facturaVenta']."|".$venta->impuestos."|".$venta->total."|".$request['dateFactura']."|".$tipoDocumento->codigo."|".$request['numeroDocumento']."|", public_path('img/qr.png')
+                                );
+
             // IMPRIMIR TICKET
             $nombre_impresora = "POS"; 
 
@@ -490,6 +503,8 @@ class ventasController extends Controller
             $printer->text("TOTAL: ".$request['totalVenta']."\n");
 
             $printer->setJustification(Printer::JUSTIFY_CENTER);
+            $imgQr = EscposImage::load(public_path('img/qr.png'), false);
+            $printer->bitImage($imgQr);
             $printer->text("Muchas gracias por su compra\n");
 
             $printer->feed(3);
@@ -516,14 +531,14 @@ class ventasController extends Controller
     {
         date_default_timezone_set("America/Mexico_City");
         // ENVIAR A LA SUNAT 
-        $rucEmpresa     = "20000000001";
-        $usuarioEmpresa = "MODDATOS";
-        $passEmpresa    = "moddatos";
+        $rucEmpresa     = "20605007211";
+        $usuarioEmpresa = "CITINETY";
+        $passEmpresa    = "raulpreciosajohnson";
 
         $see = new See();
         $see->setService(SunatEndpoints::FE_BETA);
         $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
-        $see->setCredentials('20000000001MODDATOS'/*ruc+usuario*/, 'moddatos');
+        $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
 
         // ---------- FACTURACION -------------
         $tipoDocumento    = tiposdocumento::find($request['tipoDocumento']);
@@ -538,17 +553,17 @@ class ventasController extends Controller
 
         // Emisor
         $address = new Address();
-        $address->setUbigueo('150101')
+        $address->setUbigueo('040101')
             ->setDepartamento('AREQUIPA')
             ->setProvincia('AREQUIPA')
             ->setDistrito('AREQUIPA')
             ->setUrbanizacion('NONE')
-            ->setDireccion('AV LS');
+            ->setDireccion('CAL. DEAN VALDIVIA 410, 412, 4 NRO. --');
 
         $company = new Company();
-        $company->setRuc('20000000001')
-                ->setRazonSocial('EMPRESA SAC')
-                ->setNombreComercial('EMPRESA')
+        $company->setRuc('20605007211')
+                ->setRazonSocial('LA PRECIOSA DISTRIBUCIONES IMPORTACIONES E.I.R.L')
+                ->setNombreComercial('PRECIOSA')
                 ->setAddress($address);
 
         DB::beginTransaction();
@@ -600,7 +615,7 @@ class ventasController extends Controller
                 ->setClient($client)
                 ->setMtoOperGravadas($venta->subtotal) //100
                 ->setMtoIGV($venta->impuestos) //18
-                ->setTotalImpuestos($venta->impuestos) //18
+                ->setTotalImpuestos($venta->impuestos) //18 
                 ->setValorVenta( $venta->subtotal ) //100
                 ->setMtoImpVenta( $venta->total ) //118
                 ->setCompany($company);
@@ -628,10 +643,8 @@ class ventasController extends Controller
                         $producto = productos::find($request['nombreProducto'][$x]);
                         
                         $precioFinalProducto  = $producto->precio - $request['descuento'][$x];
-                        $productoPrecioSinIgv = $precioFinalProducto * 18;
-                        $productoPrecioSinIgv = $productoPrecioSinIgv/100;
-                        $productoPrecioSinIgv = $precioFinalProducto - $productoPrecioSinIgv;
-                        $productoPrecioCantidadSinIgv   = $precioFinalProducto* $request['cantidad'][$x];
+                        $productoPrecioSinIgv = $precioFinalProducto/1.18;
+                        $productoPrecioCantidadSinIgv   = $productoPrecioSinIgv* $request['cantidad'][$x];
                         $productoImpuesto               = $request['total'][$x] - $request['subtotal'][$x];
                         $items[$x] = (new SaleDetail())
                             ->setCodProducto($producto->codigo)
@@ -680,7 +693,8 @@ class ventasController extends Controller
             // Guardar CDR
             file_put_contents(public_path('\sunat\zip\venta-'.$venta->id.'-R-'.$invoice->getName().'.zip'), $result->getCdrZip());
 
-            $codigoQr = QrCode::size(500)->generate($rucEmpresa."|".$tiposcomprobante->codigo."|".$request['serieVenta']."|".$request['facturaVenta']."|".$venta->impuestos."|".$venta->total."|".$request['dateFactura']."|".$tipoDocumento->codigo."|".$request['numeroDocumento']."|");
+            $codigoQr = QrCode::format('png')->size(500)->generate($rucEmpresa."|".$tiposcomprobante->codigo."|".$request['serieVenta']."|".$request['facturaVenta']."|".$venta->impuestos."|".$venta->total."|".$request['dateFactura']."|".$tipoDocumento->codigo."|".$request['numeroDocumento']."|", public_path('img/qr.png'));
+
             // IMPRIMIR TICKET
             $nombre_impresora = "POS"; 
 
@@ -727,7 +741,8 @@ class ventasController extends Controller
             $printer->text("TOTAL: ".$request['totalVenta']."\n");
 
             $printer->setJustification(Printer::JUSTIFY_CENTER);
-            $printer->text($codigoQr);
+            $imgQr = EscposImage::load(public_path('img/qr.png'), false);
+            $printer->bitImage($imgQr);
             $printer->text("Muchas gracias por su compra\n");
 
             $printer->feed(3);
@@ -783,7 +798,7 @@ class ventasController extends Controller
                 
                 $idCliente = $cliente->id;
             }
-
+            $tipoDocumento    = tiposdocumento::find($request['tipoDocumento']);
             $venta = new ventas;
             $venta->tipoComprobante_id  = $request['tipoComprobante'];  
             $venta->cliente_id          = $idCliente;
@@ -832,6 +847,12 @@ class ventasController extends Controller
                 }
             }
 
+            $codigoQr = QrCode::format('png')
+                                ->size(500)
+                                ->generate(
+                                    "20605007211|".$tiposcomprobante->codigo."|".$request['serieVenta']."|".$request['facturaVenta']."|".$venta->impuestos."|".$venta->total."|".$request['dateFactura']."|".$tipoDocumento->codigo."|".$request['numeroDocumento']."|", public_path('img/qr.png')
+                                );
+
             // IMPRIMIR TICKET
             $nombre_impresora = "POS"; 
 
@@ -876,6 +897,8 @@ class ventasController extends Controller
             $printer->text("TOTAL: ".$request['totalVenta']."\n");
 
             $printer->setJustification(Printer::JUSTIFY_CENTER);
+            $imgQr = EscposImage::load(public_path('img/qr.png'), false);
+            $printer->bitImage($imgQr);
             $printer->text("Muchas gracias por su compra\n");
 
             $printer->feed(3);
@@ -919,8 +942,7 @@ class ventasController extends Controller
         $see = new See();
         $see->setService(SunatEndpoints::FE_BETA);
         $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
-        $see->setCredentials('20000000001MODDATOS'/*ruc+usuario*/, 'moddatos');
-
+        $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
 
         // Cliente
         $client = new Client();
@@ -930,17 +952,17 @@ class ventasController extends Controller
 
         // Emisor
         $address = new Address();
-        $address->setUbigueo('150101')
+        $address->setUbigueo('040101')
             ->setDepartamento('AREQUIPA')
             ->setProvincia('AREQUIPA')
             ->setDistrito('AREQUIPA')
             ->setUrbanizacion('NONE')
-            ->setDireccion('AV LS');
+            ->setDireccion('CAL. DEAN VALDIVIA 410, 412, 4 NRO. --');
 
         $company = new Company();
-        $company->setRuc('20000000001')
-                ->setRazonSocial('EMPRESA SAC')
-                ->setNombreComercial('EMPRESA')
+        $company->setRuc('20605007211')
+                ->setRazonSocial('LA PRECIOSA DISTRIBUCIONES IMPORTACIONES E.I.R.L')
+                ->setNombreComercial('PRECIOSA')
                 ->setAddress($address);
 
         // Venta
@@ -971,11 +993,10 @@ class ventasController extends Controller
             
             $producto = productos::where('id', $ventaDetalle->producto_id )
                                     ->first();
-
-            $productoImpuesto = $ventaDetalle->total - $ventaDetalle->subtotal;
-            $productoPrecioSinIgv = $producto->precio * 18;
-            $productoPrecioSinIgv = $productoPrecioSinIgv/100;
-            $productoPrecioSinIgv = $producto->precio - $productoPrecioSinIgv;
+                                    
+            $precioFinalProducto    = $producto->precio - $ventaDetalle->descuento;
+            $productoImpuesto       = $ventaDetalle->total - $ventaDetalle->subtotal;
+            $productoPrecioSinIgv   = $precioFinalProducto/1.18;
             $productoPrecioCantidadSinIgv = $productoPrecioSinIgv * $ventaDetalle->cantidad;
             $items[$x] = (new SaleDetail())
                 ->setCodProducto($producto->codigo)

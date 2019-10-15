@@ -9,8 +9,8 @@ $('body').on('keyup', '.descuento', function() {
 
     precio = precio - descuento;
     total       = precio * cantidad;
-    igvProducto = (total * 18)/100;
-    subTotal    = total - igvProducto;
+    subTotal    = (total / 1.18);
+    igvProducto = total - subTotal;
 
     $(this).parent().siblings('.total').find('span').html(total.toFixed(2));
     $(this).parent().siblings('.total').find('input').val(total.toFixed(2));

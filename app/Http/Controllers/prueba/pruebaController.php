@@ -14,6 +14,7 @@ class pruebaController extends Controller
     public function index()
     {
         $nombre_impresora = "POS"; 
+            $codigoqr = QrCode::format('png')->size(500)->generate('hola', public_path('img/qr.png'));
 
             $connector = new WindowsPrintConnector($nombre_impresora);
             $printer = new Printer($connector);
