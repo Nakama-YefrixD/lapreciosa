@@ -133,7 +133,7 @@ class ventasController extends Controller
         $see = new See();
         $see->setService(SunatEndpoints::FE_BETA);
         $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
-        $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
+        $see->setCredentials('20000000001MODDATOS'/*ruc+usuario*/, 'moddatos');
         // ---------- FACTURACION -------------
         $tipoDocumento    = tiposdocumento::find($request['tipoDocumento']);
         $tiposcomprobante = tiposcomprobante::find($request['tipoComprobante']);
@@ -538,8 +538,8 @@ class ventasController extends Controller
         $see = new See();
         $see->setService(SunatEndpoints::FE_BETA);
         $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
-        $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
-
+        $see->setCredentials('20000000001MODDATOS'/*ruc+usuario*/, 'moddatos');
+        // $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
         // ---------- FACTURACION -------------
         $tipoDocumento    = tiposdocumento::find($request['tipoDocumento']);
         $tiposcomprobante = tiposcomprobante::find($request['tipoComprobante']);
@@ -942,7 +942,7 @@ class ventasController extends Controller
         $see = new See();
         $see->setService(SunatEndpoints::FE_BETA);
         $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
-        $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
+        $see->setCredentials('20000000001MODDATOS'/*ruc+usuario*/, 'moddatos');
 
         // Cliente
         $client = new Client();
