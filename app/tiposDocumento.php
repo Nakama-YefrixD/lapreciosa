@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class tiposDocumento extends Model
 {
-    protected $table = 'tiposDocumento';
+    protected $table = 'tiposdocumento';
 }
