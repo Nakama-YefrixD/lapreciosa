@@ -133,7 +133,7 @@ class ventasController extends Controller
         $see = new See();
         $see->setService(SunatEndpoints::FE_BETA);
         $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
-        $see->setCredentials('20000000001MODDATOS'/*ruc+usuario*/, 'moddatos');
+        $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
         // ---------- FACTURACION -------------
         $tipoDocumento    = tiposdocumento::find($request['tipoDocumento']);
         $tiposcomprobante = tiposcomprobante::find($request['tipoComprobante']);
@@ -290,7 +290,7 @@ class ventasController extends Controller
             file_put_contents(public_path('\sunat\zip\venta-'.$venta->id.'-R-'.$invoice->getName().'.zip'), $result->getCdrZip());
 
             $codigoQr = QrCode::format('png')
-                                ->size(500)
+                                ->size(250)
                                 ->generate(
                                     "20605007211|".$tiposcomprobante->codigo."|".$request['serieVenta']."|".$request['facturaVenta']."|".$venta->impuestos."|".$venta->total."|".$request['dateFactura']."|".$tipoDocumento->codigo."|".$request['numeroDocumento']."|", public_path('img/qr.png')
                                 );
@@ -452,7 +452,7 @@ class ventasController extends Controller
             }
 
             $codigoQr = QrCode::format('png')
-                                ->size(500)
+                                ->size(250)
                                 ->generate(
                                     "20605007211|".$tiposcomprobante->codigo."|".$request['serieVenta']."|".$request['facturaVenta']."|".$venta->impuestos."|".$venta->total."|".$request['dateFactura']."|".$tipoDocumento->codigo."|".$request['numeroDocumento']."|", public_path('img/qr.png')
                                 );
@@ -538,8 +538,7 @@ class ventasController extends Controller
         $see = new See();
         $see->setService(SunatEndpoints::FE_BETA);
         $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
-        $see->setCredentials('20000000001MODDATOS'/*ruc+usuario*/, 'moddatos');
-        // $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
+        $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
         // ---------- FACTURACION -------------
         $tipoDocumento    = tiposdocumento::find($request['tipoDocumento']);
         $tiposcomprobante = tiposcomprobante::find($request['tipoComprobante']);
@@ -693,7 +692,7 @@ class ventasController extends Controller
             // Guardar CDR
             file_put_contents(public_path('\sunat\zip\venta-'.$venta->id.'-R-'.$invoice->getName().'.zip'), $result->getCdrZip());
 
-            $codigoQr = QrCode::format('png')->size(500)->generate($rucEmpresa."|".$tiposcomprobante->codigo."|".$request['serieVenta']."|".$request['facturaVenta']."|".$venta->impuestos."|".$venta->total."|".$request['dateFactura']."|".$tipoDocumento->codigo."|".$request['numeroDocumento']."|", public_path('img/qr.png'));
+            $codigoQr = QrCode::format('png')->size(250)->generate($rucEmpresa."|".$tiposcomprobante->codigo."|".$request['serieVenta']."|".$request['facturaVenta']."|".$venta->impuestos."|".$venta->total."|".$request['dateFactura']."|".$tipoDocumento->codigo."|".$request['numeroDocumento']."|", public_path('img/qr.png'));
 
             // IMPRIMIR TICKET
             $nombre_impresora = "POS"; 
@@ -848,7 +847,7 @@ class ventasController extends Controller
             }
 
             $codigoQr = QrCode::format('png')
-                                ->size(500)
+                                ->size(250)
                                 ->generate(
                                     "20605007211|".$tiposcomprobante->codigo."|".$request['serieVenta']."|".$request['facturaVenta']."|".$venta->impuestos."|".$venta->total."|".$request['dateFactura']."|".$tipoDocumento->codigo."|".$request['numeroDocumento']."|", public_path('img/qr.png')
                                 );
@@ -942,7 +941,7 @@ class ventasController extends Controller
         $see = new See();
         $see->setService(SunatEndpoints::FE_BETA);
         $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
-        $see->setCredentials('20000000001MODDATOS'/*ruc+usuario*/, 'moddatos');
+        $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
 
         // Cliente
         $client = new Client();
