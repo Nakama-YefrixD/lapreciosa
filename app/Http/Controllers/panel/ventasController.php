@@ -313,8 +313,11 @@ class ventasController extends Controller
             $printer->text("\n"."LA PRECIOSA " . "\n");
             $printer->text("Direccion: Dean Valdivia 412 A" . "\n");
             $printer->text("Tel: 054 77 34 22" . "\n");
+            $printer->text("\n");
+            $printer->setJustification(Printer::JUSTIFY_CENTER);
+            $printer->text("FACTURA ELECTRONICA"."\n");
+            $printer->text("SERIE: ".$request['serieVenta']."-".$request['facturaVenta']."\n");
             #La fecha también
-            
             $printer->text(date("Y-m-d H:i:s") . "\n");
             $printer->text("-----------------------------" . "\n");
             $printer->setJustification(Printer::JUSTIFY_LEFT);
@@ -339,8 +342,13 @@ class ventasController extends Controller
             $printer->text("SUBTOTAL: ".$request['subTotalVenta']."\n");
             $printer->text("IVA: ".$request['igvVenta']."\n");
             $printer->text("TOTAL: ".$request['totalVenta']."\n");
-
+            
+            $printer->text("\n");
+            
             $printer->setJustification(Printer::JUSTIFY_CENTER);
+            $printer->text("Puede consultar en preciosaweb.com (https://preciosaweb.com/consultas)"."\n");
+            $printer->text("\n");
+            $printer->text("\n");
             $imgQr = EscposImage::load(public_path('img/qr.png'), false);
             $printer->bitImage($imgQr);
             $printer->text("Muchas gracias por su compra\n");
@@ -475,6 +483,10 @@ class ventasController extends Controller
             $printer->text("\n"."LA PRECIOSA " . "\n");
             $printer->text("Direccion: Dean Valdivia 412 A" . "\n");
             $printer->text("Tel: 054 77 34 22" . "\n");
+            $printer->text("\n");
+            $printer->setJustification(Printer::JUSTIFY_CENTER);
+            $printer->text("FACTURA ELECTRONICA"."\n");
+            $printer->text("SERIE: ".$request['serieVenta']."-".$request['facturaVenta']."\n");
             #La fecha también
             date_default_timezone_set("America/Mexico_City");
             $printer->text(date("Y-m-d H:i:s") . "\n");
@@ -501,8 +513,13 @@ class ventasController extends Controller
             $printer->text("SUBTOTAL: ".$request['subTotalVenta']."\n");
             $printer->text("IVA: ".$request['igvVenta']."\n");
             $printer->text("TOTAL: ".$request['totalVenta']."\n");
-
+            $printer->text("\n");
+            
             $printer->setJustification(Printer::JUSTIFY_CENTER);
+            $printer->text("Puede consultar en preciosaweb.com (https://preciosaweb.com/consultas)"."\n");
+            $printer->text("\n");
+            $printer->text("\n");
+            
             $imgQr = EscposImage::load(public_path('img/qr.png'), false);
             $printer->bitImage($imgQr);
             $printer->text("Muchas gracias por su compra\n");
@@ -712,6 +729,10 @@ class ventasController extends Controller
             $printer->text("\n"."LA PRECIOSA " . "\n");
             $printer->text("Direccion: Dean Valdivia 412 A" . "\n");
             $printer->text("Tel: 054 77 34 22" . "\n");
+            $printer->text("\n");
+            $printer->setJustification(Printer::JUSTIFY_CENTER);
+            $printer->text("BOLETA ELECTRONICA"."\n");
+            $printer->text("SERIE: ".$request['serieVenta']."-".$request['facturaVenta']."\n");
             #La fecha también
             
             $printer->text(date("Y-m-d H:i:s") . "\n");
@@ -738,8 +759,12 @@ class ventasController extends Controller
             $printer->text("SUBTOTAL: ".$request['subTotalVenta']."\n");
             $printer->text("IVA: ".$request['igvVenta']."\n");
             $printer->text("TOTAL: ".$request['totalVenta']."\n");
-
+            $printer->text("\n");
+            
             $printer->setJustification(Printer::JUSTIFY_CENTER);
+            $printer->text("Puede consultar en preciosaweb.com (https://preciosaweb.com/consultas)"."\n");
+            $printer->text("\n");
+            $printer->text("\n");
             $imgQr = EscposImage::load(public_path('img/qr.png'), false);
             $printer->bitImage($imgQr);
             $printer->text("Muchas gracias por su compra\n");
@@ -868,6 +893,10 @@ class ventasController extends Controller
             $printer->text("\n"."LA PRECIOSA " . "\n");
             $printer->text("Direccion: Dean Valdivia 412 A" . "\n");
             $printer->text("Tel: 054 77 34 22" . "\n");
+            $printer->text("\n");
+            $printer->setJustification(Printer::JUSTIFY_CENTER);
+            $printer->text("BOLETA ELECTRONICA"."\n");
+            $printer->text("SERIE: ".$request['serieVenta']."-".$request['facturaVenta']."\n");
             #La fecha también
             date_default_timezone_set("America/Mexico_City");
             $printer->text(date("Y-m-d H:i:s") . "\n");
@@ -894,8 +923,14 @@ class ventasController extends Controller
             $printer->text("SUBTOTAL: ".$request['subTotalVenta']."\n");
             $printer->text("IVA: ".$request['igvVenta']."\n");
             $printer->text("TOTAL: ".$request['totalVenta']."\n");
-
+            
+            $printer->text("\n");
+            
             $printer->setJustification(Printer::JUSTIFY_CENTER);
+            $printer->text("Puede consultar en preciosaweb.com (https://preciosaweb.com/consultas)"."\n");
+            $printer->text("\n");
+            $printer->text("\n");
+
             $imgQr = EscposImage::load(public_path('img/qr.png'), false);
             $printer->bitImage($imgQr);
             $printer->text("Muchas gracias por su compra\n");
@@ -929,7 +964,7 @@ class ventasController extends Controller
                                     'ventas.fecha as fechaVentas', 'tm.abreviatura as abreviaturaTiposmoneda',
                                     'ventas.subtotal as subtotalVentas', 'ventas.impuestos as impuestosVentas',
                                     'ventas.total as totalVentas', 'ventas.id as idVentas'
-                                    )
+                                )
                         ->join('clientes as c', 'ventas.cliente_id', '=', 'c.id')            
                         ->join('tiposdocumento as td', 'c.tipoDocumento_id', '=', 'td.id')
                         ->join('tiposcomprobante as tc', 'ventas.tipoComprobante_id', '=', 'tc.id')

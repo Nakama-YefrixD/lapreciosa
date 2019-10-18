@@ -16,10 +16,7 @@
                         </div>
                     @endif
                     
-                    @php 
-                        $isEditor = auth()->user()->hasPermissionTo('otro');
-                        echo $isEditor;
-                    @endphp
+                    
                     You are logged in!
                 </div>
             </div>

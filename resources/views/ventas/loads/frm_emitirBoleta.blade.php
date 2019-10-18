@@ -51,14 +51,15 @@
                 <div class="input-group">
                     <select class="form-control" name="tipoDocumento" id="tipoDocumento" style="width: 100%;">
                         <option value="1" > DNI </option>
+                        <option value="0" > NINGUNO </option>
                     </select>
                 </div>
             </div>
-            <div class="col-3">
+            <div class="col-3" id="contenedorNumeroDocumento">
                 <label>N° de Documento: *</label>
                 <input type="number" class="form-control" name="numeroDocumento" id="numeroDocumento">
             </div>
-            <div class="col-6">
+            <div class="col-6" id="contenedorNombreCliente">
                 <label>Nombre del cliente: *</label>
                 <input type="text" class="form-control" name="nombreCliente" id="nombreCliente">
             </div>
@@ -335,6 +336,25 @@
 <script type="text/javascript" src="{{ asset('js/ventas/comprobantes/emitirBoleta/agregarProductoTemporal.js') }}"></script>
 
 <script type="text/javascript">
+    $('body').on('change','#tipoDocumento', function() {
+        let tipoDocumento = $('#tipoDocumento').val();
+
+        if(tipoDocumento == 0){
+            // $('#numeroDocumento').val("123")
+            $("#numeroDocumento").val("00000000");
+            $("#nombreCliente").val("CLIENTE 0001");
+            $('#contenedorNombreCliente').hide();
+            $('#contenedorNumeroDocumento').hide();
+        }else{
+            $("#numeroDocumento").val("");
+            $("#nombreCliente").val("");
+            $('#contenedorNombreCliente').show();
+            $('#contenedorNumeroDocumento').show();
+        }
+        
+
+    });
+
     $('#btnAddProduct').on('click', function() {
         $('#agregarProductoDetalleModal').modal('show');
     });
