@@ -51,7 +51,7 @@
                 <div class="input-group">
                     <select class="form-control" name="tipoDocumento" id="tipoDocumento" style="width: 100%;">
                         <option value="1" > DNI </option>
-                        <option value="4" > OTROS </option>
+                        <option value="0" > OTROS </option>
                     </select>
                 </div>
             </div>
