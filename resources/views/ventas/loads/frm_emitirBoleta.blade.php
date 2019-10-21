@@ -339,7 +339,7 @@
     $('body').on('change','#tipoDocumento', function() {
         let tipoDocumento = $('#tipoDocumento').val();
         console.log('xd')
-        if(tipoDocumento == 4){
+        if(tipoDocumento == 0){
             // $('#numeroDocumento').val("123")
             $("#numeroDocumento").val("00000000");
             $("#nombreCliente").val("CLIENTE 0001");
