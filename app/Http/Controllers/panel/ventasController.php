@@ -989,10 +989,15 @@ class ventasController extends Controller
         $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
         $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
 
+        if($ventas->documentoClientes == 0){
+            $documentoCliente = "00000000";
+        }else{
+            $documentoCliente = $ventas->documentoClientes;
+        }
         // Cliente
         $client = new Client();
         $client->setTipoDoc($ventas->codigoTiposdocumento) //6 es RUC
-            ->setNumDoc($ventas->documentoClientes)
+            ->setNumDoc($documentoCliente)
             ->setRznSocial($ventas->nombreClientes);
 
         // Emisor
@@ -1082,11 +1087,11 @@ class ventasController extends Controller
 
         
         // Guardar CDR
-        file_put_contents(public_path('\sunat\zip\venta-'.$ventas->idVentas.'-R-'.$invoice->getName().'.zip'), $result->getCdrZip());
+        file_put_contents(public_path('\sunat\zip\venta-'.$ventas->id.'-R-'.$invoice->getName().'.zip'), $result->getCdrZip());
         
         $venta      = ventas::find($venta->idVentas);
-        $venta->xml = "\sunat\xml\venta-".$venta->idVentas."-".$invoice->getName().".xml";
-        $venta->cdr = '\sunat\zip\venta-'.$venta->idVentas.'-R-'.$invoice->getName().'.zip';
+        $venta->xml = "\sunat\xml\venta-".$venta->id."-".$invoice->getName().".xml";
+        $venta->cdr = '\sunat\zip\venta-'.$venta->id.'-R-'.$invoice->getName().'.zip';
         $venta->update();
         
         DB::commit();
