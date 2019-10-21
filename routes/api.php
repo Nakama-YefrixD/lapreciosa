@@ -16,3 +16,8 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/codigo/buscar', 'api\agregarProductoController@buscarCodigo');
+Route::post('/nombre/buscar', 'api\agregarProductoController@buscarNombre');
+Route::post('/marca/buscar', 'api\agregarProductoController@buscarMarca');
+Route::post('/tipo/buscar', 'api\agregarProductoController@buscarTipos');

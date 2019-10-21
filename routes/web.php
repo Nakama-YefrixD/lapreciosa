@@ -99,6 +99,9 @@ Route::post('/consult/dni/{dni}', 'consultaIdentidad@dniConsult')->name('consult
 
         Route::get('/ventas/pdf/{idVenta}', 'panel\ventasController@verDetalleVenta')
                 ->name('ventas.pdf');
+        
+        Route::get('/ventas/xml/{idVenta}', 'panel\ventasController@descargarXml')
+                ->name('ventas.xml');
 
     // VENTAS ENVIOS
         // EMITIR FACTURA ELECTRONICA
@@ -139,6 +142,19 @@ Route::post('/producto/eliminar', 'ProductosController@eliminarProducto')->name(
 Route::get('/sunats', 'sunat@sunat')->name('sunat');
 Route::get('/villca', 'sunat@villca');
 // Route::get('/codigo', 'ProductosController@codigo');
+
+
+// consultarComprobante
+Route::get('/consultar', 'consultar\consultarComprobanteController@index')
+        ->name('consultar.index');;
+Route::post('/consultar/captcha', 'consultar\consultarComprobanteController@consultaCaptcha')
+        ->name('consultar.captcha');
+Route::get('/consultar/pdf/{idVenta}', 'consultar\consultarComprobanteController@consultarPdfVenta')
+        ->name('consultar.pdf');
+Route::get('/consultar/xml/{idVenta}', 'consultar\consultarComprobanteController@consultarXml')
+        ->name('consultar.xml');
+
+
 
 
 Route::get('/prueba', 'prueba\pruebaController@index');

@@ -180,7 +180,10 @@ return [
         Barryvdh\DomPDF\ServiceProvider::class,
 
         // GENERAR QR
-        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
+
+        // CAPTCHA
+        Biscolab\ReCaptcha\ReCaptchaServiceProvider::class
     ],
 
     /*
@@ -235,7 +238,8 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
-        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+        'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class
         
     ],
 

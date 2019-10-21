@@ -51,7 +51,7 @@
                 <div class="input-group">
                     <select class="form-control" name="tipoDocumento" id="tipoDocumento" style="width: 100%;">
                         <option value="1" > DNI </option>
-                        <option value="0" > NINGUNO </option>
+                        <option value="4" > OTROS </option>
                     </select>
                 </div>
             </div>
@@ -338,8 +338,8 @@
 <script type="text/javascript">
     $('body').on('change','#tipoDocumento', function() {
         let tipoDocumento = $('#tipoDocumento').val();
-
-        if(tipoDocumento == 0){
+        console.log('xd')
+        if(tipoDocumento == 4){
             // $('#numeroDocumento').val("123")
             $("#numeroDocumento").val("00000000");
             $("#nombreCliente").val("CLIENTE 0001");

@@ -146,5 +146,6 @@ return [
     */
 
     'attributes' => [],
+    'recaptcha' => 'Hey!!! Debes demostrar que no eres un robot !',
 
 ];

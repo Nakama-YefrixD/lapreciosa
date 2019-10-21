@@ -32,6 +32,7 @@ use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use DB;
 use PDF;
 use QrCode;
+use Response;
 
 class ventasController extends Controller
 {
@@ -132,8 +133,8 @@ class ventasController extends Controller
         // ENVIAR A LA SUNAT 
         $see = new See();
         $see->setService(SunatEndpoints::FE_BETA);
-        $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
-        $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
+        $see->setCertificate(file_get_contents(public_path('\sunat\certificadosfree\certificadofree.pem')));
+        $see->setCredentials('20000000001MODDATOS'/*ruc+usuario*/, 'moddatos');
         // ---------- FACTURACION -------------
         $tipoDocumento    = tiposdocumento::find($request['tipoDocumento']);
         $tiposcomprobante = tiposcomprobante::find($request['tipoComprobante']);
@@ -288,6 +289,11 @@ class ventasController extends Controller
             
             // Guardar CDR
             file_put_contents(public_path('\sunat\zip\venta-'.$venta->id.'-R-'.$invoice->getName().'.zip'), $result->getCdrZip());
+
+            $venta      = ventas::find($venta->id);
+            $venta->xml = "\sunat\xml\venta-".$venta->id."-".$invoice->getName().".xml";
+            $venta->cdr = '\sunat\zip\venta-'.$venta->id.'-R-'.$invoice->getName().'.zip';
+            $venta->update();
 
             $codigoQr = QrCode::format('png')
                                 ->size(250)
@@ -554,8 +560,8 @@ class ventasController extends Controller
 
         $see = new See();
         $see->setService(SunatEndpoints::FE_BETA);
-        $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
-        $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
+        $see->setCertificate(file_get_contents(public_path('\sunat\certificadosfree\certificadofree.pem')));
+        $see->setCredentials('20000000001MODDATOS'/*ruc+usuario*/, 'moddatos');
         // ---------- FACTURACION -------------
         $tipoDocumento    = tiposdocumento::find($request['tipoDocumento']);
         $tiposcomprobante = tiposcomprobante::find($request['tipoComprobante']);
@@ -577,8 +583,8 @@ class ventasController extends Controller
             ->setDireccion('CAL. DEAN VALDIVIA 410, 412, 4 NRO. --');
 
         $company = new Company();
-        $company->setRuc('20605007211')
-                ->setRazonSocial('LA PRECIOSA DISTRIBUCIONES IMPORTACIONES E.I.R.L')
+        $company->setRuc('20000000001')
+                ->setRazonSocial('LA  E.I.R.L')
                 ->setNombreComercial('PRECIOSA')
                 ->setAddress($address);
 
@@ -709,70 +715,75 @@ class ventasController extends Controller
             // Guardar CDR
             file_put_contents(public_path('\sunat\zip\venta-'.$venta->id.'-R-'.$invoice->getName().'.zip'), $result->getCdrZip());
 
+            $venta      = ventas::find($venta->id);
+            $venta->xml = '\sunat\xmp\venta-'.$venta->id.'-'.$invoice->getName().'.xml';
+            $venta->cdr = '\sunat\zip\venta-'.$venta->id.'-R-'.$invoice->getName().'.zip';
+            $venta->update();
+
             $codigoQr = QrCode::format('png')->size(250)->generate($rucEmpresa."|".$tiposcomprobante->codigo."|".$request['serieVenta']."|".$request['facturaVenta']."|".$venta->impuestos."|".$venta->total."|".$request['dateFactura']."|".$tipoDocumento->codigo."|".$request['numeroDocumento']."|", public_path('img/qr.png'));
 
             // IMPRIMIR TICKET
-            $nombre_impresora = "POS"; 
+            // $nombre_impresora = "POS"; 
 
-            $connector = new WindowsPrintConnector($nombre_impresora);
-            $printer = new Printer($connector);
+            // $connector = new WindowsPrintConnector($nombre_impresora);
+            // $printer = new Printer($connector);
 
-            $printer->setJustification(Printer::JUSTIFY_CENTER);
+            // $printer->setJustification(Printer::JUSTIFY_CENTER);
 
             
-            try{
-                $logo = EscposImage::load(public_path('img/logo.png'), false);
-                $printer->bitImage($logo);
-            }catch(Exception $e){/*No hacemos nada si hay error*/}
+            // // try{
+            // //     $logo = EscposImage::load(public_path('img/logo.png'), false);
+            // //     $printer->bitImage($logo);
+            // // }catch(Exception $e){/*No hacemos nada si hay error*/}
 
 
-            $printer->text("\n"."LA PRECIOSA " . "\n");
-            $printer->text("Direccion: Dean Valdivia 412 A" . "\n");
-            $printer->text("Tel: 054 77 34 22" . "\n");
-            $printer->text("\n");
-            $printer->setJustification(Printer::JUSTIFY_CENTER);
-            $printer->text("BOLETA ELECTRONICA"."\n");
-            $printer->text("SERIE: ".$request['serieVenta']."-".$request['facturaVenta']."\n");
-            #La fecha también
+            // // $printer->text("\n"."LA PRECIOSA " . "\n");
+            // // $printer->text("Direccion: Dean Valdivia 412 A" . "\n");
+            // // $printer->text("Tel: 054 77 34 22" . "\n");
+            // // $printer->text("\n");
+            // // $printer->setJustification(Printer::JUSTIFY_CENTER);
+            // // $printer->text("BOLETA ELECTRONICA"."\n");
+            // // $printer->text("SERIE: ".$request['serieVenta']."-".$request['facturaVenta']."\n");
+            // // #La fecha también
             
-            $printer->text(date("Y-m-d H:i:s") . "\n");
-            $printer->text("-----------------------------" . "\n");
-            $printer->setJustification(Printer::JUSTIFY_LEFT);
-            $printer->text("CANT  DESCRIPCION    P.U   IMP.\n");
-            $printer->text("-----------------------------"."\n");
+            // // $printer->text(date("Y-m-d H:i:s") . "\n");
+            // // $printer->text("-----------------------------" . "\n");
+            // // $printer->setJustification(Printer::JUSTIFY_LEFT);
+            // // $printer->text("CANT  DESCRIPCION    P.U   IMP.\n");
+            // // $printer->text("-----------------------------"."\n");
 
-                $printer->setJustification(Printer::JUSTIFY_LEFT);
-                for ($x = 0; $x < count($request['cantidad']); $x++) {
+            // //     $printer->setJustification(Printer::JUSTIFY_LEFT);
+            // //     for ($x = 0; $x < count($request['cantidad']); $x++) {
                     
-                    $producto = productos::where('id', $request['nombreProducto'][$x])
-                                        ->first();
+            // //         $producto = productos::where('id', $request['nombreProducto'][$x])
+            // //                             ->first();
 
-                    $printer->text($producto['nombre'].": \n");
-                    $printer->text( $request['cantidad'][$x]."  unidad    ".$producto['precio']." ".$request['total'][$x]."   \n");
+            // //         $printer->text($producto['nombre'].": \n");
+            // //         $printer->text( $request['cantidad'][$x]."  unidad    ".$producto['precio']." ".$request['total'][$x]."   \n");
                     
                     
-                }
+            // //     }
                 
 
-            $printer->text("-----------------------------"."\n");
-            $printer->setJustification(Printer::JUSTIFY_RIGHT);
-            $printer->text("SUBTOTAL: ".$request['subTotalVenta']."\n");
-            $printer->text("IVA: ".$request['igvVenta']."\n");
-            $printer->text("TOTAL: ".$request['totalVenta']."\n");
-            $printer->text("\n");
+            // // $printer->text("-----------------------------"."\n");
+            // // $printer->setJustification(Printer::JUSTIFY_RIGHT);
+            // // $printer->text("SUBTOTAL: ".$request['subTotalVenta']."\n");
+            // // $printer->text("IVA: ".$request['igvVenta']."\n");
+            // // $printer->text("TOTAL: ".$request['totalVenta']."\n");
+            // // $printer->text("\n");
             
-            $printer->setJustification(Printer::JUSTIFY_CENTER);
-            $printer->text("Puede consultar en preciosaweb.com (https://preciosaweb.com/consultas)"."\n");
-            $printer->text("\n");
-            $printer->text("\n");
-            $imgQr = EscposImage::load(public_path('img/qr.png'), false);
-            $printer->bitImage($imgQr);
-            $printer->text("Muchas gracias por su compra\n");
+            // // $printer->setJustification(Printer::JUSTIFY_CENTER);
+            // // $printer->text("Puede consultar en preciosaweb.com (https://preciosaweb.com/consultas)"."\n");
+            // // $printer->text("\n");
+            // // $printer->text("\n");
+            // // $imgQr = EscposImage::load(public_path('img/qr.png'), false);
+            // // $printer->bitImage($imgQr);
+            // // $printer->text("Muchas gracias por su compra\n");
 
-            $printer->feed(3);
-            $printer->cut();
-            $printer->pulse();
-            $printer->close();
+            // // $printer->feed(3);
+            // // $printer->cut();
+            // // $printer->pulse();
+            // // $printer->close();
 
             DB::commit();
 
@@ -975,8 +986,8 @@ class ventasController extends Controller
 
         $see = new See();
         $see->setService(SunatEndpoints::FE_BETA);
-        $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
-        $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
+        $see->setCertificate(file_get_contents(public_path('\sunat\certificadosfree\certificadofree.pem')));
+        $see->setCredentials('20000000001MODDATOS'/*ruc+usuario*/, 'moddatos');
 
         // Cliente
         $client = new Client();
@@ -1072,6 +1083,12 @@ class ventasController extends Controller
         
         // Guardar CDR
         file_put_contents(public_path('\sunat\zip\venta-'.$ventas->idVentas.'-R-'.$invoice->getName().'.zip'), $result->getCdrZip());
+        
+        $venta      = ventas::find($venta->idVentas);
+        $venta->xml = "\sunat\xml\venta-".$venta->idVentas."-".$invoice->getName().".xml";
+        $venta->cdr = '\sunat\zip\venta-'.$venta->idVentas.'-R-'.$invoice->getName().'.zip';
+        $venta->update();
+        
         DB::commit();
 
             $rpta = array(
@@ -1164,4 +1181,17 @@ class ventasController extends Controller
         return $pdf->stream();
 
     }
+
+    public function descargarXml($idVenta)
+    {
+           
+        // Guardar CDR
+        // file_put_contents(public_path('\sunat\zip\venta-'.$ventas->idVentas.'-R-'.$invoice->getName().'.zip'), $result->getCdrZip());
+        
+        $venta = ventas::find($idVenta);
+        $file   =   public_path($venta->xml);
+        return Response::download($file);
+
+    }
+
 }
