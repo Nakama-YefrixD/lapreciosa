@@ -967,8 +967,9 @@ class ventasController extends Controller
 
     public function comprobanteEmitir(Request $request)
     {
-        DB::beginTransaction();
-        try {
+        
+        
+        
         $ventas = ventas::select(   'td.codigo as codigoTiposdocumento', 'c.documento as documentoClientes',
                                     'c.nombre as nombreClientes', 'tc.codigo as codigoTiposcomprobante',
                                     'tc.serie as serieTiposcomprobante', 'ventas.numero as numeorVentas', 
