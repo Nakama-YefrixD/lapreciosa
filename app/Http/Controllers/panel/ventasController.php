@@ -569,7 +569,7 @@ class ventasController extends Controller
 
         // Cliente
         $client = new Client();
-        $client->setTipoDoc(0 //6 es RUC
+        $client->setTipoDoc(0) //6 es RUC
             ->setNumDoc("00000000")
             ->setRznSocial("CLIENTE 0001");
 
