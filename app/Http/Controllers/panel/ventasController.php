@@ -723,67 +723,67 @@ class ventasController extends Controller
             $codigoQr = QrCode::format('png')->size(250)->generate($rucEmpresa."|".$tiposcomprobante->codigo."|".$request['serieVenta']."|".$request['facturaVenta']."|".$venta->impuestos."|".$venta->total."|".$request['dateFactura']."|".$tipoDocumento->codigo."|".$request['numeroDocumento']."|", public_path('img/qr.png'));
 
             // IMPRIMIR TICKET
-            // $nombre_impresora = "POS"; 
+            $nombre_impresora = "POS"; 
 
-            // $connector = new WindowsPrintConnector($nombre_impresora);
-            // $printer = new Printer($connector);
+            $connector = new WindowsPrintConnector($nombre_impresora);
+            $printer = new Printer($connector);
 
-            // $printer->setJustification(Printer::JUSTIFY_CENTER);
+            $printer->setJustification(Printer::JUSTIFY_CENTER);
 
             
-            // // try{
-            // //     $logo = EscposImage::load(public_path('img/logo.png'), false);
-            // //     $printer->bitImage($logo);
-            // // }catch(Exception $e){/*No hacemos nada si hay error*/}
+            try{
+                $logo = EscposImage::load(public_path('img/logo.png'), false);
+                $printer->bitImage($logo);
+            }catch(Exception $e){/*No hacemos nada si hay error*/}
 
 
-            // // $printer->text("\n"."LA PRECIOSA " . "\n");
-            // // $printer->text("Direccion: Dean Valdivia 412 A" . "\n");
-            // // $printer->text("Tel: 054 77 34 22" . "\n");
-            // // $printer->text("\n");
-            // // $printer->setJustification(Printer::JUSTIFY_CENTER);
-            // // $printer->text("BOLETA ELECTRONICA"."\n");
-            // // $printer->text("SERIE: ".$request['serieVenta']."-".$request['facturaVenta']."\n");
-            // // #La fecha también
+            $printer->text("\n"."LA PRECIOSA " . "\n");
+            $printer->text("Direccion: Dean Valdivia 412 A" . "\n");
+            $printer->text("Tel: 054 77 34 22" . "\n");
+            $printer->text("\n");
+            $printer->setJustification(Printer::JUSTIFY_CENTER);
+            $printer->text("BOLETA ELECTRONICA"."\n");
+            $printer->text("SERIE: ".$request['serieVenta']."-".$request['facturaVenta']."\n");
+            #La fecha también
             
-            // // $printer->text(date("Y-m-d H:i:s") . "\n");
-            // // $printer->text("-----------------------------" . "\n");
-            // // $printer->setJustification(Printer::JUSTIFY_LEFT);
-            // // $printer->text("CANT  DESCRIPCION    P.U   IMP.\n");
-            // // $printer->text("-----------------------------"."\n");
+            $printer->text(date("Y-m-d H:i:s") . "\n");
+            $printer->text("-----------------------------" . "\n");
+            $printer->setJustification(Printer::JUSTIFY_LEFT);
+            $printer->text("CANT  DESCRIPCION    P.U   IMP.\n");
+            $printer->text("-----------------------------"."\n");
 
-            // //     $printer->setJustification(Printer::JUSTIFY_LEFT);
-            // //     for ($x = 0; $x < count($request['cantidad']); $x++) {
+                $printer->setJustification(Printer::JUSTIFY_LEFT);
+                for ($x = 0; $x < count($request['cantidad']); $x++) {
                     
-            // //         $producto = productos::where('id', $request['nombreProducto'][$x])
-            // //                             ->first();
+                    $producto = productos::where('id', $request['nombreProducto'][$x])
+                                        ->first();
 
-            // //         $printer->text($producto['nombre'].": \n");
-            // //         $printer->text( $request['cantidad'][$x]."  unidad    ".$producto['precio']." ".$request['total'][$x]."   \n");
+                    $printer->text($producto['nombre'].": \n");
+                    $printer->text( $request['cantidad'][$x]."  unidad    ".$producto['precio']." ".$request['total'][$x]."   \n");
                     
                     
-            // //     }
+                }
                 
 
-            // // $printer->text("-----------------------------"."\n");
-            // // $printer->setJustification(Printer::JUSTIFY_RIGHT);
-            // // $printer->text("SUBTOTAL: ".$request['subTotalVenta']."\n");
-            // // $printer->text("IVA: ".$request['igvVenta']."\n");
-            // // $printer->text("TOTAL: ".$request['totalVenta']."\n");
-            // // $printer->text("\n");
+            $printer->text("-----------------------------"."\n");
+            $printer->setJustification(Printer::JUSTIFY_RIGHT);
+            $printer->text("SUBTOTAL: ".$request['subTotalVenta']."\n");
+            $printer->text("IVA: ".$request['igvVenta']."\n");
+            $printer->text("TOTAL: ".$request['totalVenta']."\n");
+            $printer->text("\n");
             
-            // // $printer->setJustification(Printer::JUSTIFY_CENTER);
-            // // $printer->text("Puede consultar en preciosaweb.com (https://preciosaweb.com/consultas)"."\n");
-            // // $printer->text("\n");
-            // // $printer->text("\n");
-            // // $imgQr = EscposImage::load(public_path('img/qr.png'), false);
-            // // $printer->bitImage($imgQr);
-            // // $printer->text("Muchas gracias por su compra\n");
+            $printer->setJustification(Printer::JUSTIFY_CENTER);
+            $printer->text("Puede consultar en preciosaweb.com (https://preciosaweb.com/consultas)"."\n");
+            $printer->text("\n");
+            $printer->text("\n");
+            $imgQr = EscposImage::load(public_path('img/qr.png'), false);
+            $printer->bitImage($imgQr);
+            $printer->text("Muchas gracias por su compra\n");
 
-            // // $printer->feed(3);
-            // // $printer->cut();
-            // // $printer->pulse();
-            // // $printer->close();
+            $printer->feed(3);
+            $printer->cut();
+            $printer->pulse();
+            $printer->close();
 
             DB::commit();
 
