@@ -145,6 +145,64 @@ class agregarProductoController extends Controller
                     )
             );
         }
+    }
+
+    public function agregarProductoExistente(Request $request)
+    {
+        $idProducto     = $request['idProducto'];
+        $precioCompra   = $request['precioCompra'];
+        $canitdad       = $request['cantidad'];
+        $code           = true;
+        $entrada = entradas::where('factura','=', 'MOVIL')->first();
+
+        if($entrada){
+
+        }else{
+            $entrada = new entradas;
+            $entrada->proveedor_id  = 1;
+            $entrada->factura       = "MOVIL";
+            $entrada->ruc           = "MOVIL";
+            if($entrada->save()){
+
+            }else{
+                return json_encode(array("code" => false ));
+            }
+        }
+        $productosEntrda = new productosEntrada;
+        $productosEntrada->producto_id  = $idProducto;
+        $productosEntrada->entrada_id   = $entrada->id;
+        $productosEntrada->precio       = $precioCompra;
+        $productosEntrada->cantidad     = $canitdad;
+
+        if($productosEntrada->save()){
+            $control = new control;
+            $control->user_id = 1;
+            $control->metodo = "crear";
+            $control->tabla = "productosEntrada";
+            $control->campos = "producto_id, entrada_id, precio, cantidad";
+            $control->datos = $idProducto.",".$entrada->id.",".$precioCompra.",".$canitdad;
+            $control->descripcion = "Crear los productos que tiene una entrada";
+            $control->save();
+
+            $producto = Productos::find($idProducto);
+            $producto->cantidad = $producto->cantidad + $canitdad;
+            if($producto->update()){
+                $control = new control;
+                $control->user_id = 1;
+                $control->metodo = "actualizar";
+                $control->tabla = "Productos";
+                $control->campos = "cantidad";
+                $control->datos = $canitdad;
+                $control->descripcion = "Actualizar la cantidad de productos";
+                $control->save();    
+            }else{
+                return json_encode(array("code" => false ));
+            }
+        }else{
+            return json_encode(array("code" => false ));
+        }
+
+        return json_encode(array("code" => true ));
 
     }
 }

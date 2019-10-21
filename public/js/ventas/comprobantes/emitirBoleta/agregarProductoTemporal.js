@@ -22,6 +22,7 @@ $('#crearProducto').on('click', function(e) {
                     dataType: 'json',
                     success: function(response) {
                         if(response['response'] == true) {
+
                             let idProducto     = response['idProducto'];
                             let nombreProducto = response['nombreProducto'];
                             let codigoProducto = response['codigoProducto'];
@@ -38,7 +39,7 @@ $('#crearProducto').on('click', function(e) {
                                 data += '<td class="producto"><select class="form-control productos" name="nombreProducto[]" id="nombreProducto[] " style="width: 100%;">';
                                 data += option;
                                 data += '</select></td>';
-                                data += '<td class="cantidad"><input type="text" class="form-control c_quantity" name="cantidad[]" value="0">';
+                                data += '<td class="cantidad"><input type="text" class="form-control c_quantity" name="cantidad[]" value="">';
                                 data += '</td>';
                                 data += '<td class="disponible"><span>0</span><input type="hidden" class="form-control disponible" name="disponible[]" value="0" readonly="">';
                                 data += '</td>';
@@ -61,6 +62,10 @@ $('#crearProducto').on('click', function(e) {
 
                             $('#tb_products tbody').append(data);
                             $('#productoTemporalModal').modal('hide');
+
+                            $('#codigoProductoNuevo').val("");
+                            $('#nombreProductoNuevo').val("");
+                            $('#precioVentaProducto').val("");
 
                         } else {
                             toastr.error('Ocurrio un error al momento de crear este producto porfavor verifique si todos los campos estan correctos');

@@ -21,3 +21,5 @@ Route::post('/codigo/buscar', 'api\agregarProductoController@buscarCodigo');
 Route::post('/nombre/buscar', 'api\agregarProductoController@buscarNombre');
 Route::post('/marca/buscar', 'api\agregarProductoController@buscarMarca');
 Route::post('/tipo/buscar', 'api\agregarProductoController@buscarTipos');
+
+Route::post('/agregar/productoExistente', 'api\agregarProductoController@agregarProductoExistente');

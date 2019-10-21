@@ -28,7 +28,7 @@ $("#tb_buscarProducto").on('click', '.seleccionarProductoDetalle', function(){
         data += '<td class="producto"><select class="form-control productos" name="nombreProducto[]" id="nombreProducto[] " style="width: 100%;">';
         data += option;
         data += '</select></td>';
-        data += '<td class="cantidad"><input type="text" class="form-control c_quantity" name="cantidad[]" value="0">';
+        data += '<td class="cantidad"><input type="text" class="form-control c_quantity" name="cantidad[]" value="">';
         data += '</td>';
         data += '<td class="disponible"><span>'+disponible+'</span><input type="hidden" class="form-control disponible" name="disponible[]" value="'+disponible+'" readonly="">';
         data += '</td>';
@@ -48,6 +48,12 @@ $("#tb_buscarProducto").on('click', '.seleccionarProductoDetalle', function(){
         data += '</td>';
 
         data += '</tr>';
+
+        $('#buscar_tb_codigo').val("");
+        $("#buscar_tb_marca").val("");
+        $("#buscar_tb_tipo").val("");
+        $("#buscar_tb_nombre").val("");
+        $("#buscar_tb_precio").val("");
 
     $('#tb_products tbody').append(data);
     // $('.productos').select2();
