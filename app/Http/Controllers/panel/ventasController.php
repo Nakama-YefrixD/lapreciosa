@@ -984,123 +984,7 @@ class ventasController extends Controller
                         ->first();
 
 
-        $see = new See();
-        $see->setService(SunatEndpoints::FE_BETA);
-        $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
-        $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
-
-        // Cliente
-        $client = new Client();
-        $client->setTipoDoc($ventas->codigoTiposdocumento) //6 es RUC
-            ->setNumDoc($ventas->documentoClientes)
-            ->setRznSocial($ventas->nombreClientes);
-
-        // Emisor
-        $address = new Address();
-        $address->setUbigueo('040101')
-            ->setDepartamento('AREQUIPA')
-            ->setProvincia('AREQUIPA')
-            ->setDistrito('AREQUIPA')
-            ->setUrbanizacion('NONE')
-            ->setDireccion('CAL. DEAN VALDIVIA 410, 412, 4 NRO. --');
-
-        $company = new Company();
-        $company->setRuc('20605007211')
-                ->setRazonSocial('LA PRECIOSA DISTRIBUCIONES IMPORTACIONES E.I.R.L')
-                ->setNombreComercial('PRECIOSA')
-                ->setAddress($address);
-
-        // Venta
-        $fechaActual = date('Y-m-d');
-        $invoice = (new Invoice())
-        ->setUblVersion('2.1')
-        ->setTipoOperacion('0101') // Catalog. 51
-        ->setTipoDoc($ventas->codigoTiposcomprobante)
-        ->setSerie($ventas->serieTiposcomprobante) 
-        ->setCorrelativo($ventas->numeorVentas)
-        ->setFechaEmision(new \DateTime(date("d-m-Y H:i:s", strtotime($ventas->fechaVentas))))
-        ->setTipoMoneda($ventas->abreviaturaTiposmoneda)
-        ->setClient($client)
-        ->setMtoOperGravadas($ventas->subtotalVentas) //100
-        ->setMtoIGV($ventas->impuestosVentas) //18
-        ->setTotalImpuestos($ventas->impuestosVentas) //18
-        ->setValorVenta( $ventas->subtotalVentas) //100
-        ->setMtoImpVenta($ventas->totalVentas) //118
-        ->setCompany($company);
-
-
-        $items = [];
-
-        $ventaDetalles = detallesventa::where('venta_id', $ventas->idVentas)
-                                        ->get();
-        $x = 0;
-        foreach($ventaDetalles as $ventaDetalle){
-            
-            $producto = productos::where('id', $ventaDetalle->producto_id )
-                                    ->first();
-                                    
-            $precioFinalProducto    = $producto->precio - $ventaDetalle->descuento;
-            $productoImpuesto       = $ventaDetalle->total - $ventaDetalle->subtotal;
-            $productoPrecioSinIgv   = $precioFinalProducto/1.18;
-            $productoPrecioCantidadSinIgv = $productoPrecioSinIgv * $ventaDetalle->cantidad;
-            $items[$x] = (new SaleDetail())
-                ->setCodProducto($producto->codigo)
-                ->setUnidad('NIU')
-                ->setCantidad($ventaDetalle->cantidad)
-                ->setDescripcion($producto->nombre)
-                ->setMtoBaseIgv($productoPrecioCantidadSinIgv)
-                ->setPorcentajeIgv(18.00) // 18%
-                ->setIgv($productoImpuesto)
-                ->setTipAfeIgv('10')
-                ->setTotalImpuestos($productoImpuesto)
-                ->setMtoValorVenta($productoPrecioCantidadSinIgv)
-                ->setMtoValorUnitario($productoPrecioSinIgv)
-                ->setMtoPrecioUnitario($producto->precio);
-            $x = $x+1;
-        }
-
-        $legend = (new Legend())
-        ->setCode('1000')
-        ->setValue(NumerosEnLetras::convertir($ventas->totalVentas).'/100 SOLES');
-
-        $invoice->setDetails($items)
-                ->setLegends([$legend]);
-
-        $result = $see->send($invoice);
-
-        // Guardar XML
-        file_put_contents(public_path('\sunat\xml\venta-'.$ventas->idVentas.'-'.$invoice->getName().'.xml'),
-                            $see->getFactory()->getLastXml());
-        if (!$result->isSuccess()) {
-            var_dump($result->getError());
-            exit();
-        }else{
-            $venta = ventas::find($ventas->idVentas);
-            $venta->estadoSunat = 1;
-            $venta->update();
-        }
-
-        
-        // Guardar CDR
-        file_put_contents(public_path('\sunat\zip\venta-'.$ventas->idVentas.'-R-'.$invoice->getName().'.zip'), $result->getCdrZip());
-        
-        $venta      = ventas::find($venta->idVentas);
-        $venta->xml = "\sunat\xml\venta-".$venta->idVentas."-".$invoice->getName().".xml";
-        $venta->cdr = '\sunat\zip\venta-'.$venta->idVentas.'-R-'.$invoice->getName().'.zip';
-        $venta->update();
-        
-        DB::commit();
-
-            $rpta = array(
-                'response'      =>  true,
-                'setValue' => NumerosEnLetras::convertir($ventas->total).'/100 SOLES',
-                'ventaTotal' => $ventas->total,
-            );
-            echo json_encode($rpta);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            echo json_encode($e->getMessage());
-        }
+        echo $ventas;
     }
 
     public function productoTemporalCrear(Request $request)
@@ -1193,5 +1077,7 @@ class ventasController extends Controller
         return Response::download($file);
 
     }
+
+    
 
 }
