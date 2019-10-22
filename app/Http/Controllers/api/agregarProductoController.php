@@ -304,7 +304,7 @@ class agregarProductoController extends Controller
             $producto->marca_id     = $marca->id;
             $producto->tipo_id      = $tipo->id;
             $producto->nombre       = $nombreProducto;
-            $producto->cantidad     = $cantidad;
+            $producto->cantidad     = 0;
             $producto->precio       = $precioVenta;
             $producto->precioVista  = "S/".$precioVenta;
             $producto->codigo       = $codigoProducto;
