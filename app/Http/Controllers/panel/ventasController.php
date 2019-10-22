@@ -323,7 +323,7 @@ class ventasController extends Controller
             $printer->setJustification(Printer::JUSTIFY_CENTER);
             $printer->text("FACTURA ELECTRONICA"."\n");
             $printer->text("SERIE: ".$request['serieVenta']."-".$request['facturaVenta']."\n");
-            #La fecha tambiÃ©n
+            #La fecha también
             $printer->text(date("Y-m-d H:i:s") . "\n");
             $printer->text("-----------------------------" . "\n");
             $printer->setJustification(Printer::JUSTIFY_LEFT);
@@ -493,7 +493,7 @@ class ventasController extends Controller
             $printer->setJustification(Printer::JUSTIFY_CENTER);
             $printer->text("FACTURA ELECTRONICA"."\n");
             $printer->text("SERIE: ".$request['serieVenta']."-".$request['facturaVenta']."\n");
-            #La fecha tambiÃ©n
+            #La fecha también
             date_default_timezone_set("America/Mexico_City");
             $printer->text(date("Y-m-d H:i:s") . "\n");
             $printer->text("-----------------------------" . "\n");
@@ -744,7 +744,7 @@ class ventasController extends Controller
             $printer->setJustification(Printer::JUSTIFY_CENTER);
             $printer->text("BOLETA ELECTRONICA"."\n");
             $printer->text("SERIE: ".$request['serieVenta']."-".$request['facturaVenta']."\n");
-            #La fecha tambiÃ©n
+            #La fecha también
             
             $printer->text(date("Y-m-d H:i:s") . "\n");
             $printer->text("-----------------------------" . "\n");
@@ -908,7 +908,7 @@ class ventasController extends Controller
             $printer->setJustification(Printer::JUSTIFY_CENTER);
             $printer->text("BOLETA ELECTRONICA"."\n");
             $printer->text("SERIE: ".$request['serieVenta']."-".$request['facturaVenta']."\n");
-            #La fecha tambiÃ©n
+            #La fecha también
             date_default_timezone_set("America/Mexico_City");
             $printer->text(date("Y-m-d H:i:s") . "\n");
             $printer->text("-----------------------------" . "\n");
@@ -1089,7 +1089,7 @@ class ventasController extends Controller
         // Guardar CDR
         file_put_contents(public_path('\sunat\zip\venta-'.$ventas->id.'-R-'.$invoice->getName().'.zip'), $result->getCdrZip());
         
-        $venta      = ventas::find($venta->idVentas);
+        $venta      = ventas::find($venta->id);
         $venta->xml = "\sunat\xml\venta-".$venta->id."-".$invoice->getName().".xml";
         $venta->cdr = '\sunat\zip\venta-'.$venta->id.'-R-'.$invoice->getName().'.zip';
         $venta->update();
