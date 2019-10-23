@@ -110,18 +110,21 @@ $(document).ready(function() {
 
     $("#tb_almacen").on('click', '.editar', function(){
         var data = dt.row($(this).parents('tr')).data();
-        let id = data['idProducto'];
-        let codigo = data['codigoProducto'];
-        let nombre = data['nombreProducto'];
-        let precio = data['precioProducto'];
-        let marca = data['idMarca'];
-        let tipo = data['idTipo'];
+        let id          = data['idProducto'];
+        let codigo      = data['codigoProducto'];
+        let nombre      = data['nombreProducto'];
+        let precio      = data['precioProducto'];
+        let marca       = data['idMarca'];
+        let tipo        = data['idTipo'];
+        let cantidad    = data['cantidadProducto'];
+
         $("#editarIdProducto").val(id);
         $("#editarCodigoProductoNuevo").val(codigo);
         $("#editarMarcaProducto").val(marca);
         $("#editarTipoProducto").val(tipo);
         $("#editarNombreProductoNuevo").val(nombre);
         $("#editarPrecioVentaProducto").val(precio);
+        $("#editarCantidadProducto").val(cantidad);
         $('#editarMarcaProducto').select2();
         $('#editarTipoProducto').select2();
         $('#editarAlertaCodigo').html('')

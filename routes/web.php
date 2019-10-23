@@ -157,7 +157,7 @@ Route::get('/consultar/xml/{idVenta}', 'consultar\consultarComprobanteController
 
 
 
-Route::get('/prueba', 'prueba\pruebaController@index');
+Route::get('/prueba/{id}', 'prueba\pruebaController@notaCredito');
 
 Route::get('qr', function () {
     \QrCode::size(500)
