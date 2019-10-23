@@ -228,6 +228,8 @@ class agregarProductoController extends Controller
 
             $producto = Productos::find($idProducto);
             $producto->cantidad = $producto->cantidad + $cantidad;
+            $producto->total = $producto->total + $cantidad;
+            
             if($producto->update()){
                 $control = new control;
                 $control->user_id = 1;
