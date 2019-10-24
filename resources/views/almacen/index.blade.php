@@ -495,6 +495,21 @@
                             </div>
                             <div class="form-group">
                                 <div class="row">
+<<<<<<< HEAD
+=======
+                                    <div class="col-6">
+                                        <label>Cantidad</label>
+                                        <input type="text" class="form-control" name="editarCantidadProducto" id="editarCantidadProducto">
+                                    </div>
+                                    <div class="col-6">
+                                        <label>Precio de compra</label>
+                                        <input type="text" class="form-control" name="editarPrecioCosto" id="editarPrecioCosto">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+>>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
                                     <div class="col-12">
                                         <label>Precio con IGV(18%)</label>
                                         <input type="text" name="editarPrecioVentaProducto" id="editarPrecioVentaProducto" class="form-control"

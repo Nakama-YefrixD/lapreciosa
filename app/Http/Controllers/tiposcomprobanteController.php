@@ -29,6 +29,7 @@ class tiposcomprobanteController extends Controller
         $tiposcomprobante = tiposcomprobante::where('codigo', '03')->first();
         return $tiposcomprobante;        
     }
+<<<<<<< HEAD
 
     public function facturaReact(){
         $tiposcomprobante = tiposcomprobante::where('codigo', '01')->first();
@@ -40,4 +41,6 @@ class tiposcomprobanteController extends Controller
     }
 
 
+=======
+>>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
 }

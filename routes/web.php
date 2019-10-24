@@ -25,11 +25,14 @@ Route::get('/', function () {
     // return view('auth.login');
 });
 
+<<<<<<< HEAD
 Route::get('/queso', function () {
     return view('react.app');
 });
 
 
+=======
+>>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -84,17 +87,25 @@ Route::post('/consult/dni/{dni}', 'consultaIdentidad@dniConsult')->name('consult
         return view('almacen.loads.marcas');
     });
 
+<<<<<<< HEAD
     Route::get('/gersonesgay', function () {
         return view('almacen.loads.marcas');
     });
 
+=======
+>>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
 
 
 // VENTAS
     Route::get('/ventas', 'panel\ventasController@index')->name('ventas.index');
     Route::get('/ventas/tb_ventas', 'panel\ventasController@tb_ventas')->name('ventas.tb_ventas');
+<<<<<<< HEAD
     Route::get('/ventas/factura/serie', 'tiposcomprobanteController@facturaReact');
     Route::get('/ventas/boleta/serie', 'tiposcomprobanteController@boletaReact');
+=======
+
+    Route::get('/ventas/tb_buscarProducto', 'panel\ventasController@tb_buscarProducto')->name('ventas.tb_buscarProducto');
+>>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
     
 
 
@@ -106,6 +117,15 @@ Route::post('/consult/dni/{dni}', 'consultaIdentidad@dniConsult')->name('consult
             return view('ventas.loads.frm_emitirBoleta');
         });
 
+<<<<<<< HEAD
+=======
+        Route::get('/ventas/pdf/{idVenta}', 'panel\ventasController@verDetalleVenta')
+                ->name('ventas.pdf');
+        
+        Route::get('/ventas/xml/{idVenta}', 'panel\ventasController@descargarXml')
+                ->name('ventas.xml');
+
+>>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
     // VENTAS ENVIOS
         // EMITIR FACTURA ELECTRONICA
         Route::post('/venta/emitirfactura', 'panel\ventasController@emitirFactura')->name('venta.emitir');
@@ -117,7 +137,13 @@ Route::post('/consult/dni/{dni}', 'consultaIdentidad@dniConsult')->name('consult
         
         // ENVIAR COMPROBANTE A LA SUNAT
         Route::post('/ventas/comprobante/emitir', 'panel\ventasController@comprobanteEmitir')->name('venta.comprobante.emitir');
+<<<<<<< HEAD
         
+=======
+
+        // CREAR PRODUCTO TEMPORAL
+        Route::post('/ventas/crear/productoTemporal', 'panel\ventasController@productoTemporalCrear')->name('venta.crear.productoTemporal');
+>>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
 
 // CONFIGURACION
 // DESCUENTOS
@@ -145,4 +171,30 @@ Route::get('/villca', 'sunat@villca');
 // Route::get('/codigo', 'ProductosController@codigo');
 
 
+<<<<<<< HEAD
 Route::post('/almacen/ejemplo', 'panel\almacen@ejemplo')->name('panel.ejemplo');
+=======
+// consultarComprobante
+Route::get('/consultar', 'consultar\consultarComprobanteController@index')
+        ->name('consultar.index');;
+Route::post('/consultar/captcha', 'consultar\consultarComprobanteController@consultaCaptcha')
+        ->name('consultar.captcha');
+Route::get('/consultar/pdf/{idVenta}', 'consultar\consultarComprobanteController@consultarPdfVenta')
+        ->name('consultar.pdf');
+Route::get('/consultar/xml/{idVenta}', 'consultar\consultarComprobanteController@consultarXml')
+        ->name('consultar.xml');
+
+
+
+
+Route::get('/prueba/{id}', 'prueba\pruebaController@notaCredito');
+
+Route::get('qr', function () {
+    \QrCode::size(500)
+              ->format('png')
+              ->generate('ItSolutionStuff.com', public_path('qrcode.png'));
+      
+    return view('qrCode');
+      
+  });
+>>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
