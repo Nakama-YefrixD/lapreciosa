@@ -12,13 +12,6 @@ use App\tiposdocumento;
 use App\tiposmoneda;
 use App\productos;
 use App\control;
-<<<<<<< HEAD
-=======
-use App\User;
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
-use Yajra\DataTables\DataTables;
-
-use Greenter\Ws\Services\SunatEndpoints;
 use Greenter\See;
 use Greenter\Model\Client\Client;
 use Greenter\Model\Company\Company;
@@ -33,9 +26,6 @@ use Mike42\Escpos\EscposImage;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 
 use DB;
-<<<<<<< HEAD
-
-=======
 use PDF;
 use QrCode;
 use Response;
@@ -43,7 +33,6 @@ use Response;
 // NOTA DE CREDITO
 use Greenter\Model\Sale\Note;
 use Greenter\Model\Sale\Document;
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
 
 class ventasController extends Controller
 {
@@ -93,10 +82,6 @@ class ventasController extends Controller
         return Datatables::of($ventas)->make(true);
     }
 
-<<<<<<< HEAD
-    public function emitirFactura(Request $request)
-    {
-=======
     public function tb_buscarProducto(Request $request)
     {
         $productos = productos::leftjoin('descuentosproducto as dp', 'dp.producto_id', '=','productos.id')
@@ -177,16 +162,11 @@ class ventasController extends Controller
                 ->setAddress($address);
         
 
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
         DB::beginTransaction();
         try {
             
             $cliente = clientes::where('documento', $request['numeroDocumento'])
-<<<<<<< HEAD
-                            ->first();
-=======
                                 ->first();
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
 
             if($cliente){
                 $idCliente = $cliente->id;
@@ -195,40 +175,12 @@ class ventasController extends Controller
                 $cliente->tipoDocumento_id = $request['tipoDocumento']; 
                 $cliente->documento = $request['numeroDocumento'];
                 $cliente->nombre = $request['razonSocial']; 
-<<<<<<< HEAD
-                // $cliente->telefono = ;
-                // $cliente->direccion = ;
-                // $cliente->email = ;
-                $cliente->save();
-=======
                 $cliente->save();
 
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
                 $idCliente = $cliente->id;
             }
 
             $venta = new ventas;
-<<<<<<< HEAD
-            $venta->tipoComprobante_id = $request['tipoComprobante'];  
-            $venta->cliente_id = $idCliente;
-            $venta->user_id = auth()->id(); 
-            $venta->tipoMoneda_id = $request['tipoMoneda'];  
-            $venta->numero = $request['facturaVenta']; 
-            $venta->fecha = $request['dateFactura'];
-            $venta->fechaVencimiento =  $request['dateFactura'];
-            $venta->descuento = $request['descuentoVenta']; 
-            $venta->igv = 18;
-            $venta->impuestos = $request['igvVenta'];
-            $venta->subtotal = $request['subTotalVenta'];
-            $venta->total = $request['totalVenta'];
-            $venta->estadoEmail = false;
-            $venta->estadoSunat = true;
-            $venta->observaciones = $request['observacionVenta'];
-
-            if($venta->save()) {
-                $tiposcomprobante = tiposcomprobante::find($request['tipoComprobante']);
-                $tiposcomprobante->correlativo = $request['facturaVenta']+1;
-=======
             $venta->tipoComprobante_id  = $request['tipoComprobante'];  
             $venta->cliente_id          = $idCliente;
             $venta->user_id             = auth()->id(); 
@@ -266,32 +218,10 @@ class ventasController extends Controller
 
                 $tiposcomprobante               = tiposcomprobante::find($request['tipoComprobante']);
                 $tiposcomprobante->correlativo  = $request['facturaVenta']+1;
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
                 $tiposcomprobante->update();
 
                 for ($x = 0; $x < count($request['cantidad']); $x++) {
                     $ventaDetalles = new detallesventa;
-<<<<<<< HEAD
-                    $ventaDetalles->venta_id = $venta->id; 
-                    $ventaDetalles->producto_id = $request['nombreProducto'][$x];
-                    $ventaDetalles->cantidad = $request['cantidad'][$x];
-                    $ventaDetalles->igv = $request['total'][$x] - $request['subtotal'][$x];
-                    $ventaDetalles->descuento = $request['descuento'][$x];
-                    $ventaDetalles->subtotal = $request['subtotal'][$x];
-                    $ventaDetalles->total = $request['total'][$x];
-                    $ventaDetalles->save();
-
-                    $producto = Productos::find($request['nombreProducto'][$x]);
-                    $producto->cantidad = $producto->cantidad - $request['cantidad'][$x];
-                    if($producto->update()){
-                        $control = new control;
-                        $control->user_id = auth()->id();
-                        $control->metodo = "actualizar";
-                        $control->tabla = "Productos";
-                        $control->campos = "cantidad";
-                        $control->datos = $request['cantidad'][$x];
-                        $control->descripcion = "Actualizar la cantidad de productos despues de realizar una venta";
-=======
                     $ventaDetalles->venta_id    = $venta->id; 
                     $ventaDetalles->producto_id = $request['nombreProducto'][$x];
                     $ventaDetalles->cantidad    = $request['cantidad'][$x];
@@ -336,112 +266,14 @@ class ventasController extends Controller
                         $control->campos        = "cantidad";
                         $control->datos         = $request['cantidad'][$x];
                         $control->descripcion   = "Actualizar la cantidad de productos despues de realizar una venta";
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
                         $control->save();    
                     }
                 }
             }
 
-<<<<<<< HEAD
-            
-
-
-            // ENVIAR A LA SUNAT 
-
-            $see = new See();
-            $see->setService(SunatEndpoints::FE_BETA);
-            $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
-            $see->setCredentials('20000000001MODDATOS'/*ruc+usuario*/, 'moddatos');
-
-            
-
-            // ---------- FACTURACION -------------
-            $tipoDocumento = tiposdocumento::where('id', $request['tipoDocumento'])
-                                            ->first();
-
-            $tiposcomprobante = tiposcomprobante::where('id', $request['tipoComprobante'])
-                                                ->first();
-
-            $tipoMoneda = tiposmoneda::where('id', $request['tipoMoneda'])
-                                        ->first();
-
-            // Cliente
-            $client = new Client();
-            $client->setTipoDoc($tipoDocumento->codigo) //6 es RUC
-                ->setNumDoc($request['numeroDocumento'])
-                ->setRznSocial($request['razonSocial']);
-
-            // Emisor
-            $address = new Address();
-            $address->setUbigueo('150101')
-                ->setDepartamento('AREQUIPA')
-                ->setProvincia('AREQUIPA')
-                ->setDistrito('AREQUIPA')
-                ->setUrbanizacion('NONE')
-                ->setDireccion('AV LS');
-
-            $company = new Company();
-            $company->setRuc('20000000001')
-                    ->setRazonSocial('EMPRESA SAC')
-                    ->setNombreComercial('EMPRESA')
-                    ->setAddress($address);
-
-            // Venta
-            $fechaActual = date('Y-m-d');
-            $invoice = (new Invoice())
-            ->setUblVersion('2.1')
-            ->setTipoOperacion('0101') // Catalog. 51
-            ->setTipoDoc($tiposcomprobante->codigo)
-            ->setSerie($request['serieVenta']) 
-            ->setCorrelativo( $request['facturaVenta'])
-            ->setFechaEmision(new \DateTime(date("d-m-Y H:i:s", strtotime($request['dateFactura']))))
-            ->setTipoMoneda($tipoMoneda->abreviatura)
-            ->setClient($client)
-            ->setMtoOperGravadas($venta->subtotal) //100
-            ->setMtoIGV($venta->impuestos) //18
-            ->setTotalImpuestos($venta->impuestos) //18
-            ->setValorVenta( $venta->subtotal) //100
-            ->setMtoImpVenta($venta->total) //118
-            ->setCompany($company);
-
-
-            $items = [];
-            for ($x = 0; $x < count($request['cantidad']); $x++) {
-                
-
-                $producto = productos::where('id', $request['nombreProducto'][$x])
-                                        ->first();
-                // $productoImpuesto = $request['total'][$x] - $request['subtotal'][$x];
-                $productoPrecioSinIgv = $producto->precio * 18;
-                $productoPrecioSinIgv = $productoPrecioSinIgv/100;
-                $productoPrecioSinIgv = $producto->precio - $productoPrecioSinIgv;
-                // $productoPrecioCantidadSinIgv = $productoPrecioSinIgv * $request['cantidad'][$x];
-                $productoPrecioCantidadSinIgv = $producto->precio * $request['cantidad'][$x];
-                $productoImpuesto = $request['total'][$x] - $request['subtotal'][$x];
-
-                $items[$x] = (new SaleDetail())
-                    ->setCodProducto($producto->codigo)
-                    ->setUnidad('NIU')
-                    ->setCantidad($request['cantidad'][$x])//2
-                    ->setDescripcion($producto->nombre)
-                    ->setMtoBaseIgv($productoPrecioCantidadSinIgv)  //100
-                    ->setPorcentajeIgv(18.00) // 18%
-                    ->setIgv(sprintf("%.2f", $productoImpuesto))    //18
-                    ->setTipAfeIgv('10')
-                    ->setTotalImpuestos(sprintf("%.2f", $productoImpuesto))//18
-                    ->setMtoValorVenta($productoPrecioCantidadSinIgv)//100
-                    ->setMtoValorUnitario($productoPrecioSinIgv)//50
-                    ->setMtoPrecioUnitario($producto->precio);//59
-            }
-
-            $legend = (new Legend())
-            ->setCode('1000')
-            ->setValue(NumerosEnLetras::convertir($venta->total).'/100 SOLES');
-=======
             $legend = (new Legend())
                             ->setCode('1000')
                             ->setValue(NumerosEnLetras::convertir($venta->total).'/100 SOLES');
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
 
             $invoice->setDetails($items)
                     ->setLegends([$legend]);
@@ -455,18 +287,10 @@ class ventasController extends Controller
             var_dump($result->getError());
             exit();
             }
-<<<<<<< HEAD
-
-=======
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
             
             // Guardar CDR
             file_put_contents(public_path('\sunat\zip\venta-'.$venta->id.'-R-'.$invoice->getName().'.zip'), $result->getCdrZip());
 
-<<<<<<< HEAD
-
-
-=======
             $venta      = ventas::find($venta->id);
             $venta->xml = "\sunat\xml\venta-".$venta->id."-".$invoice->getName().".xml";
             $venta->cdr = '\sunat\zip\venta-'.$venta->id.'-R-'.$invoice->getName().'.zip';
@@ -477,7 +301,6 @@ class ventasController extends Controller
                                 ->generate(
                                     "20605007211|".$tiposcomprobante->codigo."|".$request['serieVenta']."|".$request['facturaVenta']."|".$venta->impuestos."|".$venta->total."|".$request['dateFactura']."|".$tipoDocumento->codigo."|".$request['numeroDocumento']."|", public_path('img/qr.png')
                                 );
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
 
             // IMPRIMIR TICKET
             $nombre_impresora = "POS"; 
@@ -495,12 +318,6 @@ class ventasController extends Controller
 
 
             $printer->text("\n"."LA PRECIOSA " . "\n");
-<<<<<<< HEAD
-            $printer->text("Direccion: Orquídeas #151" . "\n");
-            $printer->text("Tel: 454664544" . "\n");
-            #La fecha también
-            date_default_timezone_set("America/Mexico_City");
-=======
             $printer->text("Direccion: Dean Valdivia 412 A" . "\n");
             $printer->text("Tel: 054 77 34 22" . "\n");
             $printer->text("\n");
@@ -508,7 +325,6 @@ class ventasController extends Controller
             $printer->text("FACTURA ELECTRONICA"."\n");
             $printer->text("SERIE: ".$request['serieVenta']."-".$request['facturaVenta']."\n");
             #La fecha tambi�n
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
             $printer->text(date("Y-m-d H:i:s") . "\n");
             $printer->text("-----------------------------" . "\n");
             $printer->setJustification(Printer::JUSTIFY_LEFT);
@@ -533,17 +349,6 @@ class ventasController extends Controller
             $printer->text("SUBTOTAL: ".$request['subTotalVenta']."\n");
             $printer->text("IVA: ".$request['igvVenta']."\n");
             $printer->text("TOTAL: ".$request['totalVenta']."\n");
-<<<<<<< HEAD
-
-            $printer->setJustification(Printer::JUSTIFY_CENTER);
-            $printer->text("Muchas gracias por su compra\n");
-
-            // try{
-            //     $logo = EscposImage::load(public_path('img/logo.png'), false);
-            //     $printer->bitImage($logo);
-            // }catch(Exception $e){/*No hacemos nada si hay error*/}
-
-=======
             
             $printer->text("\n");
             
@@ -555,7 +360,6 @@ class ventasController extends Controller
             $printer->bitImage($imgQr);
             $printer->text("Muchas gracias por su compra\n");
 
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
             $printer->feed(3);
             $printer->cut();
             $printer->pulse();
@@ -607,123 +411,6 @@ class ventasController extends Controller
                 $cliente->tipoDocumento_id = $request['tipoDocumento']; 
                 $cliente->documento = $request['numeroDocumento'];
                 $cliente->nombre = $request['razonSocial']; 
-<<<<<<< HEAD
-                // $cliente->telefono = ;
-                // $cliente->direccion = ;
-                // $cliente->email = ;
-                $cliente->save();
-                $idCliente = $cliente->id;
-            }
-
-            $venta = new ventas;
-            $venta->tipoComprobante_id = $request['tipoComprobante'];  
-            $venta->cliente_id = $idCliente;
-            $venta->user_id = auth()->id(); 
-            $venta->tipoMoneda_id = $request['tipoMoneda'];  
-            $venta->numero = $request['facturaVenta']; 
-            $venta->fecha = $request['dateFactura'];
-            $venta->fechaVencimiento =  $request['dateFactura'];
-            $venta->descuento = $request['descuentoVenta']; 
-            $venta->igv = 18;
-            $venta->impuestos = $request['igvVenta'];
-            $venta->subtotal = $request['subTotalVenta'];
-            $venta->total = $request['totalVenta'];
-            $venta->estadoEmail = false;
-            $venta->estadoSunat = false;
-            $venta->observaciones = $request['observacionVenta'];
-
-            if($venta->save()) {
-                $tiposcomprobante = tiposcomprobante::find($request['tipoComprobante']);
-                $tiposcomprobante->correlativo = $request['facturaVenta']+1;
-                $tiposcomprobante->update();
-
-                for ($x = 0; $x < count($request['cantidad']); $x++) {
-                    $ventaDetalles = new detallesventa;
-                    $ventaDetalles->venta_id = $venta->id; 
-                    $ventaDetalles->producto_id = $request['nombreProducto'][$x];
-                    $ventaDetalles->cantidad = $request['cantidad'][$x];
-                    $ventaDetalles->igv = $request['total'][$x] - $request['subtotal'][$x];
-                    $ventaDetalles->descuento = $request['descuento'][$x];
-                    $ventaDetalles->subtotal = $request['subtotal'][$x];
-                    $ventaDetalles->total = $request['total'][$x];
-                    $ventaDetalles->save();
-
-                    $producto = Productos::find($request['nombreProducto'][$x]);
-                    $producto->cantidad = $producto->cantidad - $request['cantidad'][$x];
-                    if($producto->update()){
-                        $control = new control;
-                        $control->user_id = auth()->id();
-                        $control->metodo = "actualizar";
-                        $control->tabla = "Productos";
-                        $control->campos = "cantidad";
-                        $control->datos = $request['cantidad'][$x];
-                        $control->descripcion = "Actualizar la cantidad de productos despues de realizar una venta";
-                        $control->save();    
-                    }
-
-                }
-            }
-
-            // IMPRIMIR TICKET
-            $nombre_impresora = "POS"; 
-
-            $connector = new WindowsPrintConnector($nombre_impresora);
-            $printer = new Printer($connector);
-
-            $printer->setJustification(Printer::JUSTIFY_CENTER);
-
-            
-            try{
-                $logo = EscposImage::load(public_path('img/logo.png'), false);
-                $printer->bitImage($logo);
-            }catch(Exception $e){/*No hacemos nada si hay error*/}
-
-
-            $printer->text("\n"."LA PRECIOSA " . "\n");
-            $printer->text("Direccion: Orquídeas #151" . "\n");
-            $printer->text("Tel: 454664544" . "\n");
-            #La fecha también
-            date_default_timezone_set("America/Mexico_City");
-            $printer->text(date("Y-m-d H:i:s") . "\n");
-            $printer->text("-----------------------------" . "\n");
-            $printer->setJustification(Printer::JUSTIFY_LEFT);
-            $printer->text("CANT  DESCRIPCION    P.U   IMP.\n");
-            $printer->text("-----------------------------"."\n");
-
-                $printer->setJustification(Printer::JUSTIFY_LEFT);
-                for ($x = 0; $x < count($request['cantidad']); $x++) {
-                    
-                    $producto = productos::where('id', $request['nombreProducto'][$x])
-                                        ->first();
-
-                    $printer->text($producto['nombre'].": \n");
-                    $printer->text( $request['cantidad'][$x]."  unidad    ".$producto['precio']." ".$request['total'][$x]."   \n");
-                    
-                    
-                }
-                
-
-            $printer->text("-----------------------------"."\n");
-            $printer->setJustification(Printer::JUSTIFY_RIGHT);
-            $printer->text("SUBTOTAL: ".$request['subTotalVenta']."\n");
-            $printer->text("IVA: ".$request['igvVenta']."\n");
-            $printer->text("TOTAL: ".$request['totalVenta']."\n");
-
-            $printer->setJustification(Printer::JUSTIFY_CENTER);
-            $printer->text("Muchas gracias por su compra\n");
-
-            // try{
-            //     $logo = EscposImage::load(public_path('img/logo.png'), false);
-            //     $printer->bitImage($logo);
-            // }catch(Exception $e){/*No hacemos nada si hay error*/}
-
-            $printer->feed(3);
-            $printer->cut();
-            $printer->pulse();
-            $printer->close();
-
-
-=======
                 $cliente->save();
 
                 $idCliente = $cliente->id;
@@ -831,7 +518,6 @@ class ventasController extends Controller
             // $printer->cut();
             // $printer->pulse();
             // $printer->close();
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
 
             DB::commit();
 
@@ -850,8 +536,6 @@ class ventasController extends Controller
     
     public function emitirBoleta(Request $request)
     {
-<<<<<<< HEAD
-=======
         date_default_timezone_set("America/Mexico_City");
         // ENVIAR A LA SUNAT 
         $rucEmpresa     = "20605007211";
@@ -888,16 +572,11 @@ class ventasController extends Controller
                 ->setNombreComercial('PRECIOSA')
                 ->setAddress($address);
 
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
         DB::beginTransaction();
         try {
             
             $cliente = clientes::where('documento', $request['numeroDocumento'])
-<<<<<<< HEAD
-                            ->first();
-=======
                                 ->first();
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
 
             if($cliente){
                 $idCliente = $cliente->id;
@@ -906,40 +585,12 @@ class ventasController extends Controller
                 $cliente->tipoDocumento_id = $request['tipoDocumento']; 
                 $cliente->documento = $request['numeroDocumento'];
                 $cliente->nombre = $request['nombreCliente']; 
-<<<<<<< HEAD
-                // $cliente->telefono = ;
-                // $cliente->direccion = ;
-                // $cliente->email = ;
-                $cliente->save();
-=======
                 $cliente->save();
 
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
                 $idCliente = $cliente->id;
             }
 
             $venta = new ventas;
-<<<<<<< HEAD
-            $venta->tipoComprobante_id = $request['tipoComprobante'];  
-            $venta->cliente_id = $idCliente;
-            $venta->user_id = auth()->id(); 
-            $venta->tipoMoneda_id = $request['tipoMoneda'];  
-            $venta->numero = $request['facturaVenta']; 
-            $venta->fecha = $request['dateFactura'];
-            $venta->fechaVencimiento =  $request['dateFactura'];
-            $venta->descuento = $request['descuentoVenta']; 
-            $venta->igv = 18;
-            $venta->impuestos = $request['igvVenta'];
-            $venta->subtotal = $request['subTotalVenta'];
-            $venta->total = $request['totalVenta'];
-            $venta->estadoEmail = false;
-            $venta->estadoSunat = true;
-            $venta->observaciones = $request['observacionVenta'];
-
-            if($venta->save()) {
-                $tiposcomprobante = tiposcomprobante::find($request['tipoComprobante']);
-                $tiposcomprobante->correlativo = $request['facturaVenta']+1;
-=======
             $venta->tipoComprobante_id  = $request['tipoComprobante'];  
             $venta->cliente_id          = $idCliente;
             $venta->user_id             = auth()->id(); 
@@ -978,20 +629,10 @@ class ventasController extends Controller
 
                 $tiposcomprobante               = tiposcomprobante::find($request['tipoComprobante']);
                 $tiposcomprobante->correlativo  = $request['facturaVenta']+1;
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
                 $tiposcomprobante->update();
 
                 for ($x = 0; $x < count($request['cantidad']); $x++) {
                     $ventaDetalles = new detallesventa;
-<<<<<<< HEAD
-                    $ventaDetalles->venta_id = $venta->id; 
-                    $ventaDetalles->producto_id = $request['nombreProducto'][$x];
-                    $ventaDetalles->cantidad = $request['cantidad'][$x];
-                    $ventaDetalles->igv = $request['total'][$x] - $request['subtotal'][$x];
-                    $ventaDetalles->descuento = $request['descuento'][$x];
-                    $ventaDetalles->subtotal = $request['subtotal'][$x];
-                    $ventaDetalles->total = $request['total'][$x];
-=======
                     $ventaDetalles->venta_id    = $venta->id; 
                     $ventaDetalles->producto_id = $request['nombreProducto'][$x];
                     $ventaDetalles->cantidad    = $request['cantidad'][$x];
@@ -999,14 +640,10 @@ class ventasController extends Controller
                     $ventaDetalles->descuento   = $request['descuento'][$x];
                     $ventaDetalles->subtotal    = $request['subtotal'][$x];
                     $ventaDetalles->total       = $request['total'][$x];
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
                     $ventaDetalles->save();
 
                     $producto = Productos::find($request['nombreProducto'][$x]);
                     $producto->cantidad = $producto->cantidad - $request['cantidad'][$x];
-<<<<<<< HEAD
-                    if($producto->update()){
-=======
                     $producto->vendido  = $producto->vendido + $request['cantidad'][$x];
 
                     if($producto->update()){
@@ -1030,7 +667,6 @@ class ventasController extends Controller
                             ->setMtoValorUnitario($productoPrecioSinIgv)
                             ->setMtoPrecioUnitario($precioFinalProducto);
 
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
                         $control = new control;
                         $control->user_id = auth()->id();
                         $control->metodo = "actualizar";
@@ -1043,95 +679,6 @@ class ventasController extends Controller
                 }
             }
 
-<<<<<<< HEAD
-            
-
-
-            // ENVIAR A LA SUNAT 
-
-            $see = new See();
-            $see->setService(SunatEndpoints::FE_BETA);
-            $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
-            $see->setCredentials('20000000001MODDATOS'/*ruc+usuario*/, 'moddatos');
-
-            // ---------- FACTURACION -------------
-            $tipoDocumento = tiposdocumento::where('id', $request['tipoDocumento'])
-                                            ->first();
-
-            $tiposcomprobante = tiposcomprobante::where('id', $request['tipoComprobante'])
-                                                ->first();
-
-            $tipoMoneda = tiposmoneda::where('id', $request['tipoMoneda'])
-                                        ->first();
-
-            // Cliente
-            $client = new Client();
-            $client->setTipoDoc($tipoDocumento->codigo) //6 es RUC
-                ->setNumDoc($request['numeroDocumento'])
-                ->setRznSocial($request['nombreCliente']);
-
-            // Emisor
-            $address = new Address();
-            $address->setUbigueo('150101')
-                ->setDepartamento('AREQUIPA')
-                ->setProvincia('AREQUIPA')
-                ->setDistrito('AREQUIPA')
-                ->setUrbanizacion('NONE')
-                ->setDireccion('AV LS');
-
-            $company = new Company();
-            $company->setRuc('20000000001')
-                    ->setRazonSocial('EMPRESA SAC')
-                    ->setNombreComercial('EMPRESA')
-                    ->setAddress($address);
-
-            // Venta
-            $fechaActual = date('Y-m-d');
-            $invoice = (new Invoice())
-            ->setUblVersion('2.1')
-            ->setTipoOperacion('0101') // Catalog. 51
-            ->setTipoDoc($tiposcomprobante->codigo)
-            ->setSerie($request['serieVenta']) 
-            ->setCorrelativo( $request['facturaVenta'])
-            ->setFechaEmision(new \DateTime(date("d-m-Y H:i:s", strtotime($request['dateFactura']))))
-            ->setTipoMoneda($tipoMoneda->abreviatura)
-            ->setClient($client)
-            ->setMtoOperGravadas($venta->subtotal) //100
-            ->setMtoIGV($venta->impuestos) //18
-            ->setTotalImpuestos($venta->impuestos) //18
-            ->setValorVenta( $venta->subtotal) //100
-            ->setMtoImpVenta($venta->total) //118
-            ->setCompany($company);
-
-
-            $items = [];
-            for ($x = 0; $x < count($request['cantidad']); $x++) {
-                
-                $producto = productos::where('id', $request['nombreProducto'][$x])
-                                        ->first();
-                $productoImpuesto = $request['total'][$x] - $request['subtotal'][$x];
-                $productoPrecioSinIgv = $producto->precio * 18;
-                $productoPrecioSinIgv = $productoPrecioSinIgv/100;
-                $productoPrecioSinIgv = $producto->precio - $productoPrecioSinIgv;
-                $productoPrecioCantidadSinIgv = $producto->precio * $request['cantidad'][$x];
-                // $productoPrecioCantidadSinIgv = $productoPrecioSinIgv * $request['cantidad'][$x];
-                $items[$x] = (new SaleDetail())
-                    ->setCodProducto($producto->codigo)
-                    ->setUnidad('NIU')
-                    ->setCantidad($request['cantidad'][$x])
-                    ->setDescripcion($producto->nombre)
-                    ->setMtoBaseIgv($productoPrecioCantidadSinIgv)
-                    ->setPorcentajeIgv(18.00) // 18%
-                    ->setIgv($productoImpuesto)
-                    ->setTipAfeIgv('10')
-                    ->setTotalImpuestos($productoImpuesto)
-                    ->setMtoValorVenta($productoPrecioCantidadSinIgv)
-                    ->setMtoValorUnitario($productoPrecioSinIgv)
-                    ->setMtoPrecioUnitario($producto->precio);
-            }
-
-=======
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
             $legend = (new Legend())
             ->setCode('1000')
             ->setValue(NumerosEnLetras::convertir($venta->total).'/100 SOLES');
@@ -1153,17 +700,12 @@ class ventasController extends Controller
             // Guardar CDR
             file_put_contents(public_path('\sunat\zip\venta-'.$venta->id.'-R-'.$invoice->getName().'.zip'), $result->getCdrZip());
 
-<<<<<<< HEAD
-
-
-=======
             $venta      = ventas::find($venta->id);
             $venta->xml = '\sunat\xmp\venta-'.$venta->id.'-'.$invoice->getName().'.xml';
             $venta->cdr = '\sunat\zip\venta-'.$venta->id.'-R-'.$invoice->getName().'.zip';
             $venta->update();
 
             $codigoQr = QrCode::format('png')->size(250)->generate($rucEmpresa."|".$tiposcomprobante->codigo."|".$request['serieVenta']."|".$request['facturaVenta']."|".$venta->impuestos."|".$venta->total."|".$request['dateFactura']."|".$tipoDocumento->codigo."|".$request['numeroDocumento']."|", public_path('img/qr.png'));
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
 
             // IMPRIMIR TICKET
             $nombre_impresora = "POS"; 
@@ -1181,12 +723,6 @@ class ventasController extends Controller
 
 
             $printer->text("\n"."LA PRECIOSA " . "\n");
-<<<<<<< HEAD
-            $printer->text("Direccion: Orquídeas #151" . "\n");
-            $printer->text("Tel: 454664544" . "\n");
-            #La fecha también
-            date_default_timezone_set("America/Mexico_City");
-=======
             $printer->text("Direccion: Dean Valdivia 412 A" . "\n");
             $printer->text("Tel: 054 77 34 22" . "\n");
             $printer->text("\n");
@@ -1195,7 +731,6 @@ class ventasController extends Controller
             $printer->text("SERIE: ".$request['serieVenta']."-".$request['facturaVenta']."\n");
             #La fecha tambi�n
             
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
             $printer->text(date("Y-m-d H:i:s") . "\n");
             $printer->text("-----------------------------" . "\n");
             $printer->setJustification(Printer::JUSTIFY_LEFT);
@@ -1220,17 +755,6 @@ class ventasController extends Controller
             $printer->text("SUBTOTAL: ".$request['subTotalVenta']."\n");
             $printer->text("IVA: ".$request['igvVenta']."\n");
             $printer->text("TOTAL: ".$request['totalVenta']."\n");
-<<<<<<< HEAD
-
-            $printer->setJustification(Printer::JUSTIFY_CENTER);
-            $printer->text("Muchas gracias por su compra\n");
-
-            // try{
-            //     $logo = EscposImage::load(public_path('img/logo.png'), false);
-            //     $printer->bitImage($logo);
-            // }catch(Exception $e){/*No hacemos nada si hay error*/}
-
-=======
             $printer->text("\n");
             
             $printer->setJustification(Printer::JUSTIFY_CENTER);
@@ -1241,17 +765,11 @@ class ventasController extends Controller
             $printer->bitImage($imgQr);
             $printer->text("Muchas gracias por su compra\n");
 
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
             $printer->feed(3);
             $printer->cut();
             $printer->pulse();
             $printer->close();
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
             DB::commit();
 
             $rpta = array(
@@ -1273,21 +791,6 @@ class ventasController extends Controller
     {
         DB::beginTransaction();
         try {
-<<<<<<< HEAD
-            $correlativo = ventas::where('numero', $request['facturaVenta'])
-                                ->where('tipoComprobante_id', $request['tipoComprobante'])
-                                ->first();
-
-            if($correlativo){
-                
-                $rpta = array(
-                    'response'      =>  false,
-                );
-                
-                return json_encode($rpta);
-            }
-=======
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
 
             $cliente = clientes::where('documento', $request['numeroDocumento'])
                             ->first();
@@ -1299,120 +802,6 @@ class ventasController extends Controller
                 $cliente->tipoDocumento_id = $request['tipoDocumento']; 
                 $cliente->documento = $request['numeroDocumento'];
                 $cliente->nombre = $request['nombreCliente']; 
-<<<<<<< HEAD
-                // $cliente->telefono = ;
-                // $cliente->direccion = ;
-                // $cliente->email = ;
-                $cliente->save();
-                $idCliente = $cliente->id;
-            }
-
-            $venta = new ventas;
-            $venta->tipoComprobante_id = $request['tipoComprobante'];  
-            $venta->cliente_id = $idCliente;
-            $venta->user_id = auth()->id(); 
-            $venta->tipoMoneda_id = $request['tipoMoneda'];  
-            $venta->numero = $request['facturaVenta']; 
-            $venta->fecha = $request['dateFactura'];
-            $venta->fechaVencimiento =  $request['dateFactura'];
-            $venta->descuento = $request['descuentoVenta']; 
-            $venta->igv = 18;
-            $venta->impuestos = $request['igvVenta'];
-            $venta->subtotal = $request['subTotalVenta'];
-            $venta->total = $request['totalVenta'];
-            $venta->estadoEmail = false;
-            $venta->estadoSunat = false;
-            $venta->observaciones = $request['observacionVenta'];
-
-            if($venta->save()) {
-                $tiposcomprobante = tiposcomprobante::find($request['tipoComprobante']);
-                $tiposcomprobante->correlativo = $request['facturaVenta']+1;
-                $tiposcomprobante->update();
-
-                for ($x = 0; $x < count($request['cantidad']); $x++) {
-                    $ventaDetalles = new detallesventa;
-                    $ventaDetalles->venta_id = $venta->id; 
-                    $ventaDetalles->producto_id = $request['nombreProducto'][$x];
-                    $ventaDetalles->cantidad = $request['cantidad'][$x];
-                    $ventaDetalles->igv = $request['total'][$x] - $request['subtotal'][$x];
-                    $ventaDetalles->descuento = $request['descuento'][$x];
-                    $ventaDetalles->subtotal = $request['subtotal'][$x];
-                    $ventaDetalles->total = $request['total'][$x];
-                    $ventaDetalles->save();
-
-                    $producto = Productos::find($request['nombreProducto'][$x]);
-                    $producto->cantidad = $producto->cantidad - $request['cantidad'][$x];
-                    if($producto->update()){
-                        $control = new control;
-                        $control->user_id = auth()->id();
-                        $control->metodo = "actualizar";
-                        $control->tabla = "Productos";
-                        $control->campos = "cantidad";
-                        $control->datos = $request['cantidad'][$x];
-                        $control->descripcion = "Actualizar la cantidad de productos despues de realizar una venta";
-                        $control->save();    
-                    }
-                }
-            }
-
-            // IMPRIMIR TICKET
-            $nombre_impresora = "POS"; 
-
-            $connector = new WindowsPrintConnector($nombre_impresora);
-            $printer = new Printer($connector);
-
-            $printer->setJustification(Printer::JUSTIFY_CENTER);
-
-            
-            try{
-                $logo = EscposImage::load(public_path('img/logo.png'), false);
-                $printer->bitImage($logo);
-            }catch(Exception $e){/*No hacemos nada si hay error*/}
-
-
-            $printer->text("\n"."LA PRECIOSA " . "\n");
-            $printer->text("Direccion: Orquídeas #151" . "\n");
-            $printer->text("Tel: 454664544" . "\n");
-            #La fecha también
-            date_default_timezone_set("America/Mexico_City");
-            $printer->text(date("Y-m-d H:i:s") . "\n");
-            $printer->text("-----------------------------" . "\n");
-            $printer->setJustification(Printer::JUSTIFY_LEFT);
-            $printer->text("CANT  DESCRIPCION    P.U   IMP.\n");
-            $printer->text("-----------------------------"."\n");
-
-                $printer->setJustification(Printer::JUSTIFY_LEFT);
-                for ($x = 0; $x < count($request['cantidad']); $x++) {
-                    
-                    $producto = productos::where('id', $request['nombreProducto'][$x])
-                                        ->first();
-
-                    $printer->text($producto['nombre'].": \n");
-                    $printer->text( $request['cantidad'][$x]."  unidad    ".$producto['precio']." ".$request['total'][$x]."   \n");
-                    
-                    
-                }
-                
-
-            $printer->text("-----------------------------"."\n");
-            $printer->setJustification(Printer::JUSTIFY_RIGHT);
-            $printer->text("SUBTOTAL: ".$request['subTotalVenta']."\n");
-            $printer->text("IVA: ".$request['igvVenta']."\n");
-            $printer->text("TOTAL: ".$request['totalVenta']."\n");
-
-            $printer->setJustification(Printer::JUSTIFY_CENTER);
-            $printer->text("Muchas gracias por su compra\n");
-
-            // try{
-            //     $logo = EscposImage::load(public_path('img/logo.png'), false);
-            //     $printer->bitImage($logo);
-            // }catch(Exception $e){/*No hacemos nada si hay error*/}
-
-            $printer->feed(3);
-            $printer->cut();
-            $printer->pulse();
-            $printer->close();
-=======
                 $cliente->save();
                 
                 $idCliente = $cliente->id;
@@ -1451,7 +840,6 @@ class ventasController extends Controller
 
                 }
             }          
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
 
             DB::commit();
 
@@ -1471,25 +859,11 @@ class ventasController extends Controller
     {
         DB::beginTransaction();
         try {
-<<<<<<< HEAD
-        $ventas = ventas::select(   'td.codigo as codigoTiposdocumento', 'c.documento as documentoClientes',
-                                    'c.nombre as nombreClientes', 'tc.codigo as codigoTiposcomprobante',
-                                    'tc.serie as serieTiposcomprobante', 'ventas.numero as numeorVentas', 
-                                    'ventas.fecha as fechaVentas', 'tm.abreviatura as abreviaturaTiposmoneda',
-                                    'ventas.subtotal as subtotalVentas', 'ventas.impuestos as impuestosVentas',
-                                    'ventas.total as totalVentas', 'ventas.id as idVentas'
-                                    )
-                        ->join('clientes as c', 'ventas.cliente_id', '=', 'c.id')            
-=======
         $ventas = ventas::join('clientes as c', 'ventas.cliente_id', '=', 'c.id')            
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
                         ->join('tiposdocumento as td', 'c.tipoDocumento_id', '=', 'td.id')
                         ->join('tiposcomprobante as tc', 'ventas.tipoComprobante_id', '=', 'tc.id')
                         ->join('tiposmoneda as tm', 'ventas.tipoMoneda_id', '=', 'tm.id')
                         ->where('ventas.id', '=', $request['id'])
-<<<<<<< HEAD
-                        ->first();
-=======
                         ->first([
                             'td.codigo          as codigoTiposdocumento', 
                             'c.documento        as documentoClientes',
@@ -1505,21 +879,11 @@ class ventasController extends Controller
                             'ventas.total       as totalVentas', 
                             'ventas.id          as idVentas'
                         ]);
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
 
 
         $see = new See();
         $see->setService(SunatEndpoints::FE_BETA);
         $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
-<<<<<<< HEAD
-        $see->setCredentials('20000000001MODDATOS'/*ruc+usuario*/, 'moddatos');
-
-
-        // Cliente
-        $client = new Client();
-        $client->setTipoDoc($ventas->codigoTiposdocumento) //6 es RUC
-            ->setNumDoc($ventas->documentoClientes)
-=======
         $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
 
         if($ventas->documentoClientes == 0){
@@ -1531,35 +895,21 @@ class ventasController extends Controller
         $client = new Client();
         $client->setTipoDoc($ventas->codigoTiposdocumento) //6 es RUC
             ->setNumDoc($documentoCliente)
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
             ->setRznSocial($ventas->nombreClientes);
 
         // Emisor
         $address = new Address();
-<<<<<<< HEAD
-        $address->setUbigueo('150101')
-=======
         $address->setUbigueo('040101')
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
             ->setDepartamento('AREQUIPA')
             ->setProvincia('AREQUIPA')
             ->setDistrito('AREQUIPA')
             ->setUrbanizacion('NONE')
-<<<<<<< HEAD
-            ->setDireccion('AV LS');
-
-        $company = new Company();
-        $company->setRuc('20000000001')
-                ->setRazonSocial('EMPRESA SAC')
-                ->setNombreComercial('EMPRESA')
-=======
             ->setDireccion('CAL. DEAN VALDIVIA 410, 412, 4 NRO. --');
 
         $company = new Company();
         $company->setRuc('20605007211')
                 ->setRazonSocial('LA PRECIOSA DISTRIBUCIONES IMPORTACIONES E.I.R.L')
                 ->setNombreComercial('PRECIOSA')
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
                 ->setAddress($address);
 
         // Venta
@@ -1569,11 +919,7 @@ class ventasController extends Controller
         ->setTipoOperacion('0101') // Catalog. 51
         ->setTipoDoc($ventas->codigoTiposcomprobante)
         ->setSerie($ventas->serieTiposcomprobante) 
-<<<<<<< HEAD
-        ->setCorrelativo($ventas->numeorVentas)
-=======
         ->setCorrelativo($ventas->correlativoTiposcomprobante)
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
         ->setFechaEmision(new \DateTime(date("d-m-Y H:i:s", strtotime($ventas->fechaVentas))))
         ->setTipoMoneda($ventas->abreviaturaTiposmoneda)
         ->setClient($client)
@@ -1584,8 +930,6 @@ class ventasController extends Controller
         ->setMtoImpVenta($ventas->totalVentas) //118
         ->setCompany($company);
 
-<<<<<<< HEAD
-=======
         $tiposcomprobante = tiposcomprobante::where('codigo', $ventas->codigoTiposcomprobante)->first();
         $ventaSelecionada = ventas::find($ventas->idVentas);
         $ventaSelecionada->numero = $tiposcomprobante->correlativo;
@@ -1595,7 +939,6 @@ class ventasController extends Controller
         $tiposcomprobante->update();
 
         
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
 
         $items = [];
 
@@ -1607,12 +950,6 @@ class ventasController extends Controller
             $producto = productos::where('id', $ventaDetalle->producto_id )
                                     ->first();
 
-<<<<<<< HEAD
-            $productoImpuesto = $ventaDetalle->total - $ventaDetalle->subtotal;
-            $productoPrecioSinIgv = $producto->precio * 18;
-            $productoPrecioSinIgv = $productoPrecioSinIgv/100;
-            $productoPrecioSinIgv = $producto->precio - $productoPrecioSinIgv;
-=======
             $producto->cantidad = $producto->cantidad - $ventaDetalle->cantidad;
             $producto->vendido = $producto->vendido + $ventaDetalle->cantidad;
             if($producto->update()){
@@ -1629,7 +966,6 @@ class ventasController extends Controller
             $precioFinalProducto    = $producto->precio - $ventaDetalle->descuento;
             $productoImpuesto       = $ventaDetalle->total - $ventaDetalle->subtotal;
             $productoPrecioSinIgv   = $precioFinalProducto/1.18;
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
             $productoPrecioCantidadSinIgv = $productoPrecioSinIgv * $ventaDetalle->cantidad;
             $items[$x] = (new SaleDetail())
                 ->setCodProducto($producto->codigo)
@@ -1644,10 +980,7 @@ class ventasController extends Controller
                 ->setMtoValorVenta($productoPrecioCantidadSinIgv)
                 ->setMtoValorUnitario($productoPrecioSinIgv)
                 ->setMtoPrecioUnitario($producto->precio);
-<<<<<<< HEAD
-=======
             
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
             $x = $x+1;
         }
 
@@ -1674,9 +1007,6 @@ class ventasController extends Controller
 
         
         // Guardar CDR
-<<<<<<< HEAD
-        file_put_contents(public_path('\sunat\zip\venta-'.$ventas->idVentas.'-R-'.$invoice->getName().'.zip'), $result->getCdrZip());
-=======
         file_put_contents(public_path('\sunat\zip\venta-'.$ventas->id.'-R-'.$invoice->getName().'.zip'), $result->getCdrZip());
         
         $venta      = ventas::find($venta->id);
@@ -1684,7 +1014,6 @@ class ventasController extends Controller
         $venta->cdr = '\sunat\zip\venta-'.$venta->id.'-R-'.$invoice->getName().'.zip';
         $venta->update();
         
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
         DB::commit();
 
             $rpta = array(
@@ -1698,9 +1027,6 @@ class ventasController extends Controller
             echo json_encode($e->getMessage());
         }
     }
-<<<<<<< HEAD
-}
-=======
 
     public function productoTemporalCrear(Request $request)
     {
@@ -1963,4 +1289,3 @@ class ventasController extends Controller
     }
 
 }
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94

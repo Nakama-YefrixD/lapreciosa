@@ -14,16 +14,7 @@
                         <div class="alert alert-success" role="alert">
                             {{ session('status') }}
                         </div>
-                    @endif
-                    
-<<<<<<< HEAD
-                    @php 
-                        $isEditor = auth()->user()->hasPermissionTo('otro');
-                        echo $isEditor;
-                    @endphp
-=======
-                    
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
+                    @endif 
                     You are logged in!
                 </div>
             </div>

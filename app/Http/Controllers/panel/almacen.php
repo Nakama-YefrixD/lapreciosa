@@ -21,10 +21,6 @@ class almacen extends Controller
         $this->middleware('auth');
     }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
     public function index()
     {
         $proveedores = Proveedores::all();
@@ -98,21 +94,12 @@ class almacen extends Controller
                 $control->descripcion = "Crear una entrada";
                 $control->save();
 
-<<<<<<< HEAD
-                for ($x = 0; $x < count($request['cantidad']); $x++) {
-                    $productosEntrada = new productosEntrada;
-                    $productosEntrada->producto_id = $request['producto'][$x];
-                    $productosEntrada->entrada_id = $entrada->id;
-                    $productosEntrada->precio = $request['precio'][$x];
-                    $productosEntrada->cantidad = $request['cantidad'][$x];
-=======
                 for ($x = 0; $x < count($request['producto']); $x++) {
                     $productosEntrada               = new productosEntrada;
                     $productosEntrada->producto_id  = $request['producto'][$x];
                     $productosEntrada->entrada_id   = $entrada->id;
                     $productosEntrada->precio       = $request['precio'][$x];
                     $productosEntrada->cantidad     = $request['cantidad'][$x];
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
                     
                     if($productosEntrada->save()){
                         $control = new control;
@@ -125,12 +112,8 @@ class almacen extends Controller
                         $control->save();
 
                         $producto = Productos::find($request['producto'][$x]);
-<<<<<<< HEAD
-                        $producto->cantidad = $producto->cantidad + $request['cantidad'][$x];
-=======
                         $producto->cantidad = $producto->cantidad   + $request['cantidad'][$x];
                         $producto->total    = $producto->total      + $request['cantidad'][$x];
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
                         if($producto->update()){
                             $control = new control;
                             $control->user_id = auth()->id();
@@ -262,11 +245,7 @@ class almacen extends Controller
         try {
             $precioVenta = explode("S/", $request['precioVentaProducto']);
 
-<<<<<<< HEAD
-            if(sizeof($precioVenta) > 1){       
-=======
             if(sizeof($precioVenta) > 1){
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
                 $prePrecioVenta = $precioVenta[1];
             }else{
                 $prePrecioVenta = $precioVenta[0];
@@ -285,11 +264,8 @@ class almacen extends Controller
             $productos->tipo_id = $request['tipoProducto'];
             $productos->nombre = $request['nombreProductoNuevo'];
             $productos->cantidad = 0;
-<<<<<<< HEAD
-=======
             $productos->total = 0;
             $productos->vendido = 0;
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
             $productos->precio = $precioVentaFinal;
             $productos->precioVista = $request['precioVentaProducto'];
             
@@ -347,16 +323,6 @@ class almacen extends Controller
             $productos->precio = $precioVentaFinal;
             $productos->precioVista = $request['editarPrecioVentaProducto'];
             
-<<<<<<< HEAD
-            if($productos->update()) {
-                $control = new control;
-                $control->user_id = auth()->id();
-                $control->metodo = "Editar";
-                $control->tabla = "productos";
-                $control->campos = "codigo, marca_id, tipo_id, nombre, precio, precioVista";
-                $control->datos = $request['editarIdProducto'].', '. $request['editarCodigoProductoNuevo'].', '. $request['editarMarcaProducto'].', '. $request['editarTipoProducto'].', '. $request['editarNombreProductoNuevo'].', '. $request['editarPrecioVentaProducto'];
-                $control->descripcion = "Editar un producto";
-=======
             
             if($request['editarCantidadProducto'] == $productos->cantidad){
 
@@ -396,7 +362,6 @@ class almacen extends Controller
                 $control->campos        = "codigo, marca_id, tipo_id, nombre, precio, precioVista";
                 $control->datos         = $request['editarIdProducto'].', '. $request['editarCodigoProductoNuevo'].', '. $request['editarMarcaProducto'].', '. $request['editarTipoProducto'].', '. $request['editarNombreProductoNuevo'].', '. $request['editarPrecioVentaProducto'];
                 $control->descripcion   = "Editar un producto";
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
                 $control->save();
             }
 
@@ -412,12 +377,4 @@ class almacen extends Controller
         }
     } 
 
-<<<<<<< HEAD
-    public function ejemplo(Request $request){
-
-        echo $request['codigoP'];
-
-    }
-=======
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
 }
