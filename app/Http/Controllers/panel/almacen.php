@@ -4,12 +4,12 @@ namespace App\Http\Controllers\panel;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Productos;
-use App\Proveedores;
+use App\productos;
+use App\proveedores;
 use App\Entradas;
 use App\productosEntrada;
 use App\control;
-use App\Marcas;
+use App\marcas;
 use App\Tipos;
 use Yajra\DataTables\DataTables;
 use DB;
@@ -23,9 +23,9 @@ class almacen extends Controller
 
     public function index()
     {
-        $proveedores = Proveedores::all();
-        $productos = Productos::all();
-        $marcas = Marcas::all();
+        $proveedores = proveedores::all();
+        $productos = productos::all();
+        $marcas = marcas::all();
         $tipos = Tipos::all();
         $data = array(
             'proveedores' => $proveedores,
@@ -39,7 +39,7 @@ class almacen extends Controller
 
     public function tb_almacen(Request $request)
     {
-        $productos = Productos::join('marcas', 'productos.marca_id', '=', 'marcas.id')
+        $productos = productos::join('marcas', 'productos.marca_id', '=', 'marcas.id')
                                 ->join('tipos', 'tipos.id', '=', 'productos.tipo_id')
                                 ->where(function ($query) use($request) {
                                     if($request->get('bcodigo') != ''){
@@ -111,7 +111,7 @@ class almacen extends Controller
                         $control->descripcion = "Crear los productos que tiene una entrada";
                         $control->save();
 
-                        $producto = Productos::find($request['producto'][$x]);
+                        $producto = productos::find($request['producto'][$x]);
                         $producto->cantidad = $producto->cantidad   + $request['cantidad'][$x];
                         $producto->total    = $producto->total      + $request['cantidad'][$x];
                         if($producto->update()){
@@ -315,7 +315,7 @@ class almacen extends Controller
             }
 
             //miomio
-            $productos = Productos::find($request['editarIdProducto']);
+            $productos = productos::find($request['editarIdProducto']);
             $productos->codigo = $request['editarCodigoProductoNuevo'];
             $productos->marca_id = $request['editarMarcaProducto'];
             $productos->tipo_id = $request['editarTipoProducto'];

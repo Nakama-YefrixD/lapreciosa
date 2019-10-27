@@ -177,9 +177,6 @@ return [
         Collective\Html\HtmlServiceProvider::class,
 
         Yajra\DataTables\DataTablesServiceProvider::class,
-<<<<<<< HEAD
-
-=======
         Barryvdh\DomPDF\ServiceProvider::class,
 
         // GENERAR QR
@@ -187,7 +184,6 @@ return [
 
         // CAPTCHA
         Biscolab\ReCaptcha\ReCaptchaServiceProvider::class
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
     ],
 
     /*
@@ -241,12 +237,9 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
-<<<<<<< HEAD
-=======
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
         'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
         
     ],
 

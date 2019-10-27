@@ -1,12 +1,5 @@
 <body>
   <div class="container-scroller">
-<<<<<<< HEAD
-    <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo" href="#"><img src="{{ asset('assetsAdminTemplate/images/preciosa.svg')}}" alt="logo"/></a>
-      </div>
-      <div class="navbar-menu-wrapper d-flex align-items-stretch">
-=======
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
@@ -25,7 +18,6 @@
             </div>
           </form>
         </div> -->
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
         <ul class="navbar-nav navbar-nav-right">
           <li class="nav-item d-none d-lg-block full-screen-link">
             <a class="nav-link">
@@ -43,14 +35,10 @@
               </div>
             </a>
             <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
-<<<<<<< HEAD
-              
-=======
               <!-- <a class="dropdown-item" href="#">
                 <i class="mdi mdi-cached mr-2 text-success"></i>
                 Activity Log
               </a> -->
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="{{ route('logout') }}"
                   onclick="event.preventDefault();
@@ -60,11 +48,6 @@
               <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                   @csrf
               </form>
-<<<<<<< HEAD
-          
-            </div>
-          </li>
-=======
               <!-- <a class="dropdown-item" href="#">
                 <i class="mdi mdi-logout mr-2 text-primary"></i>
                 Cerrar sesión
@@ -182,7 +165,6 @@
               <i class="mdi mdi-format-line-spacing"></i>
             </a>
           </li> -->
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
         </ul>
         <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
           <span class="mdi mdi-menu"></span>

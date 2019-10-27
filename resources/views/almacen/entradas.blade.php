@@ -200,7 +200,7 @@
 
 
 <!-- DATATABLES -->
-<script type="text/javascript" src="{{ asset('js/almacen/entradas/datatables.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/almacen/Entradas/datatables.js') }}"></script>
 
 <script type="text/javascript">
     let productos = '';

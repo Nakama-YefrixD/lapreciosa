@@ -110,14 +110,6 @@ $(document).ready(function() {
 
     $("#tb_almacen").on('click', '.editar', function(){
         var data = dt.row($(this).parents('tr')).data();
-<<<<<<< HEAD
-        let id = data['idProducto'];
-        let codigo = data['codigoProducto'];
-        let nombre = data['nombreProducto'];
-        let precio = data['precioProducto'];
-        let marca = data['idMarca'];
-        let tipo = data['idTipo'];
-=======
         let id          = data['idProducto'];
         let codigo      = data['codigoProducto'];
         let nombre      = data['nombreProducto'];
@@ -126,17 +118,13 @@ $(document).ready(function() {
         let tipo        = data['idTipo'];
         let cantidad    = data['cantidadProducto'];
 
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
         $("#editarIdProducto").val(id);
         $("#editarCodigoProductoNuevo").val(codigo);
         $("#editarMarcaProducto").val(marca);
         $("#editarTipoProducto").val(tipo);
         $("#editarNombreProductoNuevo").val(nombre);
         $("#editarPrecioVentaProducto").val(precio);
-<<<<<<< HEAD
-=======
         $("#editarCantidadProducto").val(cantidad);
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
         $('#editarMarcaProducto').select2();
         $('#editarTipoProducto').select2();
         $('#editarAlertaCodigo').html('')
@@ -145,10 +133,7 @@ $(document).ready(function() {
 
     $('#editarProducto').on('click', function(e) {
         let data = $('#frm_editarProducto').serialize();
-<<<<<<< HEAD
-=======
         console.log("DATA ENVIADA ");
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
         console.log(data);
         $.confirm({
             icon: 'fa fa-question',

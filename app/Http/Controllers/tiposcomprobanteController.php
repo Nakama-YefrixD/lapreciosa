@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\tiposcomprobante;
+use App\tiposComprobante;
 
 class tiposcomprobanteController extends Controller
 {
@@ -14,28 +14,28 @@ class tiposcomprobanteController extends Controller
 
     public static function index()
     {
-        $tiposcomprobante = tiposcomprobante::all();
+        $tiposcomprobante = tiposComprobante::all();
         return $tiposcomprobante;        
     }
 
     public static function factura()
     {
-        $tiposcomprobante = tiposcomprobante::where('codigo', '01')->first();
+        $tiposcomprobante = tiposComprobante::where('codigo', '01')->first();
         return $tiposcomprobante;        
     }
 
     public static function boleta()
     {
-        $tiposcomprobante = tiposcomprobante::where('codigo', '03')->first();
+        $tiposcomprobante = tiposComprobante::where('codigo', '03')->first();
         return $tiposcomprobante;        
     }
 
     public function facturaReact(){
-        $tiposcomprobante = tiposcomprobante::where('codigo', '01')->first();
+        $tiposcomprobante = tiposComprobante::where('codigo', '01')->first();
         return $tiposcomprobante; 
     }
     public function boletaReact(){
-        $tiposcomprobante = tiposcomprobante::where('codigo', '03')->first();
+        $tiposcomprobante = tiposComprobante::where('codigo', '03')->first();
         return $tiposcomprobante; 
     }
 

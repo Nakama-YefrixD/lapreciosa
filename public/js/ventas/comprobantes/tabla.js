@@ -1,66 +1,5 @@
 $(document).ready(function() {
     var dt = $('#tb_ventas').DataTable({
-<<<<<<< HEAD
-                "processing": true,
-                'searching': false,
-                "serverSide": true,
-                "language": { 'url': "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json" },
-                "ajax": {
-                    'url':"/ventas/tb_ventas",
-                    'type' : 'get',
-                    'data': function(d) {
-                        d.bcliente = $('#buscar_tb_cliente').val();
-                        d.bcomprobante = $('#buscar_tb_comprobante').val();
-                        d.bnumeroComprobante = $('#buscar_tb_numeroComprobante').val();
-
-                        if($('#buscar_tb_fecnumeroComprobante').val().length > 2 ){
-                            let rangeDates = $('#buscar_tb_fecnumeroComprobante').val();
-                            var arrayDates = rangeDates.split(" ");
-                            var dateSpecificOne =  arrayDates[0].split("/");
-                            var dateSpecificTwo =  arrayDates[2].split("/");
-
-                            d.dateOne = dateSpecificOne[0]+'-'+dateSpecificOne[1]+'-'+dateSpecificOne[2];
-                            d.dateTwo = dateSpecificTwo[0]+'-'+dateSpecificTwo[1]+'-'+dateSpecificTwo[2];
-                        }
-                        
-                    }
-                
-                },
-
-                "columns":[
-                    { "data": "idVentas"                },
-                    { "data": "fechaVentas"             },
-                    { "data": "nombreClientes"          },
-                    { "data": "nombreTiposcomprobante"  },
-                    { "data": "numeroVentas"            },
-                    { "data": "estadoSunatVentas"       },
-                    { "data": "subTotalVentas"          },
-                    { "data": "totalVentas"             },
-                    { "data": "idVentas"                },
-
-                ],
-                "fnRowCallback": function(nRow, aData, iDisplayIndex) {
-                    var btnPdf = '<button class="btn btn-sm btn-gradient-primary" type="button"><i class="mdi mdi-file-pdf"></i></button>';
-                    $(nRow).find("td:eq(8)").html(btnPdf);
-
-
-
-                    let btnEstado ='';
-                    if( aData['estadoSunatVentas'] == 1 ){
-                        btnEstado += '<button type="button" class="btn btn-gradient-info btn-rounded btn-icon">';
-                        btnEstado += '<i class="mdi mdi-check"></i></button>';
-                    }else{
-                        btnEstado += '<button type="button" class="btn btn-gradient-danger btn-rounded btn-icon enviarSunat">';
-                        btnEstado += '<i class="mdi mdi-close"></i></button>';
-                    }
-                    
-                    btnEstado += '</button>';
-                    $(nRow).find("td:eq(5)").html(btnEstado);
-                    
-                }
-            });
-        
-=======
         "processing": true,
         'searching': false,
         "serverSide": true,
@@ -140,7 +79,6 @@ $(document).ready(function() {
         window.open("/ventas/pdf/"+idVenta, '_blank');
         
     });
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
     dt.on( 'order.dt search.dt', function () {
             dt.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
             cell.innerHTML = i+1;
@@ -209,11 +147,5 @@ $(document).ready(function() {
             }
         });
     }); 
-<<<<<<< HEAD
-
-   
-})
-=======
 })
 
->>>>>>> d9afbde5aeae49e9addda96a006520b69c6e3f94
