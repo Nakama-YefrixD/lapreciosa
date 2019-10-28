@@ -1428,8 +1428,8 @@ class ventasController extends Controller
         
         $printer->text(date("Y-m-d H:i:s") . "\n");
         $printer->text("\n");
-        $printer->text("Señor(es): ".$nombreClientes."\n");
-        $printer->text("Dirección: ".$direccionClientes."\n");
+        $printer->text("Señor(es): ".$ventas->nombreClientes."\n");
+        $printer->text("Dirección: ".$ventas->direccionClientes."\n");
         $printer->text("RUC: ".$documentoCliente."\n");
         $printer->text("-----------------------------" . "\n");
         $printer->setJustification(Printer::JUSTIFY_LEFT);
