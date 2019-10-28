@@ -63,6 +63,7 @@
                 <label>Nombre del cliente: *</label>
                 <input type="text" class="form-control" name="nombreCliente" id="nombreCliente">
             </div>
+            <input type="hidden" class="form-control" name="direccion" id="direccion" value="-">
         </div>
     </div>
     <h6 class="card-title">DETALLE DOCUMENTO:</h6>

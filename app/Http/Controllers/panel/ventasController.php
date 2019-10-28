@@ -139,8 +139,8 @@ class ventasController extends Controller
         // ENVIAR A LA SUNAT 
         $see = new See();
         $see->setService(SunatEndpoints::FE_BETA);
-        $see->setCertificate(file_get_contents(public_path('\sunat\certificadosfree\certificadofree.pem')));
-        $see->setCredentials('20000000001MODDATOS'/*ruc+usuario*/, 'moddatos');
+        $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
+        $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
         // ---------- FACTURACION -------------
         $tipoDocumento    = tiposdocumento::find($request['tipoDocumento']);
         $tiposcomprobante = tiposcomprobante::find($request['tipoComprobante']);
@@ -162,7 +162,7 @@ class ventasController extends Controller
             ->setDireccion('CAL. DEAN VALDIVIA 410, 412, 4 NRO. --');
 
         $company = new Company();
-        $company->setRuc('20000000001')
+        $company->setRuc('20605007211')
                 ->setRazonSocial('LA PRECIOSA DISTRIBUCIONES IMPORTACIONES E.I.R.L')
                 ->setNombreComercial('PRECIOSA')
                 ->setAddress($address);
@@ -178,9 +178,10 @@ class ventasController extends Controller
                 $idCliente = $cliente->id;
             }else{
                 $cliente = new clientes;
-                $cliente->tipoDocumento_id = $request['tipoDocumento']; 
-                $cliente->documento = $request['numeroDocumento'];
-                $cliente->nombre = $request['razonSocial']; 
+                $cliente->tipoDocumento_id  = $request['tipoDocumento']; 
+                $cliente->documento         = $request['numeroDocumento'];
+                $cliente->nombre            = $request['razonSocial'];
+                $cliente->direccion         = $request['direccion'];
                 $cliente->save();
 
                 $idCliente = $cliente->id;
@@ -305,7 +306,7 @@ class ventasController extends Controller
             $codigoQr = QrCode::format('png')
                                 ->size(250)
                                 ->generate(
-                                    "20000000001|".$tiposcomprobante->codigo."|".$request['serieVenta']."|".$request['facturaVenta']."|".$venta->impuestos."|".$venta->total."|".$request['dateFactura']."|".$tipoDocumento->codigo."|".$request['numeroDocumento']."|", public_path('img/qr.png')
+                                    "20605007211|".$tiposcomprobante->codigo."|".$request['serieVenta']."|".$request['facturaVenta']."|".$venta->impuestos."|".$venta->total."|".$request['dateFactura']."|".$tipoDocumento->codigo."|".$request['numeroDocumento']."|", public_path('img/qr.png')
                                 );
 
             // IMPRIMIR TICKET
@@ -323,8 +324,8 @@ class ventasController extends Controller
             }catch(Exception $e){/*No hacemos nada si hay error*/}
 
 
-            $printer->text("\n"."LA PRECIOSA " . "\n");
-            $printer->text("Direccion: Dean Valdivia 412 A" . "\n");
+            $printer->text("\n"."LA PRECIOSA (20605007211)"."\n");
+            $printer->text("Dirección: Dean Valdivia 412 A" . "\n");
             $printer->text("Tel: 054 77 34 22" . "\n");
             $printer->text("\n");
             $printer->setJustification(Printer::JUSTIFY_CENTER);
@@ -332,6 +333,10 @@ class ventasController extends Controller
             $printer->text("SERIE: ".$request['serieVenta']."-".$request['facturaVenta']."\n");
             #La fecha tambi�n
             $printer->text(date("Y-m-d H:i:s") . "\n");
+            $printer->text("\n");
+            $printer->text("Señor(es): ".$request['razonSocial']."\n");
+            $printer->text("Dirección: ".$request['direccion']."\n");
+            $printer->text("RUC: ".$request['numeroDocumento']."\n");
             $printer->text("-----------------------------" . "\n");
             $printer->setJustification(Printer::JUSTIFY_LEFT);
             $printer->text("CANT  DESCRIPCION    P.U   IMP.\n");
@@ -458,7 +463,7 @@ class ventasController extends Controller
             // $codigoQr = QrCode::format('png')
             //                     ->size(250)
             //                     ->generate(
-            //                         "20000000001|".$tiposcomprobante->codigo."|".$request['serieVenta']."|".$request['facturaVenta']."|".$venta->impuestos."|".$venta->total."|".$request['dateFactura']."|".$tipoDocumento->codigo."|".$request['numeroDocumento']."|", public_path('img/qr.png')
+            //                         "20605007211|".$tiposcomprobante->codigo."|".$request['serieVenta']."|".$request['facturaVenta']."|".$venta->impuestos."|".$venta->total."|".$request['dateFactura']."|".$tipoDocumento->codigo."|".$request['numeroDocumento']."|", public_path('img/qr.png')
             //                     );
 
             // // IMPRIMIR TICKET
@@ -544,14 +549,14 @@ class ventasController extends Controller
     {
         date_default_timezone_set("America/Mexico_City");
         // ENVIAR A LA SUNAT 
-        $rucEmpresa     = "20000000001";
+        $rucEmpresa     = "20605007211";
         $usuarioEmpresa = "CITINETY";
         $passEmpresa    = "moddatos";
 
         $see = new See();
         $see->setService(SunatEndpoints::FE_BETA);
-        $see->setCertificate(file_get_contents(public_path('\sunat\certificadosfree\certificadofree.pem')));
-        $see->setCredentials('20000000001MODDATOS'/*ruc+usuario*/, 'moddatos');
+        $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
+        $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
         // ---------- FACTURACION -------------
         $tipoDocumento    = tiposdocumento::find($request['tipoDocumento']);
         $tiposcomprobante = tiposcomprobante::find($request['tipoComprobante']);
@@ -573,7 +578,7 @@ class ventasController extends Controller
             ->setDireccion('CAL. DEAN VALDIVIA 410, 412, 4 NRO. --');
 
         $company = new Company();
-        $company->setRuc('20000000001')
+        $company->setRuc('20605007211')
                 ->setRazonSocial('LA  E.I.R.L')
                 ->setNombreComercial('PRECIOSA')
                 ->setAddress($address);
@@ -704,7 +709,12 @@ class ventasController extends Controller
 
             
             // Guardar CDR
-            file_put_contents(public_path('\sunat\zip\venta-'.$venta->id.'-R-'.$invoice->getName().'.zip'), $result->getCdrZip());
+            file_put_contents(
+                public_path(
+                    '\sunat\zip\venta-'.$venta->id.'-R-'.$invoice->getName().'.zip'
+                ), 
+                $result->getCdrZip()
+            );
 
             $venta      = ventas::find($venta->id);
             $venta->xml = '\sunat\xmp\venta-'.$venta->id.'-'.$invoice->getName().'.xml';
@@ -728,7 +738,7 @@ class ventasController extends Controller
             }catch(Exception $e){/*No hacemos nada si hay error*/}
 
 
-            $printer->text("\n"."LA PRECIOSA " . "\n");
+            $printer->text("\n"."LA PRECIOSA (20605007211)"."\n");
             $printer->text("Direccion: Dean Valdivia 412 A" . "\n");
             $printer->text("Tel: 054 77 34 22" . "\n");
             $printer->text("\n");
@@ -889,8 +899,8 @@ class ventasController extends Controller
 
         $see = new See();
         $see->setService(SunatEndpoints::FE_BETA);
-        $see->setCertificate(file_get_contents(public_path('\sunat\certificadosfree\certificadofree.pem')));
-        $see->setCredentials('20000000001MODDATOS'/*ruc+usuario*/, 'moddatos');
+        $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
+        $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
 
         if($ventas->documentoClientes == 0){
             $documentoCliente = "00000000";
@@ -913,7 +923,7 @@ class ventasController extends Controller
             ->setDireccion('CAL. DEAN VALDIVIA 410, 412, 4 NRO. --');
 
         $company = new Company();
-        $company->setRuc('20000000001')
+        $company->setRuc('20605007211')
                 ->setRazonSocial('LA PRECIOSA DISTRIBUCIONES IMPORTACIONES E.I.R.L')
                 ->setNombreComercial('PRECIOSA')
                 ->setAddress($address);
@@ -1155,8 +1165,8 @@ class ventasController extends Controller
 
             $see = new See();
             $see->setService(SunatEndpoints::FE_BETA);
-            $see->setCertificate(file_get_contents(public_path('\sunat\certificadosfree\certificadofree.pem')));
-            $see->setCredentials('20000000001MODDATOS', 'moddatos');
+            $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
+            $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
 
             if($ventas->documentoClientes == 0){
                 $documentoCliente = "00000000";
@@ -1180,7 +1190,7 @@ class ventasController extends Controller
                 ->setDireccion('CAL. DEAN VALDIVIA 410, 412, 4 NRO. --');
 
             $company = new Company();
-            $company->setRuc('20000000001')
+            $company->setRuc('20605007211')
                     ->setRazonSocial('LA PRECIOSA DISTRIBUCIONES IMPORTACIONES E.I.R.L')
                     ->setNombreComercial('PRECIOSA')
                     ->setAddress($address);
@@ -1346,7 +1356,7 @@ class ventasController extends Controller
     public function imprimirVenta(Request $request)
     {
         
-        $rucEmpresa     = "20000000001";
+        $rucEmpresa     = "20605007211";
         $ventas = ventas::join('clientes as c', 'ventas.cliente_id', '=', 'c.id')            
                         ->join('tiposdocumento as td', 'c.tipoDocumento_id', '=', 'td.id')
                         ->join('tiposcomprobante as tc', 'ventas.tipoComprobante_id', '=', 'tc.id')
@@ -1355,7 +1365,8 @@ class ventasController extends Controller
                         ->first([
                             'td.codigo          as codigoTiposdocumento', 
                             'c.documento        as documentoClientes',
-                            'c.nombre           as nombreClientes', 
+                            'c.nombre           as nombreClientes',
+                            'c.direccion        as direccionClientes', 
                             'tc.codigo          as codigoTiposcomprobante',
                             'tc.serie           as serieTiposcomprobante',
                             'tc.correlativo     as correlativoTiposcomprobante', 
@@ -1406,8 +1417,8 @@ class ventasController extends Controller
         }catch(Exception $e){/*No hacemos nada si hay error*/}
 
 
-        $printer->text("\n"."LA PRECIOSA " . "\n");
-        $printer->text("Direccion: Dean Valdivia 412 A" . "\n");
+        $printer->text("\n"."LA PRECIOSA (20605007211)"."\n");
+        $printer->text("Dirección: Dean Valdivia 412 A" . "\n");
         $printer->text("Tel: 054 77 34 22" . "\n");
         $printer->text("\n");
         $printer->setJustification(Printer::JUSTIFY_CENTER);
@@ -1416,6 +1427,10 @@ class ventasController extends Controller
         #La fecha tambi�n
         
         $printer->text(date("Y-m-d H:i:s") . "\n");
+        $printer->text("\n");
+        $printer->text("Señor(es): ".$nombreClientes."\n");
+        $printer->text("Dirección: ".$direccionClientes."\n");
+        $printer->text("RUC: ".$documentoCliente."\n");
         $printer->text("-----------------------------" . "\n");
         $printer->setJustification(Printer::JUSTIFY_LEFT);
         $printer->text("CANT  DESCRIPCION    P.U   IMP.\n");
