@@ -134,7 +134,7 @@ class ventasController extends Controller
 
     public function emitirFactura(Request $request)
     {   
-        date_default_timezone_set("America/Mexico_City");
+        date_default_timezone_set("America/Lima");
         $fechaActual = date('Y-m-d');
         // ENVIAR A LA SUNAT 
         $see = new See();
@@ -489,7 +489,7 @@ class ventasController extends Controller
             // $printer->text("FACTURA ELECTRONICA"."\n");
             // $printer->text("SERIE: ".$request['serieVenta']."-".$request['facturaVenta']."\n");
             // #La fecha tambi�n
-            // date_default_timezone_set("America/Mexico_City");
+            // date_default_timezone_set("America/Lima");
             // $printer->text(date("Y-m-d H:i:s") . "\n");
             // $printer->text("-----------------------------" . "\n");
             // $printer->setJustification(Printer::JUSTIFY_LEFT);
@@ -547,7 +547,7 @@ class ventasController extends Controller
     
     public function emitirBoleta(Request $request)
     {
-        date_default_timezone_set("America/Mexico_City");
+        date_default_timezone_set("America/Lima");
         // ENVIAR A LA SUNAT 
         $rucEmpresa     = "20605007211";
         $usuarioEmpresa = "CITINETY";
@@ -1137,7 +1137,7 @@ class ventasController extends Controller
 
     public function notaCredito(Request $request)
     {
-        date_default_timezone_set("America/Mexico_City");
+        date_default_timezone_set("America/Lima");
         $idVenta = $request['id'];
         $motivo  = $request['motivo'];
         DB::beginTransaction();
@@ -1355,7 +1355,7 @@ class ventasController extends Controller
 
     public function imprimirVenta(Request $request)
     {
-        date_default_timezone_set("America/Mexico_City");   
+        date_default_timezone_set("America/Lima");   
         $rucEmpresa     = "20605007211";
         $ventas = ventas::join('clientes as c', 'ventas.cliente_id', '=', 'c.id')            
                         ->join('tiposdocumento as td', 'c.tipoDocumento_id', '=', 'td.id')
