@@ -1355,7 +1355,7 @@ class ventasController extends Controller
 
     public function imprimirVenta(Request $request)
     {
-        
+        date_default_timezone_set("America/Mexico_City");   
         $rucEmpresa     = "20605007211";
         $ventas = ventas::join('clientes as c', 'ventas.cliente_id', '=', 'c.id')            
                         ->join('tiposdocumento as td', 'c.tipoDocumento_id', '=', 'td.id')
