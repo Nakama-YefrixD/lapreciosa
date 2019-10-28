@@ -1,12 +1,49 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import {Component} from 'react';
+import ListProductComponent from './componentsExtras/listProductComponent'
 
 class EntradaCrear extends Component {
     constructor(){
         super();
-        this.state ={}
+        this.state ={
+
+            contador:[],
+            contadorNumero:0
+
+        }
+        this.quitarOpcion = this.quitarOpcion.bind(this);
     }
+
+
+    generateComponents(){
+
+         this.setState({contadorNumero: this.state.contadorNumero+1},
+            ()=>{ this.setState({
+             contador: [...this.state.contador, this.state.contadorNumero]},
+             ()=>{console.log(this.state.contadorNumero) , console.log(this.state.contador)}
+             )
+            })
+       
+
+    }
+
+    quitarOpcion(numero){
+        console.log(numero);
+
+        var array = [...this.state.contador];
+        var index = array.indexOf(numero);
+        console.log(index);
+
+        if (index > -1) {
+        array.splice(index,1);
+        console.log(array);    
+        this.setState({
+            contador: array
+        })
+    }
+    }
+
 
     render(){
         return(
@@ -14,24 +51,6 @@ class EntradaCrear extends Component {
                     <div className="card card-default">
                         <div className="card-header cabezera">
                             <h4> Agregar Entrada </h4>
-                            <div className="form-group row">
-                                  <div className="col-sm-3">
-                                    <div className="form-check">
-                                      <label className="form-check-label">
-                                        <input type="radio" className="form-check-input" name="membershipRadios" id="cerrar" value="1" defaultChecked=""/>
-                                        Cerrar automaticamente
-                                      <i className="input-helper"></i></label>
-                                    </div>
-                                  </div>
-                                  <div className="col-sm-2">
-                                    <div className="form-check">
-                                      <label className="form-check-label">
-                                        <input type="radio" className="form-check-input" name="membershipRadios" id="abrir" value="0"/>
-                                        Mantenerla abierta
-                                      <i className="input-helper"></i></label>
-                                    </div>
-                                  </div>
-                                </div>
                         </div>
                         <div className="modal-body">
                             <div className="card-body">
@@ -60,10 +79,7 @@ class EntradaCrear extends Component {
                                                             :null
                                                         */}
                         
-                                                    </select>
-                                                    <div className="input-group-append">
-                                                        <button className="btn btn-sm btn-gradient-primary" id="agregarNuevoProveedor" type="button"><i className="mdi mdi-plus"></i></button>
-                                                    </div>
+                                                    </select>                 
                                                 </div>
                                             </div>
                                             <div className="col-3">
@@ -77,7 +93,7 @@ class EntradaCrear extends Component {
                                                 
                                         </div>
                                     </div>
-                                    <div className="form-group" id="listProductos">
+                                    <div className="form-group" id="listProductos" name="this.props.number">
                                         <div className="row">
                                             <div className="col-4">
                                                 <label>Producto de entrada</label><br/>
@@ -117,9 +133,24 @@ class EntradaCrear extends Component {
                                                 </button>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>                   
+
+                                     {
+                                        this.state.contador?
+                                        this.state.contador.map((data)=>{
+                                            
+                                           return(
+                                            <ListProductComponent number={data} quitarOpcion={this.quitarOpcion}/>
+                                           ) 
+                                        }
+                                        )
+                                        :null                              
+                                                                    
+                                     }
+                                     
+
                                     <div className="form-group">
-                                        <button type="button" id="agregarProducto" className="btn btn-gradient-warning btn-rounded btn-fw">Agregar producto</button>
+                                        <button type="button" id="agregarProducto" className="btn btn-gradient-warning btn-rounded btn-fw" onClick={()=>this.generateComponents()}>Agregar producto</button>
                                     </div>
                                     
                                     <div className="form-group boton">
