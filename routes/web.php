@@ -109,7 +109,13 @@ Route::post('/consult/dni/{dni}', 'consultaIdentidad@dniConsult')->name('consult
         
         Route::get('/ventas/xml/{idVenta}', 'panel\ventasController@descargarXml')
                 ->name('ventas.xml');
+        
+        Route::post('/ventas/notaCredito', 'panel\ventasController@notaCredito')
+                ->name('ventas.notaCredito');
 
+        Route::post('/ventas/imprimir/venta', 'panel\ventasController@imprimirVenta')
+                ->name('ventas.imprimir.venta');
+               
     // VENTAS ENVIOS
         // EMITIR FACTURA ELECTRONICA
         Route::post('/venta/emitirfactura', 'panel\ventasController@emitirFactura')->name('venta.emitir');
