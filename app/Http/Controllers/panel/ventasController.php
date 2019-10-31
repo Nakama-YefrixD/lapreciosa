@@ -1426,7 +1426,7 @@ class ventasController extends Controller
         $printer->text("SERIE: ".$ventas->serieTiposcomprobante."-".$ventas->numeroVentas."\n");
         #La fecha tambi�n
         
-        $printer->text(date("Y-m-d H:i:s") . "\n");
+        $printer->text($ventas->fechaVentas . "\n");
         $printer->text("\n");
         $printer->text("Señor(es): ".$ventas->nombreClientes."\n");
         $printer->text("Dirección: ".$ventas->direccionClientes."\n");
