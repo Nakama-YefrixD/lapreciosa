@@ -1,5 +1,6 @@
 $(document).ready(function() {
     var dt = $('#tb_ventas').DataTable({
+        "order": [[ 4, "desc" ]],
         "processing": true,
         'searching': false,
         "serverSide": true,

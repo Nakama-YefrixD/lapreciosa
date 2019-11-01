@@ -46,6 +46,11 @@ class ventasController extends Controller
         $this->middleware('auth');
     }
 
+    public function reporte()
+    {
+        return view('ventas.reporte');
+    }
+
     public function index()
     {
         return view('ventas.index');
@@ -72,7 +77,7 @@ class ventasController extends Controller
                                 $query->whereBetween('ventas.fecha',  [$request->get('dateOne'), $request->get('dateTwo')]);
                             }
                         })
-                        ->orderBy('ventas.fecha', 'desc')
+                        ->orderBy('ventas.numero', 'asc')
                         ->get([
                             'ventas.id                  as idVentas',
                             'tiposcomprobante.id        as idTiposcomprobante',

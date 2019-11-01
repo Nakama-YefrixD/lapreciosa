@@ -50,6 +50,12 @@
             </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="{{route ('ventas.reporte')}}">
+              <span class="menu-title">Generar Reporte</span>
+              <i class="mdi mdi-shopping menu-icon"></i>
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-configuracion" aria-expanded="false" aria-controls="ui-basic">
               <span class="menu-title">Configuración</span>
               <i class="menu-arrow"></i>
