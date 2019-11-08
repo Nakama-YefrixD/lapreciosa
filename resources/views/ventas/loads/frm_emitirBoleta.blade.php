@@ -8,7 +8,7 @@
   $tiposcomprobante = tiposcomprobanteController::boleta();
   $descuentosProducto = descuentosProductoController::index();
   date_default_timezone_set("America/Lima");
-  $fechaActual = date('d-m-Y');
+  $fechaActual = date('Y-m-d');
 //   $otros = ProductosController::buscadorProductos();
   
   
