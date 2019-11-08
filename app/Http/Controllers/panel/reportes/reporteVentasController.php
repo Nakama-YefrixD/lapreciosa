@@ -28,6 +28,7 @@ class reporteVentasController extends Controller
                         ->join('clientes as c', 'ventas.cliente_id', '=', 'c.id')
                         ->join('tiposcomprobante as tc', 'ventas.tipoComprobante_id', '=', 'tc.id')
                         ->join('productos as p', 'p.id', '=', 'dv.producto_id')
+                        ->where('ventas.estadoSunat', 1)
                         ->where(function ($query) use($request) {
                             if($request->get('bcliente') != ''){
                                 $query->where('c.nombre', 'like', '%' . $request->get('bcliente') . '%');
