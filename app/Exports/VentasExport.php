@@ -70,6 +70,7 @@ class VentasExport implements FromCollection
                             'p.nombre                   as nombreProducto',
                             'dv.cantidad                as cantidadDetalleVenta',
                             'p.precio                   as precioProducto',
+                            'dv.descuento               as descuentoProductoVenta',
                             'dv.subtotal                as subTotalProductoVenta',
                             'dv.total                   as totalProductoVenta',
                             'ventas.subtotal            as subTotalVentas',
