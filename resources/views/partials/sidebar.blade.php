@@ -50,8 +50,8 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{route ('ventas.reporte')}}">
-              <span class="menu-title">Generar Reporte</span>
+            <a class="nav-link" href="{{route ('reporte.ventas')}}">
+              <span class="menu-title">Reporte de ventas</span>
               <i class="mdi mdi-shopping menu-icon"></i>
             </a>
           </li>

@@ -183,7 +183,10 @@ return [
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
 
         // CAPTCHA
-        Biscolab\ReCaptcha\ReCaptchaServiceProvider::class
+        Biscolab\ReCaptcha\ReCaptchaServiceProvider::class,
+
+        // GENERAR EXCEL
+        Maatwebsite\Excel\ExcelServiceProvider::class
     ],
 
     /*
@@ -239,7 +242,8 @@ return [
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
-        'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class
+        'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class
         
     ],
 

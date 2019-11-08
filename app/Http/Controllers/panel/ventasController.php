@@ -46,11 +46,6 @@ class ventasController extends Controller
         $this->middleware('auth');
     }
 
-    public function reporte()
-    {
-        return view('ventas.reporte');
-    }
-
     public function index()
     {
         return view('ventas.index');

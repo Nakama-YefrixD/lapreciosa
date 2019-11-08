@@ -83,7 +83,6 @@ Route::post('/consult/dni/{dni}', 'consultaIdentidad@dniConsult')->name('consult
 
 // VENTAS
     Route::get('/ventas', 'panel\ventasController@index')->name('ventas.index');
-    Route::get('/reporte', 'panel\ventasController@reporte')->name('ventas.reporte');
     Route::get('/ventas/tb_ventas', 'panel\ventasController@tb_ventas')->name('ventas.tb_ventas');
 
     Route::get('/ventas/tb_buscarProducto', 'panel\ventasController@tb_buscarProducto')->name('ventas.tb_buscarProducto');
@@ -124,6 +123,14 @@ Route::post('/consult/dni/{dni}', 'consultaIdentidad@dniConsult')->name('consult
 
         // CREAR PRODUCTO TEMPORAL
         Route::post('/ventas/crear/productoTemporal', 'panel\ventasController@productoTemporalCrear')->name('venta.crear.productoTemporal');
+
+//REPORTES
+    Route::get('/reporte', 'panel\reportes\reporteVentasController@index')->name('reporte.ventas');
+    Route::get(
+        '/reporte/generar/ventas/{cliente}/{tipoComprobante}/{numeroComprobante}/{primeraFecha}/{segundaFecha}', 
+        'panel\reportes\reporteVentasController@generarReporte')->name('reporte.generar.ventas');
+    Route::get('/reporte/tb_ventas', 'panel\reportes\reporteVentasController@tb_ventas')->name('reportes.tb_ventas');
+
 
 // CONFIGURACION
 // DESCUENTOS
