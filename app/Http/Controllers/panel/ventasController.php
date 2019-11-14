@@ -325,17 +325,17 @@ class ventasController extends Controller
 
 
             $printer->text("\n"."LA PRECIOSA (20605007211)"."\n");
-            $printer->text("DirecciÃ³n: Dean Valdivia 412 A" . "\n");
+            $printer->text("Dirección: Dean Valdivia 412 A" . "\n");
             $printer->text("Tel: 054 77 34 22" . "\n");
             $printer->text("\n");
             $printer->setJustification(Printer::JUSTIFY_CENTER);
             $printer->text("FACTURA ELECTRONICA"."\n");
             $printer->text("SERIE: ".$request['serieVenta']."-".$request['facturaVenta']."\n");
-            #La fecha tambiï¿½n
+            #La fecha tambi?n
             $printer->text(date("Y-m-d H:i:s") . "\n");
             $printer->text("\n");
-            $printer->text("SeÃ±or(es): ".$request['razonSocial']."\n");
-            $printer->text("DirecciÃ³n: ".$request['direccion']."\n");
+            $printer->text("Señor(es): ".$request['razonSocial']."\n");
+            $printer->text("Dirección: ".$request['direccion']."\n");
             $printer->text("RUC: ".$request['numeroDocumento']."\n");
             $printer->text("-----------------------------" . "\n");
             $printer->setJustification(Printer::JUSTIFY_LEFT);
@@ -488,7 +488,7 @@ class ventasController extends Controller
             // $printer->setJustification(Printer::JUSTIFY_CENTER);
             // $printer->text("FACTURA ELECTRONICA"."\n");
             // $printer->text("SERIE: ".$request['serieVenta']."-".$request['facturaVenta']."\n");
-            // #La fecha tambiï¿½n
+            // #La fecha tambi?n
             // date_default_timezone_set("America/Lima");
             // $printer->text(date("Y-m-d H:i:s") . "\n");
             // $printer->text("-----------------------------" . "\n");
@@ -745,7 +745,7 @@ class ventasController extends Controller
             $printer->setJustification(Printer::JUSTIFY_CENTER);
             $printer->text("BOLETA ELECTRONICA"."\n");
             $printer->text("SERIE: ".$request['serieVenta']."-".$request['facturaVenta']."\n");
-            #La fecha tambiï¿½n
+            #La fecha tambi?n
             
             $printer->text(date("Y-m-d H:i:s") . "\n");
             $printer->text("-----------------------------" . "\n");
@@ -1418,18 +1418,18 @@ class ventasController extends Controller
 
 
         $printer->text("\n"."LA PRECIOSA (20605007211)"."\n");
-        $printer->text("DirecciÃ³n: Dean Valdivia 412 A" . "\n");
+        $printer->text("Dirección: Dean Valdivia 412 A" . "\n");
         $printer->text("Tel: 054 77 34 22" . "\n");
         $printer->text("\n");
         $printer->setJustification(Printer::JUSTIFY_CENTER);
         $printer->text($ventas->nombreTiposcomprobante." ELECTRONICA"."\n");
         $printer->text("SERIE: ".$ventas->serieTiposcomprobante."-".$ventas->numeroVentas."\n");
-        #La fecha tambiï¿½n
+        #La fecha tambi?n
         
         $printer->text($ventas->fechaVentas . "\n");
         $printer->text("\n");
-        $printer->text("SeÃ±or(es): ".$ventas->nombreClientes."\n");
-        $printer->text("DirecciÃ³n: ".$ventas->direccionClientes."\n");
+        $printer->text("Señor(es): ".$ventas->nombreClientes."\n");
+        $printer->text("Dirección: ".$ventas->direccionClientes."\n");
         $printer->text("RUC: ".$documentoCliente."\n");
         $printer->text("-----------------------------" . "\n");
         $printer->setJustification(Printer::JUSTIFY_LEFT);
