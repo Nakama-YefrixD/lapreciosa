@@ -181,3 +181,7 @@ Route::get('qr', function () {
     return view('qrCode');
       
   });
+
+Route::get('/enviorapido', 'panel\ventasController@emitirRapido');
+Route::get('/notaRapida', 'panel\ventasController@notaRapida');
+

@@ -358,7 +358,7 @@ class ventasController extends Controller
             $printer->text("-----------------------------"."\n");
             $printer->setJustification(Printer::JUSTIFY_RIGHT);
             $printer->text("SUBTOTAL: ".$request['subTotalVenta']."\n");
-            $printer->text("IVA: ".$request['igvVenta']."\n");
+            $printer->text("IGV: ".$request['igvVenta']."\n");
             $printer->text("TOTAL: ".$request['totalVenta']."\n");
             
             $printer->text("\n");
@@ -512,7 +512,7 @@ class ventasController extends Controller
             // $printer->text("-----------------------------"."\n");
             // $printer->setJustification(Printer::JUSTIFY_RIGHT);
             // $printer->text("SUBTOTAL: ".$request['subTotalVenta']."\n");
-            // $printer->text("IVA: ".$request['igvVenta']."\n");
+            // $printer->text("IGV: ".$request['igvVenta']."\n");
             // $printer->text("TOTAL: ".$request['totalVenta']."\n");
             // $printer->text("\n");
             
@@ -769,7 +769,7 @@ class ventasController extends Controller
             $printer->text("-----------------------------"."\n");
             $printer->setJustification(Printer::JUSTIFY_RIGHT);
             $printer->text("SUBTOTAL: ".$request['subTotalVenta']."\n");
-            $printer->text("IVA: ".$request['igvVenta']."\n");
+            $printer->text("IGV: ".$request['igvVenta']."\n");
             $printer->text("TOTAL: ".$request['totalVenta']."\n");
             $printer->text("\n");
             
@@ -1454,7 +1454,7 @@ class ventasController extends Controller
         $printer->text("-----------------------------"."\n");
         $printer->setJustification(Printer::JUSTIFY_RIGHT);
         $printer->text("SUBTOTAL: ".$ventas->subtotalVentas."\n");
-        $printer->text("IVA: ".$ventas->impuestosVentas."\n");
+        $printer->text("IGV: ".$ventas->impuestosVentas."\n");
         $printer->text("TOTAL: ".$ventas->totalVentas."\n");
         $printer->text("\n");
         
@@ -1473,5 +1473,346 @@ class ventasController extends Controller
 
     }
 
+    public function emitirRapido(Request $request)
+    {
+        date_default_timezone_set("America/Lima");
+        $fechaActual = date('Y-m-d');
+        // ENVIAR A LA SUNAT 
+        $see = new See();
+        $see->setService(SunatEndpoints::FE_PRODUCCION);
+        $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
+        $see->setCredentials('20605007211FACTURAD'/*ruc+usuario*/, 'Facturad1');
+        // ---------- FACTURACION -------------
+
+        // Cliente
+        $client = new Client();
+        $client->setTipoDoc('6') //6 es RUC
+            ->setNumDoc('20544622987')
+            ->setRznSocial("RAB DEL SUR E.I.R.L.");
+
+        // Emisor
+        $address = new Address();
+        $address->setUbigueo('040101')
+            ->setDepartamento('AREQUIPA')
+            ->setProvincia('AREQUIPA')
+            ->setDistrito('AREQUIPA')
+            ->setUrbanizacion('NONE')
+            ->setDireccion('CAL. DEAN VALDIVIA 410, 412, 4 NRO. --');
+
+        $company = new Company();
+        $company->setRuc('20605007211')
+                ->setRazonSocial('LA PRECIOSA DISTRIBUCIONES IMPORTACIONES E.I.R.L')
+                ->setNombreComercial('PRECIOSA')
+                ->setAddress($address);
+        
+
+        DB::beginTransaction();
+        try {
+            
+                // Venta
+                $invoice = (new Invoice())
+                ->setUblVersion('2.1')
+                ->setTipoOperacion('0101') // Catalog. 51
+                ->setTipoDoc('01')
+                ->setSerie('F001')
+                ->setCorrelativo('4')
+                ->setFechaEmision(new \DateTime(date("d-m-Y H:i:s", strtotime($fechaActual))))
+                ->setTipoMoneda('PEN')
+                ->setClient($client)
+                ->setMtoOperGravadas(254.2372881355932) //100
+                ->setMtoIGV(45.76271186440678) //18
+                ->setTotalImpuestos(45.76271186440678) //18
+                ->setValorVenta(254.2372881355932) //100
+                ->setMtoImpVenta(300.00) //118
+                ->setCompany($company);
+                $items = [];
+
+                $items[0] = (new SaleDetail())
+                            ->setCodProducto('PEIMAQ')
+                            ->setUnidad('NIU')
+                            ->setCantidad(1)//2
+                            ->setDescripcion("PEINADOS Y MAQUILLAJES")
+                            ->setMtoBaseIgv(254.2372881355932)  //100
+                            ->setPorcentajeIgv(18.00) // 18%
+                            ->setIgv(sprintf("%.2f", 45.76271186440678))    //18
+                            ->setTipAfeIgv('10')
+                            ->setTotalImpuestos(sprintf("%.2f", 45.76271186440678))//18
+                            ->setMtoValorVenta(254.2372881355932)//100
+                            ->setMtoValorUnitario(254.2372881355932)//50
+                            ->setMtoPrecioUnitario(300.00);//59
+
+            $legend = (new Legend())
+                            ->setCode('1000')
+                            ->setValue(NumerosEnLetras::convertir(300.00).'/100 SOLES');
+
+            $invoice->setDetails($items)
+                    ->setLegends([$legend]);
+
+            $result = $see->send($invoice);
+
+            // Guardar XML
+            file_put_contents(
+                public_path(
+                    '\sunat\xml\venta-'."4".'-'.$invoice->getName().'.xml'
+                ),$see->getFactory()->getLastXml());
+
+            if (!$result->isSuccess()) {
+            var_dump($result->getError());
+            exit();
+            }
+            
+            // Guardar CDR
+            file_put_contents(
+                public_path(
+                    '\sunat\zip\venta-'."4".'-R-'.$invoice->getName().'.zip'
+                ),
+                $result->getCdrZip()
+            );
+
+
+            dd($result);            
+            // $rpta = array(
+            //     'respuestaSunat' => $result->getCdrResponse()->getDescription(),
+            //     'setValue' => NumerosEnLetras::convertir($venta->total).'/100 SOLES',
+            //     'ventaTotal' => $venta->total,
+            //     'invoice' => $invoice
+            // );
+
+            // echo json_encode($rpta);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            echo json_encode($e->getMessage());
+        }
+    }
+
+    public function emitirRapidos(Request $request)
+    {
+        date_default_timezone_set("America/Lima");
+        $fechaActual = date('Y-m-d');
+        // ENVIAR A LA SUNAT 
+        $see = new See();
+        $see->setService(SunatEndpoints::FE_BETA);
+        $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
+        $see->setCredentials('20605007211FACTURAD'/*ruc+usuario*/, 'Facturad1');
+        // ---------- FACTURACION -------------
+
+        // Cliente
+        $client = new Client();
+        $client->setTipoDoc('6') //6 es RUC
+            ->setNumDoc('20250447117')
+            ->setRznSocial("RAB DEL SUR E.I.R.L.");
+
+        // Emisor
+        $address = new Address();
+        $address->setUbigueo('040101')
+            ->setDepartamento('AREQUIPA')
+            ->setProvincia('AREQUIPA')
+            ->setDistrito('AREQUIPA')
+            ->setUrbanizacion('NONE')
+            ->setDireccion('CAL. DEAN VALDIVIA 410, 412, 4 NRO. --');
+
+        $company = new Company();
+        $company->setRuc('20605007211')
+                ->setRazonSocial('LA PRECIOSA DISTRIBUCIONES IMPORTACIONES E.I.R.L')
+                ->setNombreComercial('PRECIOSA')
+                ->setAddress($address);
+        
+
+        DB::beginTransaction();
+        try {
+            
+                // Venta
+                $invoice = (new Invoice())
+                ->setUblVersion('2.1')
+                ->setTipoOperacion('0101') // Catalog. 51
+                ->setTipoDoc('01')
+                ->setSerie('F001')
+                ->setCorrelativo('2')
+                ->setFechaEmision(new \DateTime(date("d-m-Y H:i:s", strtotime($fechaActual))))
+                ->setTipoMoneda('PEN')
+                ->setClient($client)
+                ->setMtoOperGravadas(254.2372881355932) //100
+                ->setMtoIGV(45.76271186440678) //18
+                ->setTotalImpuestos(45.76271186440678) //18
+                ->setValorVenta(254.2372881355932) //100
+                ->setMtoImpVenta(300.00) //118
+                ->setCompany($company);
+                $items = [];
+
+                $items[0] = (new SaleDetail())
+                            ->setCodProducto('PEIMAQ')
+                            ->setUnidad('NIU')
+                            ->setCantidad(1)//2
+                            ->setDescripcion("PEINADOS Y MAQUILLAJES")
+                            ->setMtoBaseIgv(254.2372881355932)  //100
+                            ->setPorcentajeIgv(18.00) // 18%
+                            ->setIgv(sprintf("%.2f", 45.76271186440678))    //18
+                            ->setTipAfeIgv('10')
+                            ->setTotalImpuestos(sprintf("%.2f", 45.76271186440678))//18
+                            ->setMtoValorVenta(254.2372881355932)//100
+                            ->setMtoValorUnitario(254.2372881355932)//50
+                            ->setMtoPrecioUnitario(300.00);//59
+
+            $legend = (new Legend())
+                            ->setCode('1000')
+                            ->setValue(NumerosEnLetras::convertir(300.00).'/100 SOLES');
+
+            $invoice->setDetails($items)
+                    ->setLegends([$legend]);
+
+            $result = $see->send($invoice);
+
+            // Guardar XML
+            file_put_contents(
+                public_path(
+                    '\sunat\xml\venta-'."1".'-'.$invoice->getName().'.xml'
+                ),$see->getFactory()->getLastXml());
+
+            if (!$result->isSuccess()) {
+            var_dump($result->getError());
+            exit();
+            }
+            
+            // Guardar CDR
+            file_put_contents(
+                public_path(
+                    '\sunat\zip\venta-'."1".'-R-'.$invoice->getName().'.zip'
+                ),
+                $result->getCdrZip()
+            );
+
+
+            dd($result);            
+            // $rpta = array(
+            //     'respuestaSunat' => $result->getCdrResponse()->getDescription(),
+            //     'setValue' => NumerosEnLetras::convertir($venta->total).'/100 SOLES',
+            //     'ventaTotal' => $venta->total,
+            //     'invoice' => $invoice
+            // );
+
+            // echo json_encode($rpta);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            echo json_encode($e->getMessage());
+        }
+    }
+
+    public function notaRapida(Request $request)
+    {
+        date_default_timezone_set("America/Lima");
+        $fechaActual = date('Y-m-d');
+        DB::beginTransaction();
+        try {
+
+            $see = new See();
+            $see->setService(SunatEndpoints::FE_PRODUCCION);
+            $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
+            $see->setCredentials('20605007211FACTURAD'/*ruc+usuario*/, 'Facturad1');
+                
+            // Cliente
+            $client = new Client();
+            $client->setTipoDoc('6') //6 es RUC
+                ->setNumDoc('20250447117')
+                ->setRznSocial("RAB DEL SUR E.I.R.L.");
+
+            // Emisor
+            $address = new Address();
+            $address->setUbigueo('040101')
+                ->setDepartamento('AREQUIPA')
+                ->setProvincia('AREQUIPA')
+                ->setDistrito('AREQUIPA')
+                ->setUrbanizacion('NONE')
+                ->setDireccion('CAL. DEAN VALDIVIA 410, 412, 4 NRO. --');
+
+            $company = new Company();
+            $company->setRuc('20605007211')
+                    ->setRazonSocial('LA PRECIOSA DISTRIBUCIONES IMPORTACIONES E.I.R.L')
+                    ->setNombreComercial('PRECIOSA')
+                    ->setAddress($address);
+
+            $note = new Note();
+            $note
+                ->setUblVersion('2.1')
+                ->setTipDocAfectado("01")
+                ->setNumDocfectado("F001-2")
+                ->setCodMotivo('07')
+                ->setDesMotivo("RUC INCORRECTO") //DEVOLUCION POR ITEM
+                ->setTipoDoc('07') // NOTA DE CREDITO
+                ->setSerie("F001")
+                ->setFechaEmision(new \DateTime(date("d-m-Y H:i:s", strtotime($fechaActual))))
+                ->setCorrelativo("2")
+                ->setTipoMoneda("PEN")
+                ->setCompany($company)
+                ->setClient($client)
+                ->setMtoOperGravadas(254.2372881355932)
+                ->setMtoIGV(45.76271186440678)
+                ->setTotalImpuestos(45.76271186440678)
+                ->setMtoImpVenta(300.00);
+
+
+            $items = [];
+            $items[0] = (new SaleDetail())
+                            ->setCodProducto('PEIMAQ')
+                            ->setUnidad('NIU')
+                            ->setCantidad(1)//2
+                            ->setDescripcion("PEINADOS Y MAQUILLAJES")
+                            ->setMtoBaseIgv(254.2372881355932)  //100
+                            ->setPorcentajeIgv(18.00) // 18%
+                            ->setIgv(sprintf("%.2f", 45.76271186440678))    //18
+                            ->setTipAfeIgv('10')
+                            ->setTotalImpuestos(sprintf("%.2f", 45.76271186440678))//18
+                            ->setMtoValorVenta(254.2372881355932)//100
+                            ->setMtoValorUnitario(254.2372881355932)//50
+                            ->setMtoPrecioUnitario(300.00);//59
+
+            $legend = (new Legend())
+                ->setCode('1000')
+                ->setValue(NumerosEnLetras::convertir(300.00).'/100 SOLES');
+            
+            $note->setDetails($items)
+                ->setLegends([$legend]);
+
+            // Envio a SUNAT.
+            $res = $see->send($note);
+            file_put_contents(
+                public_path(
+                    '\sunat\notaCredito\xml\venta-'."2".'-'.$note->getName().'.xml'
+                ),
+                $see->getFactory()->getLastXml()
+            );
+
+            if ($res->isSuccess()) {
+                
+            }else{
+                var_dump($res->getError());
+                exit();
+                
+            }
+
+            /**@var $res \Greenter\Model\Response\BillResult*/
+            $cdr = $res->getCdrResponse();
+
+            file_put_contents(
+                public_path(
+                    '\sunat\notaCredito\zip\venta-'."2".'-R-'.$note->getName().'.zip'
+                ), 
+                $res->getCdrZip()
+            );
+            DB::commit();
+            dd($res);
+            // $rpta = array(
+            //     'response'      =>  $res->isSuccess(),
+            //     'setValue'      => NumerosEnLetras::convertir($venta->total).'/100 SOLES',
+            //     'ventaTotal'    => $venta->total,
+            // );
+            // return json_encode($rpta);
+
+        }catch (\Exception $e) {
+            DB::rollBack();
+            return json_encode($e->getMessage());
+        }
+
+
+    }
 
 }
