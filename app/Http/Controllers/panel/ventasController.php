@@ -228,6 +228,8 @@ class ventasController extends Controller
                 $tiposcomprobante->update();
 
                 for ($x = 0; $x < count($request['cantidad']); $x++) {
+                    $producto           = Productos::find($request['nombreProducto'][$x]);
+
                     $ventaDetalles = new detallesventa;
                     $ventaDetalles->venta_id    = $venta->id; 
                     $ventaDetalles->producto_id = $request['nombreProducto'][$x];
@@ -236,9 +238,10 @@ class ventasController extends Controller
                     $ventaDetalles->descuento   = $request['descuento'][$x];
                     $ventaDetalles->subtotal    = $request['subtotal'][$x];
                     $ventaDetalles->total       = $request['total'][$x];
+                    $ventaDetalles->precio      = $producto->precio;
                     $ventaDetalles->save();
 
-                    $producto           = Productos::find($request['nombreProducto'][$x]);
+                    
                     $producto->cantidad = $producto->cantidad - $request['cantidad'][$x];
                     $producto->vendido  = $producto->vendido + $request['cantidad'][$x];
 
@@ -325,7 +328,7 @@ class ventasController extends Controller
 
 
             $printer->text("\n"."LA PRECIOSA (20605007211)"."\n");
-            $printer->text("Dirección: Dean Valdivia 412 A" . "\n");
+            $printer->text("DirecciÃ³n: Dean Valdivia 412 A" . "\n");
             $printer->text("Tel: 054 77 34 22" . "\n");
             $printer->text("\n");
             $printer->setJustification(Printer::JUSTIFY_CENTER);
@@ -334,8 +337,8 @@ class ventasController extends Controller
             #La fecha tambi?n
             $printer->text(date("Y-m-d H:i:s") . "\n");
             $printer->text("\n");
-            $printer->text("Señor(es): ".$request['razonSocial']."\n");
-            $printer->text("Dirección: ".$request['direccion']."\n");
+            $printer->text("SeÃ±or(es): ".$request['razonSocial']."\n");
+            $printer->text("DirecciÃ³n: ".$request['direccion']."\n");
             $printer->text("RUC: ".$request['numeroDocumento']."\n");
             $printer->text("-----------------------------" . "\n");
             $printer->setJustification(Printer::JUSTIFY_LEFT);
@@ -447,6 +450,7 @@ class ventasController extends Controller
             if($venta->save()) {
 
                 for ($x = 0; $x < count($request['cantidad']); $x++) {
+                    $producto           = Productos::find($request['nombreProducto'][$x]);
                     $ventaDetalles = new detallesventa;
                     $ventaDetalles->venta_id    = $venta->id; 
                     $ventaDetalles->producto_id = $request['nombreProducto'][$x];
@@ -455,6 +459,7 @@ class ventasController extends Controller
                     $ventaDetalles->descuento   = $request['descuento'][$x];
                     $ventaDetalles->subtotal    = $request['subtotal'][$x];
                     $ventaDetalles->total       = $request['total'][$x];
+                    $ventaDetalles->precio      = $producto->precio;
                     $ventaDetalles->save();
 
                 }
@@ -643,6 +648,7 @@ class ventasController extends Controller
                 $tiposcomprobante->update();
 
                 for ($x = 0; $x < count($request['cantidad']); $x++) {
+                    $producto = Productos::find($request['nombreProducto'][$x]);
                     $ventaDetalles = new detallesventa;
                     $ventaDetalles->venta_id    = $venta->id; 
                     $ventaDetalles->producto_id = $request['nombreProducto'][$x];
@@ -651,9 +657,10 @@ class ventasController extends Controller
                     $ventaDetalles->descuento   = $request['descuento'][$x];
                     $ventaDetalles->subtotal    = $request['subtotal'][$x];
                     $ventaDetalles->total       = $request['total'][$x];
+                    $ventaDetalles->precio      = $producto->precio;
                     $ventaDetalles->save();
 
-                    $producto = Productos::find($request['nombreProducto'][$x]);
+
                     $producto->cantidad = $producto->cantidad - $request['cantidad'][$x];
                     $producto->vendido  = $producto->vendido + $request['cantidad'][$x];
 
@@ -844,6 +851,7 @@ class ventasController extends Controller
                 
 
                 for ($x = 0; $x < count($request['cantidad']); $x++) {
+                    $producto = Productos::find($request['nombreProducto'][$x]);
                     $ventaDetalles              = new detallesventa;
                     $ventaDetalles->venta_id    = $venta->id; 
                     $ventaDetalles->producto_id = $request['nombreProducto'][$x];
@@ -852,6 +860,7 @@ class ventasController extends Controller
                     $ventaDetalles->descuento   = $request['descuento'][$x];
                     $ventaDetalles->subtotal    = $request['subtotal'][$x];
                     $ventaDetalles->total       = $request['total'][$x];
+                    $ventaDetalles->precio      = $producto->precio;
                     $ventaDetalles->save();
 
                 }
@@ -1418,7 +1427,7 @@ class ventasController extends Controller
 
 
         $printer->text("\n"."LA PRECIOSA (20605007211)"."\n");
-        $printer->text("Dirección: Dean Valdivia 412 A" . "\n");
+        $printer->text("Direcciï¿½n: Dean Valdivia 412 A" . "\n");
         $printer->text("Tel: 054 77 34 22" . "\n");
         $printer->text("\n");
         $printer->setJustification(Printer::JUSTIFY_CENTER);
@@ -1428,8 +1437,8 @@ class ventasController extends Controller
         
         $printer->text($ventas->fechaVentas . "\n");
         $printer->text("\n");
-        $printer->text("Señor(es): ".$ventas->nombreClientes."\n");
-        $printer->text("Dirección: ".$ventas->direccionClientes."\n");
+        $printer->text("Seï¿½or(es): ".$ventas->nombreClientes."\n");
+        $printer->text("Direcciï¿½n: ".$ventas->direccionClientes."\n");
         $printer->text("RUC: ".$documentoCliente."\n");
         $printer->text("-----------------------------" . "\n");
         $printer->setJustification(Printer::JUSTIFY_LEFT);
