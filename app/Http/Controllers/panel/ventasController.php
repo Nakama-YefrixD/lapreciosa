@@ -138,9 +138,9 @@ class ventasController extends Controller
         $fechaActual = date('Y-m-d');
         // ENVIAR A LA SUNAT 
         $see = new See();
-        $see->setService(SunatEndpoints::FE_BETA);
+        $see->setService(SunatEndpoints::FE_PRODUCCION);
         $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
-        $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
+        $see->setCredentials('20605007211FACTURAD'/*ruc+usuario*/, 'Facturad1');
         // ---------- FACTURACION -------------
         $tipoDocumento    = tiposdocumento::find($request['tipoDocumento']);
         $tiposcomprobante = tiposcomprobante::find($request['tipoComprobante']);
@@ -559,9 +559,9 @@ class ventasController extends Controller
         $passEmpresa    = "moddatos";
 
         $see = new See();
-        $see->setService(SunatEndpoints::FE_BETA);
+        $see->setService(SunatEndpoints::FE_PRODUCCION);
         $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
-        $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
+        $see->setCredentials('20605007211FACTURAD'/*ruc+usuario*/, 'Facturad1');
         // ---------- FACTURACION -------------
         $tipoDocumento    = tiposdocumento::find($request['tipoDocumento']);
         $tiposcomprobante = tiposcomprobante::find($request['tipoComprobante']);
@@ -907,9 +907,9 @@ class ventasController extends Controller
 
 
         $see = new See();
-        $see->setService(SunatEndpoints::FE_BETA);
+        $see->setService(SunatEndpoints::FE_PRODUCCION);
         $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
-        $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
+        $see->setCredentials('20605007211FACTURAD'/*ruc+usuario*/, 'Facturad1');
 
         if($ventas->documentoClientes == 0){
             $documentoCliente = "00000000";
@@ -1173,9 +1173,9 @@ class ventasController extends Controller
 
 
             $see = new See();
-            $see->setService(SunatEndpoints::FE_BETA);
+            $see->setService(SunatEndpoints::FE_PRODUCCION);
             $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
-            $see->setCredentials('20605007211CITINETY'/*ruc+usuario*/, 'raulpreciosajohnson');
+            $see->setCredentials('20605007211FACTURAD'/*ruc+usuario*/, 'Facturad1');
 
             if($ventas->documentoClientes == 0){
                 $documentoCliente = "00000000";
@@ -1427,7 +1427,7 @@ class ventasController extends Controller
 
 
         $printer->text("\n"."LA PRECIOSA (20605007211)"."\n");
-        $printer->text("Direcci�n: Dean Valdivia 412 A" . "\n");
+        $printer->text("Dirección: Dean Valdivia 412 A" . "\n");
         $printer->text("Tel: 054 77 34 22" . "\n");
         $printer->text("\n");
         $printer->setJustification(Printer::JUSTIFY_CENTER);
@@ -1437,8 +1437,8 @@ class ventasController extends Controller
         
         $printer->text($ventas->fechaVentas . "\n");
         $printer->text("\n");
-        $printer->text("Se�or(es): ".$ventas->nombreClientes."\n");
-        $printer->text("Direcci�n: ".$ventas->direccionClientes."\n");
+        $printer->text("Señor(es): ".$ventas->nombreClientes."\n");
+        $printer->text("Dirección: ".$ventas->direccionClientes."\n");
         $printer->text("RUC: ".$documentoCliente."\n");
         $printer->text("-----------------------------" . "\n");
         $printer->setJustification(Printer::JUSTIFY_LEFT);
@@ -1454,7 +1454,7 @@ class ventasController extends Controller
                                     ->first();
 
             $printer->text($producto->nombre.": \n");
-            $precio = $producto->precio - $ventaDetalle->descuento;
+            $precio = $ventaDetalle->precio - $ventaDetalle->descuento;
             $printer->text( $ventaDetalle->cantidad."  unidad    ".$precio." ".$ventaDetalle->total."   \n");
             
         }
@@ -1600,7 +1600,7 @@ class ventasController extends Controller
         $fechaActual = date('Y-m-d');
         // ENVIAR A LA SUNAT 
         $see = new See();
-        $see->setService(SunatEndpoints::FE_BETA);
+        $see->setService(SunatEndpoints::FE_PRODUCCION);
         $see->setCertificate(file_get_contents(public_path('\sunat\certificados\certificate.pem')));
         $see->setCredentials('20605007211FACTURAD'/*ruc+usuario*/, 'Facturad1');
         // ---------- FACTURACION -------------
